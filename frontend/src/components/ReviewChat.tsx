@@ -46,7 +46,7 @@ export default function ProductDetails() {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5 }}
-            src="https://th.bing.com/th/id/OIP.e4D9TSkwmmvvJeg7PRwpLgHaI3?rs=1&pid=ImgDetMain?" 
+            src="https://mir-s3-cdn-cf.behance.net/project_modules/1400/d30e9647291143.587609fa2b328.jpg" 
             alt="Premium Wireless Headphones" 
             className="w-full md:w-1/3 rounded-lg mb-4 md:mb-0 md:mr-6" 
           />
