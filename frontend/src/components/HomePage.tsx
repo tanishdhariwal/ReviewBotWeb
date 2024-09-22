@@ -30,11 +30,9 @@ export default function HomePage() {
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-100">
       <nav className="fixed top-0 left-0 right-0 bg-white bg-opacity-20 backdrop-filter backdrop-blur-lg shadow-lg z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
+          <div className="flex items-center  justify-between h-16">
             <div className="flex-shrink-0">
-              <span className="text-2xl font-bold text-blue-600">
-                ReviewSummarizer
-              </span>
+              <img  className="h-8 w-30" src="Group 1.png" alt="" />
             </div>
             <div className="hidden md:block">
               <Link
