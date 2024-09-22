@@ -1,18 +1,29 @@
-import { useState } from 'react';
-import { Menu, X, Search, Star, BarChart2, TrendingUp } from 'lucide-react';
-import { Link } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState } from "react";
+import { Menu, X, Search, Star, BarChart2, TrendingUp } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function HomePage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [url, setUrl] = useState('');
+  const [url, setUrl] = useState("");
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Handle URL submission logic here
-    console.log('Submitted URL:', url);
+
+    console.log("Submitted URL:", url);
+  };
+
+  const handleNavigateToReviewChat = () => {
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+      navigate("/reviewchat");
+    }, 2000); // Simulate a loading delay of 2 seconds
   };
 
   return (
@@ -21,10 +32,15 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex-shrink-0">
-              <span className="text-2xl font-bold text-blue-600">ReviewSummarizer</span>
+              <span className="text-2xl font-bold text-blue-600">
+                ReviewSummarizer
+              </span>
             </div>
             <div className="hidden md:block">
-              <Link to="/about" className="text-gray-800 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">
+              <Link
+                to="/about"
+                className="text-gray-800 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
+              >
                 About
               </Link>
             </div>
@@ -33,17 +49,20 @@ export default function HomePage() {
                 onClick={toggleMenu}
                 className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-blue-600 focus:outline-none"
               >
-                {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+                {isMenuOpen ? (
+                  <X className="h-6 w-6" />
+                ) : (
+                  <Menu className="h-6 w-6" />
+                )}
               </button>
             </div>
           </div>
         </div>
       </nav>
-      
-      
+
       <AnimatePresence>
         {isMenuOpen && (
-          <motion.div 
+          <motion.div
             initial={{ x: "-100%" }}
             animate={{ x: 0 }}
             exit={{ x: "-100%" }}
@@ -57,15 +76,26 @@ export default function HomePage() {
               >
                 <X className="h-6 w-6" />
               </button>
-              <Link to="/about" className="block text-gray-800 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">
+              <Link
+                to="/about"
+                className="block text-gray-800 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
+              >
                 About
               </Link>
               <div className="border-t border-gray-200 my-2"></div>
-              <div className="px-3 py-2 text-sm font-medium text-gray-600">Recent Searches:</div>
-              <Link to="#" className="block text-gray-800 hover:text-blue-600 px-3 py-2 rounded-md text-sm">
+              <div className="px-3 py-2 text-sm font-medium text-gray-600">
+                Recent Searches:
+              </div>
+              <Link
+                to="#"
+                className="block text-gray-800 hover:text-blue-600 px-3 py-2 rounded-md text-sm"
+              >
                 Product 1
               </Link>
-              <Link to="#" className="block text-gray-800 hover:text-blue-600 px-3 py-2 rounded-md text-sm">
+              <Link
+                to="#"
+                className="block text-gray-800 hover:text-blue-600 px-3 py-2 rounded-md text-sm"
+              >
                 Product 2
               </Link>
             </div>
@@ -74,8 +104,10 @@ export default function HomePage() {
       </AnimatePresence>
 
       <main className="pt-20 flex flex-col items-center justify-center min-h-screen px-4">
-        <h1 className="text-4xl font-bold text-gray-800 mb-8 text-center">Summarize Product Reviews</h1>
-        
+        <h1 className="text-4xl font-bold text-gray-800 mb-8 text-center">
+          Summarize Product Reviews
+        </h1>
+
         <form onSubmit={handleSubmit} className="w-full max-w-md mb-8">
           <div className="flex items-center border-b-2 border-blue-500 py-2">
             <input
@@ -90,22 +122,56 @@ export default function HomePage() {
             <button
               className="flex-shrink-0 bg-blue-500 hover:bg-blue-700 border-blue-500 hover:border-blue-700 text-sm border-4 text-white py-1 px-2 rounded"
               type="submit"
+              onClick={handleNavigateToReviewChat}
             >
-              <Search className="h-5 w-5" />
+              {isLoading ? (
+                <svg
+                  className="animate-spin h-5 w-5 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                  ></path>
+                </svg>
+              ) : (
+                <Search className="h-5 w-5" />
+              )}
+              
             </button>
           </div>
         </form>
 
         <div className="flex flex-wrap justify-center gap-4">
-          <Link to="/top-rated" className="bg-white bg-opacity-20 backdrop-filter backdrop-blur-lg hover:bg-opacity-30 text-gray-800 font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out flex items-center">
+          <Link
+            to="/top-rated"
+            className="bg-white bg-opacity-20 backdrop-filter backdrop-blur-lg hover:bg-opacity-30 text-gray-800 font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out flex items-center"
+          >
             <Star className="h-5 w-5 mr-2" />
             Top Rated Products
           </Link>
-          <Link to="/trending" className="bg-white bg-opacity-20 backdrop-filter backdrop-blur-lg hover:bg-opacity-30 text-gray-800 font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out flex items-center">
+          <Link
+            to="/trending"
+            className="bg-white bg-opacity-20 backdrop-filter backdrop-blur-lg hover:bg-opacity-30 text-gray-800 font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out flex items-center"
+          >
             <TrendingUp className="h-5 w-5 mr-2" />
             Trending Products
           </Link>
-          <Link to="/categories" className="bg-white bg-opacity-20 backdrop-filter backdrop-blur-lg hover:bg-opacity-30 text-gray-800 font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out flex items-center">
+          <Link
+            to="/categories"
+            className="bg-white bg-opacity-20 backdrop-filter backdrop-blur-lg hover:bg-opacity-30 text-gray-800 font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out flex items-center"
+          >
             <BarChart2 className="h-5 w-5 mr-2" />
             Product Categories
           </Link>
