@@ -1,10 +1,9 @@
-// src/components/ReviewChat.tsx
 import { useState, useEffect } from 'react';
 import { Star, ThumbsUp, ThumbsDown, DollarSign, MessageCircle, Send, Award, Zap, Truck, Repeat } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export default function ProductDetails() {
-  const [chatMessages, setChatMessages] = useState<string[]>([]);
+  const [chatMessages, setChatMessages] = useState([]);
   const [currentMessage, setCurrentMessage] = useState('');
   const [isLoaded, setIsLoaded] = useState(false);
 
@@ -12,7 +11,7 @@ export default function ProductDetails() {
     setIsLoaded(true);
   }, []);
 
-  const handleSendMessage = (e: React.FormEvent) => {
+  const handleSendMessage = (e) => {
     e.preventDefault();
     if (currentMessage.trim()) {
       setChatMessages([...chatMessages, currentMessage]);
