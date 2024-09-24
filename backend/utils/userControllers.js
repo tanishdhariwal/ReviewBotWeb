@@ -21,7 +21,7 @@ const login = async (req, res) => {
             {
             expiresIn: "1h",
             });
-            return res.status(200).json({ message: "Login successful", token });
+            return res.status(200).json({ message: "Login successful", token ,canLogin:true});
 
 
     } else {

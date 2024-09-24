@@ -24,6 +24,8 @@ export default function LoginSignUp({ setIsAuthenticated }) {
     const isAuthenticated = localStorage.getItem("isAuthenticated");
     if (isAuthenticated) {
       navigate("/");
+    }else{
+      navigate("/login");
     }
   }, [navigate]);
 

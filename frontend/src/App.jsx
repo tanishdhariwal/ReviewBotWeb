@@ -5,35 +5,24 @@ import ReviewChat from './components/ReviewChat'
 import LoginSignUp from './components/LoginSignUp'
 import NavBar from './components/NavBar'
 import { useState, useEffect } from 'react'
+import AuthContext from './Context/AuthContext'
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  useEffect(() => {
-    const authStatus = localStorage.getItem("isAuthenticated");
-    setIsAuthenticated(authStatus === "true");
-  }, []);
-
-  const handleLogout = () => {
-    localStorage.removeItem("isAuthenticated");
-    setIsAuthenticated(false);
-    window.location.href = "/login"; // Redirect to login page after logout
-  };
-
-  const ProtectedRoute = ({ element }) => {
-    return isAuthenticated ? element : <Navigate to="/login" />;
-  };
-
+  
   return (
+    <AuthContext.Provider>
     <Router>
-      {isAuthenticated && <NavBar isAuthenticated={isAuthenticated} handleLogout={handleLogout} />}
+      <NavBar />
       <Routes>
-        <Route path="/" element={<ProtectedRoute element={<Home />} />} />
-        <Route path="/reviewchat" element={<ProtectedRoute element={<ReviewChat />} />} />
-        <Route path="/about" element={<ProtectedRoute element={<div>About Page</div>} />} />
-        <Route path="/login" element={<LoginSignUp setIsAuthenticated={setIsAuthenticated} />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/review-chat" element={<ReviewChat />} />
+        <Route path="/login" element={<LoginSignUp />} />
+        <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </Router>
+    </AuthContext.Provider>
+
+
   )
 }
 
