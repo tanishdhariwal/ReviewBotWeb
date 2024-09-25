@@ -12,53 +12,81 @@ import {
   Button,
 } from "@material-tailwind/react";
 import { FaUser, FaLock, FaEnvelope } from "react-icons/fa";
+import { SignUpUser } from "../Helpers/apiComms";
 
-export default function LoginSignUp({ setIsAuthenticated }) {
-  const [isLogin, setIsLogin] = useState(true);
+export default function LoginSignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const isAuthenticated = localStorage.getItem("isAuthenticated");
-    if (isAuthenticated) {
-      navigate("/");
-    }else{
-      navigate("/login");
-    }
-  }, [navigate]);
+  const [isSignin, setisSignin] = useState(true);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const endpoint = isLogin ? "/login" : "/signup";
-    const payload = { email, password, ...(isLogin ? {} : { name }) };
 
+    const payload = { email:"nams@mail.com", password:"kmit", username: "names" };
+    console.log(payload);
     try {
-      const response = await fetch(`http://localhost:5000${endpoint}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        console.log(isLogin ? "Login successful" : "Registration successful", data);
-        localStorage.setItem("isAuthenticated", true);
-        setIsAuthenticated(true);
-        navigate("/");
-      } else {
-        console.error(data.error);
-      }
+      const data = await SignUpUser(payload);
+      console.log(data);
     } catch (error) {
       console.error("Error:", error);
     }
+    // try {
+    //   const data = await (isLogin
+    //     ? LoginUser(email, password)
+    //     : SignUpUser(name, email, password));
+    //   console.log(
+    //     isLogin ? "Login successful" : "Registration successful",
+    //     data
+    //   );
+    //   localStorage.setItem("isAuthenticated", true);
+    //   navigate("/");
+    // } catch (error) {
+    //   console.error("Error:", error);
+    // }
   };
 
-  const toggleForm = () => setIsLogin(!isLogin);
+  // useEffect(() => {
+  //   const isAuthenticated = localStorage.getItem("isAuthenticated");
+  //   if (isAuthenticated) {
+  //     navigate("/");
+  //   }else{
+  //     navigate("/login");
+  //   }
+  // }, [navigate]);
+
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   const endpoint = isSignin ? "/login" : "/signup";
+  //   const payload = { email, password, ...(isLogin ? {} : { name }) };
+
+  //   try {
+  //     const response = await fetch(`http://localhost:5000${endpoint}`, {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify(payload),
+  //     });
+
+  //     const data = await response.json();
+
+  //     if (response.ok) {
+  //       console.log(isLogin ? "Login successful" : "Registration successful", data);
+  //       localStorage.setItem("isAuthenticated", true);
+  //       setIsAuthenticated(true);
+  //       navigate("/");
+  //     } else {
+  //       console.error(data.error);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error:", error);
+  //   }
+  // };
+
+  const toggleForm = () => setisSignin(!isSignin);
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-purple-900 via-indigo-800 to-blue-700 relative overflow-hidden">
@@ -75,13 +103,13 @@ export default function LoginSignUp({ setIsAuthenticated }) {
             className="mb-4 grid h-28 place-items-center bg-gradient-to-r from-purple-600 to-blue-500"
           >
             <Typography variant="h3" color="white">
-              {isLogin ? "Welcome Back" : "Join Us"}
+              {isSignin ? "Join Us" : "Welcome Back"}
             </Typography>
           </CardHeader>
           <CardBody className="flex flex-col gap-4">
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
               <AnimatePresence mode="wait">
-                {!isLogin && (
+                {isSignin && (
                   <motion.div
                     key="name"
                     initial={{ opacity: 0, y: -20 }}
@@ -129,10 +157,10 @@ export default function LoginSignUp({ setIsAuthenticated }) {
               onClick={handleSubmit}
               className="bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 transition-all duration-300"
             >
-              {isLogin ? "Sign In" : "Sign Up"}
+              {isSignin ? "Sign Up" : "Sign In"}
             </Button>
             <Typography variant="small" className="mt-6 flex justify-center">
-              {isLogin ? "Don't have an account?" : "Already have an account?"}
+              {isSignin ? "Already have an account?" : "Don't have an account?"}
               <Typography
                 as="span"
                 variant="small"
@@ -140,7 +168,7 @@ export default function LoginSignUp({ setIsAuthenticated }) {
                 className="ml-1 font-bold cursor-pointer hover:text-purple-500 transition-colors duration-300"
                 onClick={toggleForm}
               >
-                {isLogin ? "Sign up" : "Sign in"}
+                {isSignin ? "Sign in" : "Sign up"}
               </Typography>
             </Typography>
           </CardFooter>

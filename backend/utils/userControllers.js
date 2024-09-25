@@ -34,7 +34,7 @@ const login = async (req, res) => {
 
 const signup = async (req, res) => {
   const { name, email, password } = req.body;
-
+  console.log(req.url);
   if (!name || !email || !password) {
     return res
       .status(400)

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 
-export default function NavBar({ isAuthenticated, handleLogout }) {
+export default function NavBar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -32,11 +32,9 @@ export default function NavBar({ isAuthenticated, handleLogout }) {
             >
               About
             </Link>
-            {isAuthenticated ? (
-              <button onClick={handleLogout}>Logout</button>
-            ) : (
+            
               <button onClick={handleNavigateToLogin}>Login</button>
-            )}
+          
           </div>
           <div className="md:hidden">
             <button
@@ -61,11 +59,8 @@ export default function NavBar({ isAuthenticated, handleLogout }) {
           >
             About
           </Link>
-          {isAuthenticated ? (
-            <button onClick={handleLogout}>Logout</button>
-          ) : (
+          
             <button onClick={handleNavigateToLogin}>Login</button>
-          )}
         </div>
       )}
     </nav>

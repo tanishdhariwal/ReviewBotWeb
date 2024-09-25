@@ -1,9 +1,11 @@
 import { createContext, useState, useContext } from "react";
 import { LoginUser, LogoutUser } from "../Helpers/apiComms";
-// Define the shape of the user and authentication state
-const AuthContext = createContext(null);
+import { User, AuthContextType } from "./User";
 
-export default AuthProvider = ({ children }) => {
+// Define the shape of the user and authentication state
+const AuthContext = createContext(new AuthContextType()|null);
+
+export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -12,7 +14,8 @@ export default AuthProvider = ({ children }) => {
     if (!data) {
       throw new Error("Invalid login");
     }
-    setUser({ username: data.username, email:data.email});
+    const user = new User(data.username, data.email);
+    setUser(user);
     setIsLoggedIn(true);
   };
 
@@ -26,12 +29,31 @@ export default AuthProvider = ({ children }) => {
     window.location.reload();
   };
 
-  const value = {
-    user,isLoggedIn,login,logout,
+  const value = new AuthContextType(user, isLoggedIn, login, logout);
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  );
+
+
+// Custom hook to use the AuthContext
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error("useAuth must be used within an AuthProvider");
+  }
+  return context;
 };
+
+// export { useAuth, AuthProvider };
+
+
+/*
+
+Read me here 
+AuthContext File:
+
+AuthContext: This is the context object created using createContext. It holds the default value of the context, which is null.
+AuthProvider: This component wraps its children with the AuthContext.Provider and provides the authentication state and functions (login, logout) to its children.
+useAuth: This is a custom hook that allows components to access the authentication context.
+
+*/

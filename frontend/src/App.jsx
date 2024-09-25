@@ -5,12 +5,12 @@ import ReviewChat from './components/ReviewChat'
 import LoginSignUp from './components/LoginSignUp'
 import NavBar from './components/NavBar'
 import { useState, useEffect } from 'react'
-import AuthContext from './Context/AuthContext'
+import { AuthProvider } from './Context/AuthContext'
 
 function App() {
   
   return (
-    <AuthContext.Provider>
+    <AuthProvider>
     <Router>
       <NavBar />
       <Routes>
@@ -20,7 +20,7 @@ function App() {
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </Router>
-    </AuthContext.Provider>
+    </AuthProvider>
 
 
   )
