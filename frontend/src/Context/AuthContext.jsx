@@ -14,7 +14,7 @@ export const AuthProvider = ({ children }) => {
     if (!data) {
       throw new Error("Invalid login");
     }
-    const user = new User(data.username, data.email);
+    const user = new User(data.username, data.email);         // creating a new user ensuring type safety coz we don't know TS
     setUser(user);
     setIsLoggedIn(true);
   };

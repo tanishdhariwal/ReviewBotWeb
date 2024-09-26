@@ -3,7 +3,7 @@ const dotenv = require("dotenv").config();
 const cors = require("cors");
 const connectionToDB = require("./DB/dbconnection");
 const router = require("./routes/userRoutes");
-
+const cookieParser = require("cookie-parser");
 
 const corsOptions = {
   origin: "http://localhost:5173", // Replace with your frontend domain
@@ -12,17 +12,9 @@ const corsOptions = {
   optionsSuccessStatus: 204
 };
 const app = express();
-// app.use((req, res, next) => {
-//   res.header("Access-Control-Allow-Origin", "http://localhost:5173");
-//   res.header("Access-Control-Allow-Credentials", "true");
-//   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-//   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
-//   next();
-// });
-
 app.use(cors(corsOptions));
 app.use(express.json());
-
+app.use(cookieParser(process.env.COOKIE_NAME));
 app.use(router);
 
 

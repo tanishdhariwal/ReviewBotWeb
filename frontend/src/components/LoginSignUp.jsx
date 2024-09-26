@@ -12,79 +12,36 @@ import {
   Button,
 } from "@material-tailwind/react";
 import { FaUser, FaLock, FaEnvelope } from "react-icons/fa";
-import { SignUpUser } from "../Helpers/apiComms";
+import { SignUpUser, LoginUser } from "../Helpers/apiComms";
+import { useAuth } from "../Context/AuthContext";
 
 export default function LoginSignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
+  const [username, setuserName] = useState("");
   const navigate = useNavigate();
 
   const [isSignin, setisSignin] = useState(true);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const payload = { email:"nams@mail.com", password:"kmit", username: "names" };
+    const auth = useAuth();
+    const payload = { "email": email, "password":password, "username":username };
     console.log(payload);
     try {
-      const data = await SignUpUser(payload);
+      let data;
+      if (isSignin) {
+        data = await SignUpUser(payload);
+      } else {
+
+        data = await LoginUser({ "email":"ddhhhhd@gmail.com", "password":"asdf" });
+      }
       console.log(data);
+      navigate("/");
     } catch (error) {
       console.error("Error:", error);
     }
-    // try {
-    //   const data = await (isLogin
-    //     ? LoginUser(email, password)
-    //     : SignUpUser(name, email, password));
-    //   console.log(
-    //     isLogin ? "Login successful" : "Registration successful",
-    //     data
-    //   );
-    //   localStorage.setItem("isAuthenticated", true);
-    //   navigate("/");
-    // } catch (error) {
-    //   console.error("Error:", error);
-    // }
   };
-
-  // useEffect(() => {
-  //   const isAuthenticated = localStorage.getItem("isAuthenticated");
-  //   if (isAuthenticated) {
-  //     navigate("/");
-  //   }else{
-  //     navigate("/login");
-  //   }
-  // }, [navigate]);
-
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   const endpoint = isSignin ? "/login" : "/signup";
-  //   const payload = { email, password, ...(isLogin ? {} : { name }) };
-
-  //   try {
-  //     const response = await fetch(`http://localhost:5000${endpoint}`, {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify(payload),
-  //     });
-
-  //     const data = await response.json();
-
-  //     if (response.ok) {
-  //       console.log(isLogin ? "Login successful" : "Registration successful", data);
-  //       localStorage.setItem("isAuthenticated", true);
-  //       setIsAuthenticated(true);
-  //       navigate("/");
-  //     } else {
-  //       console.error(data.error);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error:", error);
-  //   }
-  // };
 
   const toggleForm = () => setisSignin(!isSignin);
 
@@ -121,8 +78,8 @@ export default function LoginSignUp() {
                       type="text"
                       label="Name"
                       size="lg"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
+                      value={username}
+                      onChange={(e) => setuserName(e.target.value)}
                       icon={<FaUser className="h-5 w-5 text-blue-gray-300" />}
                     />
                   </motion.div>

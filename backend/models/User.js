@@ -3,7 +3,7 @@ const dotenv = require('dotenv').config();
 const bcrypt = require('bcryptjs');
 
 const UserSchema = new mongoose.Schema({
-    name: {
+    username: {
         type: String,
         required: true
     },
