@@ -37,7 +37,7 @@ export const SignUpUser = async (userData) => {
   
 
 
-export const logoutUser = async () => {
+export const LogoutUser = async () => {
   try {
     await axios.post('/logout', {});
   } catch (error) {

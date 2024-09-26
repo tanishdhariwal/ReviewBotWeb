@@ -20,23 +20,35 @@ export default function LoginSignUp() {
   const [password, setPassword] = useState("");
   const [username, setuserName] = useState("");
   const navigate = useNavigate();
-
+  const auth = useAuth();
   const [isSignin, setisSignin] = useState(true);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const auth = useAuth();
-    const payload = { "email": email, "password":password, "username":username };
+
+    const payload = { email, password, username };
     console.log(payload);
     try {
-      let data;
-      if (isSignin) {
-        data = await SignUpUser(payload);
+      if (!isSignin) {
+        try {
+          const Loginpayload = {"email":email,"password":password};
+          await auth.login(Loginpayload);
+        } catch (error) {
+          console.error("Login failed:", error);
+          alert("Login failed. Please check your credentials and try again.");
+        }
       } else {
-
-        data = await LoginUser({ "email":"ddhhhhd@gmail.com", "password":"asdf" });
+        try {
+          const data = await SignUpUser(payload);
+            alert("Sign up successful! Please log in.");
+            setisSignin(false);
+            navigate("/login");
+          
+        } catch (error) {
+          console.error("Sign up failed:", error);
+          alert("Sign up failed. Please try again.");
+        }
       }
-      console.log(data);
       navigate("/");
     } catch (error) {
       console.error("Error:", error);
