@@ -40,6 +40,7 @@ export default function Profile() {
 
   const handleFeedbackSubmit = () => {
     console.log("Feedback submitted:", feedback)
+    alert("Fuck Your Opinion ")
     setFeedback("")
   }
 
@@ -56,7 +57,7 @@ export default function Profile() {
   }
 
   return (
-    <div className="mt-10 min-h-screen bg-gradient-to-br from-purple-50 to-blue-100 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="pt-24  min-h-screen bg-gradient-to-br from-purple-50 to-blue-100 py-12 px-4 sm:px-6 lg:px-8">
       <motion.div
         initial="initial"
         animate="animate"
@@ -132,7 +133,7 @@ export default function Profile() {
             <CardBody className="space-y-4">
               <Typography variant="h5" className="text-purple-800">Feedback</Typography>
               <Textarea
-                label="Your Feedback"
+                label="Your Feedback is valuable to us"
                 value={feedback}
                 onChange={(e) => setFeedback(e.target.value)}
                 className="border-purple-200 focus:border-purple-500"

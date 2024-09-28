@@ -6,7 +6,7 @@ import { FaGithub, FaLinkedin, FaInstagram, FaTwitter } from 'react-icons/fa';
 // Team member data
 const teamMembers = [
   {
-    name: "Alice Johnson",
+    name: "Bharadwaj Reddy Vancha",
     description: "Full-stack developer with a passion for React and Node.js",
     image: "/placeholder.svg?height=200&width=300",
     github: "https://github.com/alice",
@@ -15,7 +15,7 @@ const teamMembers = [
     twitter: "https://twitter.com/alice"
   },
   {
-    name: "Bob Smith",
+    name: "Kushal Bang",
     description: "UI/UX designer creating beautiful and intuitive interfaces",
     image: "/placeholder.svg?height=200&width=300",
     github: "https://github.com/bob",
@@ -24,7 +24,7 @@ const teamMembers = [
     twitter: "https://twitter.com/bob"
   },
   {
-    name: "Charlie Brown",
+    name: "Abhinav",
     description: "DevOps engineer ensuring smooth deployments and scalability",
     image: "/placeholder.svg?height=200&width=300",
     github: "https://github.com/charlie",
@@ -33,7 +33,7 @@ const teamMembers = [
     twitter: "https://twitter.com/charlie"
   },
   {
-    name: "Diana Ross",
+    name: "Tanish Dhariwal",
     description: "Product manager with a keen eye for market trends",
     image: "/placeholder.svg?height=200&width=300",
     github: "https://github.com/diana",
@@ -42,7 +42,7 @@ const teamMembers = [
     twitter: "https://twitter.com/diana"
   },
   {
-    name: "Ethan Hunt",
+    name: "Tanay Bansal",
     description: "Security expert keeping our systems safe and sound",
     image: "/placeholder.svg?height=200&width=300",
     github: "https://github.com/ethan",
@@ -51,7 +51,7 @@ const teamMembers = [
     twitter: "https://twitter.com/ethan"
   },
   {
-    name: "Fiona Apple",
+    name: "Gaurav Jain",
     description: "Data scientist turning raw data into actionable insights",
     image: "/placeholder.svg?height=200&width=300",
     github: "https://github.com/fiona",
@@ -67,7 +67,7 @@ const MemberCard = ({ member }) => {
       whileHover={{ scale: 1.05 }}
       transition={{ type: "spring", stiffness: 300 }}
     >
-      <Card className="w-72 bg-teal-50 shadow-lg overflow-hidden">
+      <Card className="w-72 bg-teal-10 shadow-lg overflow-hidden">
         <CardBody className="p-0">
           <div className="p-4">
             <Typography variant="h5" color="blue-gray" className="mb-2">

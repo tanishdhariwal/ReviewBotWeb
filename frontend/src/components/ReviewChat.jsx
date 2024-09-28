@@ -29,7 +29,7 @@ export default function ProductDetails() {
   ];
 
   return (
-    <div className=" pt-5 min-h-screen bg-gradient-to-br from-purple-50 to-blue-100 p-8">
+    <div className=" pt-20 min-h-screen bg-gradient-to-br from-purple-50 to-blue-100 p-8">
       <div className="max-w-4xl mx-auto bg-white bg-opacity-20 backdrop-filter backdrop-blur-lg rounded-lg shadow-lg p-8">
         <motion.h1 
           initial={{ opacity: 0, y: -20 }}
