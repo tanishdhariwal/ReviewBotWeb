@@ -1,9 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Search, Star, BarChart2, TrendingUp } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import { useAuth } from "../Context/AuthContext";
 
 export default function HomePage() {
+  const auth = useAuth();
+
+  useEffect(() => {
+    console.log(auth.isLoggedIn + " is the status");
+  }, [auth.isLoggedIn]);
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [url, setUrl] = useState("");
   const navigate = useNavigate();
@@ -22,13 +29,14 @@ export default function HomePage() {
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
-      navigate("/reviewchat");
-    }, 2000); // Simulate a loading delay of 2 seconds
+      navigate("/review-chat");
+      // navigate("/login");
+    }, 2000); 
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-100">
-      <main className="pt-20 flex flex-col items-center justify-center min-h-screen px-4">
+      <main className="pt-2 flex flex-col items-center justify-center min-h-screen px-4">
         <h1 className="text-4xl font-bold text-gray-800 mb-8 text-center">
           Summarize Product Reviews
         </h1>
@@ -97,9 +105,11 @@ export default function HomePage() {
             className="bg-white bg-opacity-20 backdrop-filter backdrop-blur-lg hover:bg-opacity-30 text-gray-800 font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out flex items-center"
           >
             <BarChart2 className="h-5 w-5 mr-2" />
-            Product Categories
+            Recently Reviewed Products
           </Link>
         </div>
+
+ 
       </main>
     </div>
   );

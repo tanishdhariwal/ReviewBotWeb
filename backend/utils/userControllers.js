@@ -2,19 +2,12 @@ const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 
 const signup = async (req, res) => {
-  console.log(req.body);
   const { username, email, password } = req.body;
-  console.log(req.url);
   if (!username || !email || !password) {
-    console.log("inside if");
-    return res
-      .status(400)
-      .json({ error: "Please provide name email and password" });
+    return res.status(400).json({ error: "Please provide name email and password" });
   }
   try {
-    console.log("inside try");
     const user = new User({ username, email, password });
-    console.log("user created");
     await user.save();
     res.status(201).json({ message: "User created successfully" });
   } catch (error) {
@@ -44,7 +37,6 @@ const login = async (req, res) => {
       return res.status(400).json({ error: "Incorrect password" });
     }
 
-    // Clear any existing cookie
     res.clearCookie(process.env.COOKIE_NAME, {
       httpOnly: true,
       domain: "localhost",
@@ -60,10 +52,8 @@ const login = async (req, res) => {
       }
     );
 
-    // Set the cookie expiration date
     const expires = new Date(Date.now() + 3600000); // 1 hour
 
-    // Set the new cookie
     res.cookie(process.env.COOKIE_NAME, token, {
       path: "/",
       domain: "localhost",
@@ -72,12 +62,28 @@ const login = async (req, res) => {
       signed: true,
     });
 
-    return res
-      .status(200)
-      .json({ message: "Login successful", token, canLogin: true });
+    return res.status(200).json({ message: "Login successful", token, canLogin: true });
   } catch (error) {
     console.error("Error during login:", error);
     return res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+const verifyuser = async (req, res) => {
+  console.log("verifying user");
+  try {
+    const user = await User.findById(res.locals.jwtData.id);
+    if (!user) {
+      return res.status(401).send("User not registered or Token malfunctioned");
+    }
+    if (user._id.toString() !== res.locals.jwtData.id) {
+      return res.status(401).send("Permissions didn't match");
+    } 
+
+    return res.status(200).json({ message: "Ok", "username": user.username, "email": user.email });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: "Error", cause: error.message });
   }
 };
 
@@ -88,22 +94,28 @@ const logout = async (req, res) => {
       return res.status(401).send("User not registered or Token malfunctioned");
     }
     if (user._id.toString() !== res.locals.jwtData.id) {
-      return res.status(401).send("Permissions didnt match");
+      return res.status(401).send("Permissions didn't match");
     }
-    res.clearCookie(COOKIE_NAME, {
+    res.clearCookie(process.env.COOKIE_NAME, {
       httpOnly: true,
       domain: "localhost",
       signed: true,
       path: "/",
     });
 
-    return res
-      .status(200)
-      .json({ message: "Ok", name: user.name, email: user.email });
+    // res.cookie(process.env.COOKIE_NAME, token, {
+    //   path: "/",
+    //   domain: "localhost",
+    //   expires,
+    //   httpOnly: true,
+    //   signed: true,
+    // });
+
+    return res.status(200).json({ message: "Ok", name: user.name, email: user.email });
   } catch (error) {
     console.log(error);
-    return res.status(200).json({ message: "Error", cause: error.message });
+    return res.status(500).json({ message: "Error", cause: error.message });
   }
 };
 
-module.exports = { signup, login, logout };
+module.exports = { signup, login, logout, verifyuser };

@@ -36,12 +36,25 @@ export const SignUpUser = async (userData) => {
 };
   
 
+export const checkAuthStatus = async () => {
+  console.log("entered auth status");
+  try {
+    const res = await axios.get("/authstatus");
+    console.log(res.status);
+    // if (res.status !== 200) {
+    //   throw new Error("Unable to authenticate");
+    // }
+    return res.data.message != null ? "Token not received" : null;
+  } catch (error) {
+    console.error("Error checking auth status:", error);
+    throw error;
+  }
+};
 
 export const LogoutUser = async () => {
   try {
-    await axios.post('/logout', {});
+    await axios.get('/logout');
   } catch (error) {
     console.error('Error logging out:', error);
-    throw error;
   }
 };

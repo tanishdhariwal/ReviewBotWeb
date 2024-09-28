@@ -1,42 +1,64 @@
-import { createContext, useState, useContext } from "react";
-import { LoginUser, LogoutUser } from "../Helpers/apiComms";
+import { createContext, useState, useContext, useEffect } from "react";
+import { LoginUser, LogoutUser, checkAuthStatus } from "../Helpers/apiComms";
 import { User, AuthContextType } from "./User";
 
-// Define the shape of the user and authentication state
-const AuthContext = createContext(new AuthContextType()|null);
+const AuthContext = createContext(new AuthContextType|null);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const login = async (userData) => {
-    const payload = {"email": userData.email,"password": userData.password };
-    const data = await LoginUser(payload);
-    if (!data) {
-      throw new Error("Invalid login");
+  useEffect(() => {
+    async function checkStatus() {
+      try {
+        const data = await checkAuthStatus();
+        if (data) {
+          const user = new User(data.username, data.email);
+          setUser(user);
+          setIsLoggedIn(true);
+        }
+      } catch (error) {
+        console.error("Error checking auth status:", error);
+      }
     }
-    const user = new User(data.username, data.email);         // creating a new user ensuring type safety coz we don't know TS
-    setUser(user);
-    setIsLoggedIn(true);
+    checkStatus();
+  }, []);
+
+  const login = async (userData) => {
+    try {
+      const payload = { email: userData.email, password: userData.password };
+      const data = await LoginUser(payload);
+      if (!data) {
+        throw new Error("Invalid login");
+      }
+      const user = new User(data.username, data.email);
+      setUser(user);
+      setIsLoggedIn(true);
+    } catch (error) {
+      console.error("Error during login:", error);
+      throw error;
+    }
   };
 
   const logout = async () => {
-    const data = await LogoutUser();
-    if (!data) {
-      throw new Error("Invalid logout");
+    try {
+      console.log("trying logout");
+      await LogoutUser();
+      console.log("lemme logout");
+      setUser(null);
+      setIsLoggedIn(false);
+      window.location.reload();
+    } catch (error) {
+      console.error("Error during logout:", error);
+      throw error;
     }
-    setUser(null);
-    setIsLoggedIn(false);
-    window.location.reload();
   };
 
-  const value = new AuthContextType(user, isLoggedIn, login, logout);
+  const value = { user, isLoggedIn, login, logout };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
-
-// Custom hook to use the AuthContext
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (context === undefined) {
@@ -44,17 +66,3 @@ export const useAuth = () => {
   }
   return context;
 };
-
-// export { useAuth, AuthProvider };
-
-
-/*
-
-Read me here 
-AuthContext File:
-
-AuthContext: This is the context object created using createContext. It holds the default value of the context, which is null.
-AuthProvider: This component wraps its children with the AuthContext.Provider and provides the authentication state and functions (login, logout) to its children.
-useAuth: This is a custom hook that allows components to access the authentication context.
-
-*/

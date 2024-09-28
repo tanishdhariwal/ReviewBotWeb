@@ -3,24 +3,33 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Home from './components/Home'
 import ReviewChat from './components/ReviewChat'
 import LoginSignUp from './components/LoginSignUp'
-import NavBar from './components/NavBar'
-import { useState, useEffect } from 'react'
-import { AuthProvider } from './Context/AuthContext'
+import { AuthProvider, useAuth } from './Context/AuthContext'
+import Header from './components/shared/Header'
+import Profile from './components/Profile'
+import About from './components/About'
 
 function App() {
+
+  const auth = useAuth();
   
   return (
-    <AuthProvider>
+
     <Router>
-      <NavBar />
+      <Header />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/review-chat" element={<ReviewChat />} />
+        <Route path="/about" element={<About />} />
+        {auth.isLoggedIn &&
+        <>
+          <Route path="/review-chat" element={<ReviewChat />} />
+          <Route path="/profile" element={<Profile />} />
+        </>
+        }
         <Route path="/login" element={<LoginSignUp />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </Router>
-    </AuthProvider>
+
 
 
   )

@@ -29,7 +29,7 @@ export default function ProductDetails() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-100 p-8">
+    <div className=" pt-5 min-h-screen bg-gradient-to-br from-purple-50 to-blue-100 p-8">
       <div className="max-w-4xl mx-auto bg-white bg-opacity-20 backdrop-filter backdrop-blur-lg rounded-lg shadow-lg p-8">
         <motion.h1 
           initial={{ opacity: 0, y: -20 }}
@@ -153,7 +153,7 @@ export default function ProductDetails() {
           transition={{ delay: 1.7, duration: 0.5 }}
           className="bg-white bg-opacity-50 rounded-lg p-4 mb-8"
         >
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">Product Chat</h2>
+          <h2 className="text-xl font-semibold text-gray-800 mb-4">Review Chat</h2>
           <div className="h-64 overflow-y-auto mb-4 bg-white bg-opacity-50 rounded-lg p-4">
             {chatMessages.map((message, index) => (
               <div key={index} className="mb-2">
