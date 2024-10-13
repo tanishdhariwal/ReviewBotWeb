@@ -1,27 +1,29 @@
 import { createContext, useState, useContext, useEffect } from "react";
 import { LoginUser, LogoutUser, checkAuthStatus } from "../Helpers/apiComms";
+import { User, AuthContextType } from "./User";
+import LoaderModal from "../components/shared/Loader"; // Import loader modal
 
-// Create the AuthContext with null as the initial value
-const AuthContext = createContext(null);
+const AuthContext = createContext(new AuthContextType || null);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [loading, setLoading] = useState(false); // Global loading state
 
   useEffect(() => {
     async function checkStatus() {
       try {
+        setLoading(true); // Start loading
         const data = await checkAuthStatus();
         if (data) {
-          const user = { username: data.username, email: data.email };
+          const user = new User(data.username, data.email);
           setUser(user);
           setIsLoggedIn(true);
         }
       } catch (error) {
         console.error("Error checking auth status:", error);
       } finally {
-        setIsLoading(false);
+        setLoading(false); // End loading
       }
     }
     checkStatus();
@@ -29,22 +31,26 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (userData) => {
     try {
+      setLoading(true); // Start loading
       const payload = { email: userData.email, password: userData.password };
       const data = await LoginUser(payload);
       if (!data) {
         throw new Error("Invalid login");
       }
-      const user = { username: data.username, email: data.email };
+      const user = new User(data.username, data.email);
       setUser(user);
       setIsLoggedIn(true);
     } catch (error) {
       console.error("Error during login:", error);
       throw error;
+    } finally {
+      setLoading(false); // End loading
     }
   };
 
   const logout = async () => {
     try {
+      setLoading(true); // Start loading
       await LogoutUser();
       setUser(null);
       setIsLoggedIn(false);
@@ -52,17 +58,24 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       console.error("Error during logout:", error);
       throw error;
+    } finally {
+      setLoading(false); // End loading
     }
   };
 
-  const value = { user, isLoggedIn, isLoading, login, logout };
+  const value = { user, isLoggedIn, login, logout, loading };
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={value}>
+      {loading && <LoaderModal />} 
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (context === null) {
+  if (context === undefined) {
     throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;

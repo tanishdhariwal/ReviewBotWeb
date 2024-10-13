@@ -2,7 +2,7 @@ import React from 'react';
 
 const LoaderModal = () => {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-transparent backdrop-blur-lg">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-transparent backdrop-blur-sm">
       <div className="flex flex-col items-center">
         {/* Loader Spinner */}
         <svg
