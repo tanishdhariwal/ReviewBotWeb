@@ -1,0 +1,29 @@
+version: '3.8'  # Specifies the version of the Docker Compose syntax
+
+services:
+  backend:
+    build:
+      context: ./backend    # Path to the backend directory where the Dockerfile is located
+      dockerfile: Dockerfile # The Dockerfile to use (default is 'Dockerfile', can omit if named Dockerfile)
+    ports:
+      - "5000:5000"          # Map port 5000 of the host to port 5000 in the container
+    environment:
+      - NODE_ENV=production  # You can set any environment variables here
+    networks:
+      - app-network          # Connect to the same network as the frontend
+
+  frontend:
+    build:
+      context: ./frontend    # Path to the frontend directory where the Dockerfile is located
+      dockerfile: Dockerfile # The Dockerfile to use (can omit if named Dockerfile)
+    ports:
+      - "5173:5173"          # Map port 5173 of the host to port 5173 in the container
+    depends_on:
+      - backend              # Ensure the backend is up before starting the frontend
+    networks:
+      - app-network          # Connect to the same network as the backend
+
+# Define a network to allow communication between the frontend and backend services
+networks:
+  app-network:
+    driver: bridge
