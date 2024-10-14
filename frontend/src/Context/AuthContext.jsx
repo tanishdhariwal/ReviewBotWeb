@@ -1,16 +1,19 @@
 import { createContext, useState, useContext, useEffect } from "react";
 import { LoginUser, LogoutUser, checkAuthStatus } from "../Helpers/apiComms";
 import { User, AuthContextType } from "./User";
+import LoaderModal from "../components/shared/Loader"; // Import loader modal
 
-const AuthContext = createContext(new AuthContextType|null);
+const AuthContext = createContext(new AuthContextType || null);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [loading, setLoading] = useState(false); // Global loading state
 
   useEffect(() => {
     async function checkStatus() {
       try {
+        setLoading(true); // Start loading
         const data = await checkAuthStatus();
         if (data) {
           const user = new User(data.username, data.email);
@@ -19,6 +22,8 @@ export const AuthProvider = ({ children }) => {
         }
       } catch (error) {
         console.error("Error checking auth status:", error);
+      } finally {
+        setLoading(false); // End loading
       }
     }
     checkStatus();
@@ -26,6 +31,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (userData) => {
     try {
+      setLoading(true); // Start loading
       const payload = { email: userData.email, password: userData.password };
       const data = await LoginUser(payload);
       if (!data) {
@@ -37,26 +43,34 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       console.error("Error during login:", error);
       throw error;
+    } finally {
+      setLoading(false); // End loading
     }
   };
 
   const logout = async () => {
     try {
-      console.log("trying logout");
+      setLoading(true); // Start loading
       await LogoutUser();
-      console.log("lemme logout");
       setUser(null);
       setIsLoggedIn(false);
       window.location.reload();
     } catch (error) {
       console.error("Error during logout:", error);
       throw error;
+    } finally {
+      setLoading(false); // End loading
     }
   };
 
-  const value = { user, isLoggedIn, login, logout };
+  const value = { user, isLoggedIn, login, logout, loading };
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={value}>
+      {loading && <LoaderModal />} 
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
 export const useAuth = () => {
