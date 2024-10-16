@@ -1,23 +1,14 @@
 import { useState, useEffect } from 'react';
-import { Star, ThumbsUp, ThumbsDown, DollarSign, MessageCircle, Send, Award, Zap, Truck, Repeat } from 'lucide-react';
+import { Star, ThumbsUp, ThumbsDown, DollarSign, Award, Zap, Truck, Repeat } from 'lucide-react';
 import { motion } from 'framer-motion';
+import ChatComponent from './ChatComponent'; // Import the new ChatComponent
 
 export default function ProductDetails() {
-  const [chatMessages, setChatMessages] = useState([]);
-  const [currentMessage, setCurrentMessage] = useState('');
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     setIsLoaded(true);
   }, []);
-
-  const handleSendMessage = (e) => {
-    e.preventDefault();
-    if (currentMessage.trim()) {
-      setChatMessages([...chatMessages, currentMessage]);
-      setCurrentMessage('');
-    }
-  };
 
   const metrics = [
     { name: 'Quality', value: 85, color: 'bg-blue-600' },
@@ -29,7 +20,7 @@ export default function ProductDetails() {
   ];
 
   return (
-    <div className=" pt-20 min-h-screen bg-gradient-to-br from-purple-50 to-blue-100 p-8">
+    <div className="pt-20 min-h-screen bg-gradient-to-br from-purple-50 to-blue-100 p-8">
       <div className="max-w-4xl mx-auto bg-white bg-opacity-20 backdrop-filter backdrop-blur-lg rounded-lg shadow-lg p-8">
         <motion.h1 
           initial={{ opacity: 0, y: -20 }}
@@ -147,36 +138,7 @@ export default function ProductDetails() {
           </div>
         </motion.div>
 
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.7, duration: 0.5 }}
-          className="bg-white bg-opacity-50 rounded-lg p-4 mb-8"
-        >
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">Review Chat</h2>
-          <div className="h-64 overflow-y-auto mb-4 bg-white bg-opacity-50 rounded-lg p-4">
-            {chatMessages.map((message, index) => (
-              <div key={index} className="mb-2">
-                <span className="font-semibold">You:</span> {message}
-              </div>
-            ))}
-          </div>
-          <form onSubmit={handleSendMessage} className="flex">
-            <input
-              type="text"
-              value={currentMessage}
-              onChange={(e) => setCurrentMessage(e.target.value)}
-              placeholder="Ask about this product..."
-              className="flex-grow px-4 py-2 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            <button
-              type="submit"
-              className="bg-blue-500 text-white px-4 py-2 rounded-r-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <Send className="w-5 h-5" />
-            </button>
-          </form>
-        </motion.div>
+        <ChatComponent /> {/* Use the new ChatComponent */}
       </div>
     </div>
   );
