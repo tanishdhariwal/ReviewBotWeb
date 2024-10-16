@@ -11,7 +11,7 @@ import {
   Checkbox,
   Button,
 } from "@material-tailwind/react";
-import { FaUser, FaLock, FaEnvelope } from "react-icons/fa";
+import { FaUser, FaLock, FaEnvelope, FaEye, FaEyeSlash } from "react-icons/fa";
 import { SignUpUser, LoginUser } from "../Helpers/apiComms";
 import { useAuth } from "../Context/AuthContext";
 
@@ -19,6 +19,7 @@ export default function LoginSignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setuserName] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const auth = useAuth();
   const [isSignin, setisSignin] = useState(true);
@@ -56,6 +57,7 @@ export default function LoginSignUp() {
   };
 
   const toggleForm = () => setisSignin(!isSignin);
+  const togglePasswordVisibility = () => setShowPassword(!showPassword);
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-purple-900 via-indigo-800 to-blue-700 relative overflow-hidden">
@@ -105,14 +107,30 @@ export default function LoginSignUp() {
                 onChange={(e) => setEmail(e.target.value)}
                 icon={<FaEnvelope className="h-5 w-5 text-blue-gray-300" />}
               />
-              <Input
-                type="password"
-                label="Password"
-                size="lg"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                icon={<FaLock className="h-5 w-5 text-blue-gray-300" />}
-              />
+              <div className="relative">
+                <Input
+                  type={showPassword ? "text" : "password"}
+                  label="Password"
+                  size="lg"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                {password && (
+                  <div
+                    className="absolute inset-y-0 right-8 pr-3 flex items-center cursor-pointer"
+                    onClick={togglePasswordVisibility}
+                  >
+                    {showPassword ? (
+                      <FaEyeSlash className="h-5 w-5 text-blue-gray-300" />
+                    ) : (
+                      <FaEye className="h-5 w-5 text-blue-gray-300" />
+                    )}
+                  </div>
+                )}
+                <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                  <FaLock className="h-5 w-5 text-blue-gray-300" />
+                </div>
+              </div>
               <div className="-ml-2.5">
                 <Checkbox label="Remember Me" />
               </div>
