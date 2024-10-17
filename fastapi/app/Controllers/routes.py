@@ -7,12 +7,15 @@ from app.DB.session import dbconnection  # Import the dbConnection function
 from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
 from app.Schemas.models import QueryInput
 from jose import JWTError, jwt
+from dotenv import load_dotenv
+import os
+load_dotenv()
 
 router = APIRouter()
 
-SECRET_KEY = "cjshvkHCJHRfgkjKFTYDCJM"  # Same secret key used to sign the JWT in Express
-ALGORITHM = "HS256"
-COOKIE_NAME = "your_cookie_name"  # Replace with your actual cookie name
+SECRET_KEY = os.getenv("SECRET")
+ALGORITHM = os.getenv("ALGORITHM")
+
 
 def verify_token(request: Request):
     token = request.headers.get("Authorization")
