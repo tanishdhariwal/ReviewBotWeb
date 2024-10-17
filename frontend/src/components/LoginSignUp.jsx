@@ -40,9 +40,9 @@ export default function LoginSignUp() {
       } else {
         try {
           const data = await SignUpUser(payload);
-            alert("Sign up successful! Please log in.");
-            setisSignin(false);
-            navigate("/login");
+          alert("Sign up successful! Please log in.");
+          setisSignin(false);
+          navigate("/login");
           
         } catch (error) {
           console.error("Sign up failed:", error);
