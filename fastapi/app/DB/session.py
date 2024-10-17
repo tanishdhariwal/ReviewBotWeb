@@ -12,6 +12,6 @@ if not mongo_url:
     raise ValueError("No MongoDB URL found in environment variables")
 
 # Connect to MongoDB and return the database object
-def dbConnection():
+def dbconnection():
     client = MongoClient(mongo_url)
     return client.get_database()

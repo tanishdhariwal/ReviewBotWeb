@@ -7,5 +7,5 @@ export default defineConfig({
   preview:{
     port:5173,
     host:true,
-  }
+  },
 })
