@@ -3,14 +3,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { Send, Loader2, User } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
-
-const dummyResponses = [
-  "That's an interesting point. Can you tell me more?",
-  "I understand. Let me think about that for a moment.",
-  "Thank you for sharing. Is there anything else you'd like to add?",
-  "I see. Have you considered looking at it from a different perspective?",
-  "That's a great question. Let me find some information for you.",
-]
+import { getChatResponse } from '../Helpers/apiComms' // Import the getChatResponse function
 
 export default function ChatComponent() {
   const [chatMessages, setChatMessages] = useState([])
@@ -47,15 +40,25 @@ export default function ChatComponent() {
       setCurrentMessage('')
       setIsLoading(true)
 
-      await new Promise(resolve => setTimeout(resolve, 1500))
-      
-      const botMessage = {
-        id: (Date.now() + 1).toString(),
-        content: dummyResponses[Math.floor(Math.random() * dummyResponses.length)],
-        sender: 'bot',
+      try {
+        const data = await getChatResponse(currentMessage)
+        const botMessage = {
+          id: (Date.now() + 1).toString(),
+          content: data.response, // Extract the response field from the API response
+          sender: 'bot',
+        }
+        setChatMessages(prev => [...prev, botMessage])
+      } catch (error) {
+        console.error('Error fetching AI response:', error)
+        const botMessage = {
+          id: (Date.now() + 1).toString(),
+          content: "Sorry, I couldn't process your request. Please try again.",
+          sender: 'bot',
+        }
+        setChatMessages(prev => [...prev, botMessage])
+      } finally {
+        setIsLoading(false)
       }
-      setChatMessages(prev => [...prev, botMessage])
-      setIsLoading(false)
     }
   }
 
@@ -68,12 +71,6 @@ export default function ChatComponent() {
 
   return (
     <div className="flex flex-col h-[500px] bg-gray-100 rounded-lg">
-      {/* <header className="flex items-center justify-between px-6 py-4 bg-white shadow-md">
-        <h1 className="text-2xl font-bold text-gray-800">Chat Assistant</h1>
-        <button className="p-2 rounded-full bg-gray-200 hover:bg-gray-300 transition-colors">
-          <User className="w-6 h-6 text-gray-600" />
-        </button>
-      </header> */}
       <div className="flex-1 overflow-hidden">
         <div className="h-full overflow-y-auto p-6 space-y-6" ref={chatContainerRef}>
           <AnimatePresence>

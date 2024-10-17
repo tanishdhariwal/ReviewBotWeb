@@ -5,7 +5,7 @@ const COOKIE_NAME = process.env.COOKIE_NAME;
 const verifyToken = async (req, res, next) => {
   console.log("verifying token");
   const token = req.signedCookies[COOKIE_NAME];
-
+  console.log("token:", token);
   if (!token || token.trim() === "") {
     console.log("Token not received");
     return res.status(401).json({ message: "Token Not Received" });

@@ -23,10 +23,8 @@ export default function LoginSignUp() {
   const navigate = useNavigate();
   const auth = useAuth();
   const [isSignin, setisSignin] = useState(true);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const payload = { email, password, username };
     console.log(payload);
     try {
