@@ -8,12 +8,11 @@ const AuthContext = createContext(new AuthContextType || null);
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [loading, setLoading] = useState(false); // Global loading state
+  const [loading, setLoading] = useState(true); // Start with loading true
 
   useEffect(() => {
     async function checkStatus() {
       try {
-        setLoading(true); // Start loading
         const data = await checkAuthStatus();
         if (data) {
           const user = new User(data.username, data.email);
@@ -68,7 +67,7 @@ export const AuthProvider = ({ children }) => {
   return (
     <AuthContext.Provider value={value}>
       {loading && <LoaderModal />} 
-      {children}
+      {!loading && children}
     </AuthContext.Provider>
   );
 };
