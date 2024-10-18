@@ -31,7 +31,7 @@ export default function HomePage() {
       setTimeout(() => {
         setIsLoading(false);
         navigate(`/review-chat?url=${url}`);
-      }, 50000);
+      }, 6000);
     }
   };
 
