@@ -30,11 +30,11 @@ export default function LoginSignUp() {
     try {
       if (!isSignin) {
         try {
-          const Loginpayload = {"email":email,"password":password};
+          const Loginpayload = { "email": email, "password": password };
           await auth.login(Loginpayload);
         } catch (error) {
           console.error("Login failed:", error);
-          alert("Login failed. Please check your credentials and try again.");
+          // alert("Login failed. Please check your credentials and try again.");
         }
       } else {
         try {
@@ -42,13 +42,13 @@ export default function LoginSignUp() {
           alert("Sign up successful! Please log in.");
           setisSignin(false);
           navigate("/login");
-          
+
         } catch (error) {
           console.error("Sign up failed:", error);
           alert("Sign up failed. Please try again.");
         }
       }
-      navigate("/");
+      // navigate("/");
     } catch (error) {
       console.error("Error:", error);
     }

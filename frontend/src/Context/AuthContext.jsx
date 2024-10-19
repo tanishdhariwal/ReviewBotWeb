@@ -2,6 +2,7 @@ import { createContext, useState, useContext, useEffect } from "react";
 import { LoginUser, LogoutUser, checkAuthStatus } from "../Helpers/apiComms";
 import { User, AuthContextType } from "./User";
 import LoaderModal from "../components/shared/Loader"; // Import loader modal
+import { CloudCog } from "lucide-react";
 
 const AuthContext = createContext(new AuthContextType || null);
 
@@ -36,6 +37,8 @@ export const AuthProvider = ({ children }) => {
       if (!data) {
         throw new Error("Invalid login");
       }
+      console.log(data);
+      console.log(data.username)
       const user = new User(data.username, data.email);
       setUser(user);
       setIsLoggedIn(true);
@@ -66,7 +69,7 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider value={value}>
-      {loading && <LoaderModal />} 
+      {loading && <LoaderModal />}
       {!loading && children}
     </AuthContext.Provider>
   );
