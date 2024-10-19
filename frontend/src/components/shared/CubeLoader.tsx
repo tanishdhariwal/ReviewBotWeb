@@ -125,7 +125,7 @@ export default function CubeLoader({
           // text-shadow: 0 0 5px rgba(147, 51, 234, 0.5);
         }
         .side-0 { transform: rotateY(0deg) translateZ(${halfSize}px); }
-        .side-1 { transform: rotateY(180deg) translateZ(${halfSize}px); }
+        .side-1 { transform: rotateY(180deg) translateZ(${halfSize}px); } 
         .side-2 { transform: rotateY(90deg) translateZ(${halfSize}px); }
         .side-3 { transform: rotateY(-90deg) translateZ(${halfSize}px); }
         .side-4 { transform: rotateX(90deg) translateZ(${halfSize}px); }

@@ -1,15 +1,16 @@
-'use client'
-
 import { useState, useEffect, useRef } from 'react'
 import { Send, Loader2, User } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { getChatResponse } from '../Helpers/apiComms' // Import the getChatResponse function
+import { useAuth } from '../Context/AuthContext'
 
 export default function ChatComponent() {
   const [chatMessages, setChatMessages] = useState([])
   const [currentMessage, setCurrentMessage] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const chatContainerRef = useRef(null)
+  const auth = useAuth();
+  const name = auth.user.username.charAt(0);
 
   useEffect(() => {
     fetchExistingChats()
@@ -111,7 +112,7 @@ export default function ChatComponent() {
                 </motion.div>
                 {message.sender === 'user' && (
                   <div className="w-10 h-10 rounded-full bg-gray-400 flex items-center justify-center text-white font-bold">
-                    U
+                    {name}
                   </div>
                 )}
               </motion.div>
