@@ -9,6 +9,8 @@ services:
       - "5000:5000"          # Map port 5000 of the host to port 5000 in the container
     environment:
       - NODE_ENV=production  # You can set any environment variables here
+    depends_on:
+      - fastapi              # Ensure the fastapi is up before starting the backend
     networks:
       - app-network          # Connect to the same network as the frontend
 
@@ -22,7 +24,14 @@ services:
       - backend              # Ensure the backend is up before starting the frontend
     networks:
       - app-network          # Connect to the same network as the backend
-
+  fastapi:
+    build:
+      context: ./fastapi
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    networks:
+      - app-network
 # Define a network to allow communication between the frontend and backend services
 networks:
   app-network:

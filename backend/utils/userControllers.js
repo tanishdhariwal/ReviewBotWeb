@@ -130,7 +130,7 @@ const get_response = async (req, res) => {
       { text },
       {
         headers: {
-          Authorization: `Bearer ${token}`, // Attach the token in headers
+          Authorization: `Bearer ${token}`, 
         },
       }
     );
