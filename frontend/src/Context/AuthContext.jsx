@@ -15,6 +15,7 @@ export const AuthProvider = ({ children }) => {
       try {
         const data = await checkAuthStatus();
         if (data) {
+          console.log(data.username, data.email);
           const user = new User(data.username, data.email);
           setUser(user);
           setIsLoggedIn(true);

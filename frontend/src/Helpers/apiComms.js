@@ -32,8 +32,8 @@ export const checkAuthStatus = async () => {
   console.log("entered auth status");
   try {
     const res = await axios.get(`/authstatus`);
-    console.log(res.status);
-    return res.data.message != null ? "Token not received" : null;
+    console.log(res.data);
+    return res.data;
   } catch (error) {
     console.error("Error checking auth status:", error);
     throw error;

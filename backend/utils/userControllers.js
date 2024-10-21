@@ -77,22 +77,32 @@ const login = async (req, res) => {
 const verifyuser = async (req, res) => {
   console.log("verifying user");
   try {
+    console.log("JWT Data:", res.locals.jwtData);
+
     const user = await User.findById(res.locals.jwtData.id);
     if (!user) {
+      console.log("User not found");
       return res.status(401).send("User not registered or Token malfunctioned");
     }
+
+    console.log("User found:", user);
+
     if (user._id.toString() !== res.locals.jwtData.id) {
+      console.log("Permissions didn't match");
       return res.status(401).send("Permissions didn't match");
     }
 
+    console.log("Permissions matched");
+    console.log("User:", user.username, user.email);
     return res
       .status(200)
-      .json({ message: "Ok", username: user.username, email: user.email });
+      .json({ "message": "Ok", "username": user.username, "email": user.email });
   } catch (error) {
-    console.log(error);
+    console.log("Error during verification:", error);
     return res.status(500).json({ message: "Error", cause: error.message });
   }
 };
+
 
 const logout = async (req, res) => {
   try {
