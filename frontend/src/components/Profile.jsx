@@ -21,6 +21,7 @@ import {
   FaSignOutAlt,
 } from "react-icons/fa";
 import { useAuth } from "../Context/AuthContext";
+import toast from "react-hot-toast";
 
 export default function Profile() {
   const [password, setPassword] = useState("");
@@ -51,6 +52,10 @@ export default function Profile() {
 
   const handleLogout = () => {
     console.log("User logged out");
+    toast.success("Logout successful!", {
+      duration: 2000,
+      style: { background: "green", color: "white", zIndex: 1 },
+    });
     auth.logout();
     // Implement logout logic here
   };
