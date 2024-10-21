@@ -1,4 +1,4 @@
-FROM node:18 AS build_image
+FROM node:18-alpine AS build_image
 
 WORKDIR /app
 
@@ -15,7 +15,7 @@ RUN npm run build
 # it also won't expose any of the code in teh container 
 # as we only copy the build output from first stage hehe
 
-FROM node:18
+FROM node:18-alpine
 
 WORKDIR /app
 
