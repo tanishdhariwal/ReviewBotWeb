@@ -24,6 +24,7 @@ export const SignUpUser = async (userData) => {
     return response.data;
   } catch (error) {
     console.error("Error signing up:", error);
+    throw error;
   }
 };
 

@@ -14,6 +14,7 @@ import {
 import { FaUser, FaLock, FaEnvelope, FaEye, FaEyeSlash } from "react-icons/fa";
 import { SignUpUser, LoginUser } from "../Helpers/apiComms";
 import { useAuth } from "../Context/AuthContext";
+import toast, { Toaster } from 'react-hot-toast';
 
 export default function LoginSignUp() {
   const [email, setEmail] = useState("");
@@ -32,20 +33,21 @@ export default function LoginSignUp() {
         try {
           const Loginpayload = {"email":email,"password":password};
           await auth.login(Loginpayload);
+          toast.success("Login successful!", {duration: 2000, style: {background: "green", color: "white", zIndex: 1}});
         } catch (error) {
           console.error("Login failed:", error);
-          alert("Login failed. Please check your credentials and try again.");
+          // alert("Login failed. Please check your credentials and try again.");
+          toast.error("Login failed. Please check your credentials and try again.");
         }
       } else {
         try {
-          const data = await SignUpUser(payload);
-            alert("Sign up successful! Please log in.");
+            const data = await SignUpUser(payload);
+            toast.success("Sign up successful! Please log in.");
             setisSignin(false);
             navigate("/login");
-          
         } catch (error) {
           console.error("Sign up failed:", error);
-          alert("Sign up failed. Please try again.");
+          toast.error("Sign up failed. Please try again.");
         }
       }
       navigate("/");
