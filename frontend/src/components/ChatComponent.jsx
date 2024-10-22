@@ -63,12 +63,12 @@ export default function ChatComponent() {
     }
   }
 
-  const handleKeyPress = (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault()
-      handleSendMessage(e)
-    }
-  }
+  // const handleKeyPress = (e) => {
+  //   if (e.key === 'Enter' && !e.shiftKey) {
+  //     e.preventDefault()
+  //     handleSendMessage(e)
+  //   }
+  // }
 
   return (
     <div className="flex flex-col h-[500px] bg-gray-100 rounded-lg">
@@ -150,7 +150,7 @@ export default function ChatComponent() {
             type="text"
             value={currentMessage}
             onChange={(e) => setCurrentMessage(e.target.value)}
-            onKeyPress={handleKeyPress}
+            // onKeyPress={handleKeyPress}
             placeholder="Type your message here..."
             className="flex-grow px-4 py-3 text-lg bg-gray-100 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300"
           />
