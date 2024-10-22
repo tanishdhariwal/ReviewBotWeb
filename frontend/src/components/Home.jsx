@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "../Context/AuthContext";
 import CubeLoader from "./shared/CubeLoader";
+import toast, { Toaster } from 'react-hot-toast';
 
 export default function HomePage() {
   const auth = useAuth();
@@ -26,8 +27,21 @@ export default function HomePage() {
   };
 
   const handleNavigateToReviewChat = () => {
-    if (url!== "") {
-      setIsLoading(true);
+    const urlPattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
+      '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.?)+[a-z]{2,}|'+ // domain name
+      '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+      '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
+      '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+      '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+
+    if (!urlPattern.test(url)) {
+      toast.error("Please enter a valid URL.");
+      
+    }
+
+    if (url !== "") {
+      // setIsLoading(true);
+      toast.success("Loading...", { duration: 6000,style: { zIndex: 1 } });
       setTimeout(() => {
         setIsLoading(false);
         navigate(`/review-chat?url=${url}`);
@@ -67,6 +81,7 @@ export default function HomePage() {
 
   return (
     <div className="relative">
+      <Toaster />
       {isLoading && (
         <div className="fixed inset-0 flex items-center justify-center bg-transparent  backdrop-blur-sm z-50">
           <CubeLoader />

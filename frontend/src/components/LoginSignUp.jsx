@@ -14,6 +14,7 @@ import {
 import { FaUser, FaLock, FaEnvelope, FaEye, FaEyeSlash } from "react-icons/fa";
 import { SignUpUser, LoginUser } from "../Helpers/apiComms";
 import { useAuth } from "../Context/AuthContext";
+import toast, { Toaster } from 'react-hot-toast';
 
 export default function LoginSignUp() {
   const [email, setEmail] = useState("");
@@ -23,32 +24,40 @@ export default function LoginSignUp() {
   const navigate = useNavigate();
   const auth = useAuth();
   const [isSignin, setisSignin] = useState(true);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const payload = { email, password, username };
     console.log(payload);
     try {
       if (!isSignin) {
+        const toastId = toast.loading("Logging in...");
         try {
-          const Loginpayload = { "email": email, "password": password };
-          await auth.login(Loginpayload);
+            const Loginpayload = { email, password }; 
+          const response = await auth.login(Loginpayload);
+          if (response.message == "ok") {
+            // throw new Error("Invalid login");
+            toast.success("Login successful!", { id: toastId, style: { zIndex: 1 } });
+          }else{
+            toast.error("Login Failed", {id:toastId})
+          }
+          navigate("/");
         } catch (error) {
           console.error("Login failed:", error);
-          // alert("Login failed. Please check your credentials and try again.");
+          toast.error("Login failed. Please check your credentials and try again.", { id: toastId });
         }
       } else {
+        const toastId = toast.loading("Signing up...");
         try {
-          const data = await SignUpUser(payload);
-          alert("Sign up successful! Please log in.");
+          await SignUpUser(payload);
+          toast.success("Sign up successful! Please log in.", { id: toastId });
           setisSignin(false);
-          navigate("/login");
-
+          navigate("/login"); 
         } catch (error) {
           console.error("Sign up failed:", error);
-          alert("Sign up failed. Please try again.");
+          toast.error("Sign up failed. Please try again.", { id: toastId });
         }
       }
-      // navigate("/");
     } catch (error) {
       console.error("Error:", error);
     }
@@ -59,6 +68,7 @@ export default function LoginSignUp() {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-purple-900 via-indigo-800 to-blue-700 relative overflow-hidden">
+      <Toaster />
       <div className="absolute inset-0 bg-white opacity-10 transform -skew-y-12"></div>
       <motion.div
         initial={{ opacity: 0, y: -20 }}

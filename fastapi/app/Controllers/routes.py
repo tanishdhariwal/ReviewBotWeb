@@ -9,6 +9,7 @@ from app.Schemas.models import QueryInput
 from jose import JWTError, jwt
 import os
 from dotenv import load_dotenv
+import time
 
 load_dotenv()
 
@@ -38,9 +39,14 @@ def verify_token(request: Request):
 
 @router.post("/random_text")
 async def get_random_text(input: TextInput, token: dict = Depends(verify_token)):
+    
     try:
-        print(input)
+        username = token.get("username")
+        time.sleep(5)
+        print("I came here bruh !!")
         random_response = random.choice(responses)
+        print( input ," ---> ", random_response)
+        random_response = random_response + "----------- " + username
         return {"response": random_response}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

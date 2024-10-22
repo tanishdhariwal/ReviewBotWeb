@@ -7,8 +7,11 @@ import { CloudCog } from "lucide-react";
 const AuthContext = createContext(new AuthContextType || null);
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState(() => {
+    const storedUser = localStorage.getItem("user");
+    return storedUser ? JSON.parse(storedUser) : null;
+  });
+  const [isLoggedIn, setIsLoggedIn] = useState(() => !!localStorage.getItem("user"));
   const [loading, setLoading] = useState(true); // Start with loading true
 
   useEffect(() => {
@@ -16,9 +19,11 @@ export const AuthProvider = ({ children }) => {
       try {
         const data = await checkAuthStatus();
         if (data) {
+          console.log(data.username, data.email);
           const user = new User(data.username, data.email);
           setUser(user);
           setIsLoggedIn(true);
+          localStorage.setItem("user", JSON.stringify(user));
         }
       } catch (error) {
         console.error("Error checking auth status:", error);
@@ -42,6 +47,8 @@ export const AuthProvider = ({ children }) => {
       const user = new User(data.username, data.email);
       setUser(user);
       setIsLoggedIn(true);
+      localStorage.setItem("user", JSON.stringify(user));
+      return { message: "Login successful!" };
     } catch (error) {
       console.error("Error during login:", error);
       throw error;
@@ -56,6 +63,7 @@ export const AuthProvider = ({ children }) => {
       await LogoutUser();
       setUser(null);
       setIsLoggedIn(false);
+      localStorage.removeItem("user");
       window.location.reload();
     } catch (error) {
       console.error("Error during logout:", error);

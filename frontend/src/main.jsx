@@ -7,13 +7,16 @@ import axios from "axios";
 import { ThemeProvider } from "@material-tailwind/react";
 import { AuthProvider } from "./Context/AuthContext.jsx";
 
-axios.defaults.baseURL = "http://localhost:5000";
+import { Toaster } from "react-hot-toast";
+
+axios.defaults.baseURL = "http://192.168.88.135:5000";
 axios.defaults.withCredentials = true;
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <AuthProvider>
       <ThemeProvider>
+      <Toaster position="top-center" />
         <App />
       </ThemeProvider>
     </AuthProvider>
