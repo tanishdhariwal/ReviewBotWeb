@@ -6,7 +6,7 @@ const router = require("./routes/userRoutes");
 const cookieParser = require("cookie-parser");
 
 const corsOptions = {
-  origin: "http://localhost:5173", // Replace with your frontend domain
+  origin: `http://${process.env.FRONTEND_URL}:5173`, // Replace with your frontend domain
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true, // Allow cookies to be sent
   optionsSuccessStatus: 204
@@ -21,7 +21,7 @@ app.use(router);
 try {
   connectionToDB();
 
-  app.listen(process.env.PORT, () => {
+  app.listen(process.env.PORT,'0.0.0.0', () => {
     console.log(`Server is running on port ${process.env.PORT}`);
   });
 } catch (error) {

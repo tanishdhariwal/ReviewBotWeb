@@ -42,7 +42,7 @@ const login = async (req, res) => {
 
     res.clearCookie(process.env.COOKIE_NAME, {
       httpOnly: true,
-      domain: "localhost",
+      domain: process.env.FRONTEND_URL,
       signed: true,
       path: "/",
     });
@@ -59,7 +59,7 @@ const login = async (req, res) => {
 
     res.cookie(process.env.COOKIE_NAME, token, {
       path: "/",
-      domain: "localhost",
+      domain: process.env.FRONTEND_URL,
       expires,
       httpOnly: true,
       signed: true,
@@ -115,7 +115,7 @@ const logout = async (req, res) => {
     }
     res.clearCookie(process.env.COOKIE_NAME, {
       httpOnly: true,
-      domain: "localhost",
+      domain: process.env.FRONTEND_URL,
       signed: true,
       path: "/",
     });
@@ -136,7 +136,7 @@ const get_response = async (req, res) => {
 
     // Forward the request to FastAPI with the JWT token
     const response = await axios.post(
-      'http://localhost:8000/random_text',
+      `http://${process.env.FRONTEND_URL}:8000/random_text`,
       { text },
       {
         headers: {
