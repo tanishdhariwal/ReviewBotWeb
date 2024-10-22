@@ -30,22 +30,23 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = async (userData) => {
-    try {
-      setLoading(true); // Start loading
-      const payload = { email: userData.email, password: userData.password };
-      const data = await LoginUser(payload);
-      if (!data) {
-        throw new Error("Invalid login");
+      try {
+          setLoading(true); // Start loading
+          const payload = { email: userData.email, password: userData.password };
+          const data = await LoginUser(payload);
+          if (!data) {
+              throw new Error("Invalid login");
+          }
+          const user = new User(data.username, data.email);
+          setUser(user);
+          setIsLoggedIn(true);
+          return {"message": "ok"};
+      } catch (error) {
+          console.error("Error during login:", error);
+          throw error;
+      } finally {
+          setLoading(false); // End loading
       }
-      const user = new User(data.username, data.email);
-      setUser(user);
-      setIsLoggedIn(true);
-    } catch (error) {
-      console.error("Error during login:", error);
-      throw error;
-    } finally {
-      setLoading(false); // End loading
-    }
   };
 
   const logout = async () => {

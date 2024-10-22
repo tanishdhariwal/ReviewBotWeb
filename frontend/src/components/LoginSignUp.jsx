@@ -34,8 +34,13 @@ export default function LoginSignUp() {
         const toastId = toast.loading("Logging in...");
         try {
             const Loginpayload = { email, password }; 
-          await auth.login(Loginpayload);
-          toast.success("Login successful!", { id: toastId, style: { zIndex: 1 } });
+          const response = await auth.login(Loginpayload);
+          if (response.message == "ok") {
+            // throw new Error("Invalid login");
+            toast.success("Login successful!", { id: toastId, style: { zIndex: 1 } });
+          }else{
+            toast.error("Login Failed", {id:toastId})
+          }
           navigate("/");
         } catch (error) {
           console.error("Login failed:", error);
