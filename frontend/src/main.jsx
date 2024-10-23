@@ -3,13 +3,12 @@ import { createRoot } from "react-dom/client";
 import App from "./App.jsx";
 import "./index.css";
 import axios from "axios";
-
 import { ThemeProvider } from "@material-tailwind/react";
 import { AuthProvider } from "./Context/AuthContext.jsx";
-
 import { Toaster } from "react-hot-toast";
-
-axios.defaults.baseURL = "http://192.168.88.135:5000";
+import dotenv from "dotenv";
+dotenv.config(); 
+axios.defaults.baseURL = process.env.BACKEND_URL;
 axios.defaults.withCredentials = true;
 
 createRoot(document.getElementById("root")).render(

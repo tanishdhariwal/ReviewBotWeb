@@ -20,6 +20,8 @@ const UserSchema = new mongoose.Schema({
         required: true,
         minlength: 4,
     }
+
+     
 });
 
 // salt is a random string that is used to hash the password, 
