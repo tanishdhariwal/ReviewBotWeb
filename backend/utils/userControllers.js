@@ -133,11 +133,11 @@ const get_response = async (req, res) => {
   try {
     const { text } = req.body;
     const token = req.signedCookies[process.env.COOKIE_NAME];
-
+    console.log("Token:", text);
     // Forward the request to FastAPI with the JWT token
     const response = await axios.post(
-      `http://${process.env.FRONTEND_URL}:8000/random_text`,
-      { text },
+      `http://${process.env.FRONTEND_URL}:8000/generate`,
+      { query: text }, // Ensure the request body matches the expected schema
       {
         headers: {
           Authorization: `Bearer ${token}`, 
@@ -151,5 +151,4 @@ const get_response = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-
 module.exports = { signup, login, logout, verifyuser, get_response };
