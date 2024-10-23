@@ -18,6 +18,7 @@ export const SignUpUser = async (userData) => {
     const response = await axios.post(`/signup`, { username, email, password });
     console.log(response.status);
     if (response.status !== 201) {
+      
       throw new Error(response.data);
     }
     console.log(response.data);

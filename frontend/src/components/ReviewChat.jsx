@@ -100,6 +100,7 @@ export default function ProductDetails() {
             >
               <h3 className="text-lg font-semibold text-gray-800 mb-2">{metric.name}</h3>
               <div className="flex items-center">
+                
                 <div className="w-full bg-gray-200 rounded-full h-2.5">
                   <motion.div 
                     className={`${metric.color} h-2.5 rounded-full`}
