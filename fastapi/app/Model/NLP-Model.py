@@ -11,7 +11,6 @@ model = AutoModelForCausalLM.from_pretrained(
     cache_dir="./HuggingFaceModels",
     trust_remote_code=True,
 )
-
 tokenizer = AutoTokenizer.from_pretrained(model_name = "microsoft/Phi-3.5-mini-instruct", cache_dir="./HuggingFaceModels")
 
 #initialize the pipeline
