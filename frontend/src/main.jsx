@@ -6,9 +6,9 @@ import axios from "axios";
 import { ThemeProvider } from "@material-tailwind/react";
 import { AuthProvider } from "./Context/AuthContext.jsx";
 import { Toaster } from "react-hot-toast";
-import dotenv from "dotenv";
-dotenv.config(); 
-axios.defaults.baseURL = process.env.BACKEND_URL;
+// import dotenv from "dotenv";
+// dotenv.config(); 
+axios.defaults.baseURL = "http://192.168.180.58:5000";
 axios.defaults.withCredentials = true;
 
 createRoot(document.getElementById("root")).render(
