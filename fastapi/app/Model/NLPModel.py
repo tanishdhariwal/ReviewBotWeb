@@ -3,15 +3,17 @@ from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
 
 torch.random.manual_seed(0)
 
+modelName = "microsoft/Phi-3.5-mini-instruct"
+
 #initialize the model and tokenizer
 model = AutoModelForCausalLM.from_pretrained(
-    "microsoft/Phi-3.5-mini-instruct",
+    modelName,
     device_map = "cuda" if torch.cuda.is_available() else "cpu",
     torch_dtype="auto",
     cache_dir="./HuggingFaceModels",
     trust_remote_code=True,
 )
-tokenizer = AutoTokenizer.from_pretrained(model_name = "microsoft/Phi-3.5-mini-instruct", cache_dir="./HuggingFaceModels")
+tokenizer = AutoTokenizer.from_pretrained(modelName, cache_dir="./HuggingFaceModels")
 
 #initialize the pipeline
 pipe = pipeline(
