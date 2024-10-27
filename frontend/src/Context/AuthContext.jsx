@@ -40,7 +40,8 @@ export const AuthProvider = ({ children }) => {
       const payload = { email: userData.email, password: userData.password };
       const data = await LoginUser(payload);
       if (!data) {
-        throw new Error("Invalid login");
+        // throw new Error("Invalid login");
+        return { message: "Invalid login" };
       }
       console.log(data);
       console.log(data.username)
@@ -50,8 +51,10 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem("user", JSON.stringify(user));
       return { message: "Login successful!" };
     } catch (error) {
-      console.error("Error during login:", error);
-      throw error;
+      return { message: "Login failed" };
+      // console.error("Error during login:", error);
+      // throw error;
+      return { message: "Error during login" };
     } finally {
       setLoading(false); // End loading
     }
@@ -67,7 +70,8 @@ export const AuthProvider = ({ children }) => {
       window.location.reload();
     } catch (error) {
       console.error("Error during logout:", error);
-      throw error;
+      // throw error;
+        return { message: "Error during logout" };
     } finally {
       setLoading(false); // End loading
     }
@@ -87,6 +91,7 @@ export const useAuth = () => {
   const context = useContext(AuthContext);
   if (context === undefined) {
     throw new Error("useAuth must be used within an AuthProvider");
+    // return { message: "useAuth must be used within an AuthProvider" };
   }
   return context;
 };
