@@ -48,7 +48,7 @@ This app provides users with insights from product reviews by allowing them to i
 ### Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/ReviewBot.git
+git clone https://github.com/Bharadwajreddy1406/ReviewBot.git
 cd ReviewBot
 
 ```
