@@ -31,7 +31,7 @@ This app provides users with insights from product reviews by allowing them to i
 
 ## Features
 
-- Interactive chatbot to analyze product reviews.
+- Interactive bot to analyze product reviews.
 - Sentiment analysis for providing product review insights.
 - User profile management.
 - Responsive UI for a smooth user experience.
