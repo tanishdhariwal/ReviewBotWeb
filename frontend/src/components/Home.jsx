@@ -41,7 +41,7 @@ export default function HomePage() {
 
     if (url !== "") {
       // setIsLoading(true);
-      toast.success("Loading...", { duration: 6000,style: { zIndex: 1 } });
+      toast.loading("Loading...", { duration: 6000,style: { zIndex: 1 } });
       setTimeout(() => {
         setIsLoading(false);
         navigate(`/review-chat?url=${url}`);

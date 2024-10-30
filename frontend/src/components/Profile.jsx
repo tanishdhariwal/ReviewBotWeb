@@ -52,10 +52,10 @@ export default function Profile() {
 
   const handleLogout = () => {
     console.log("User logged out");
-    toast.success("Logout successful!", {
-      duration: 2000,
-      style: { background: "green", color: "white", zIndex: 1 },
-    });
+    // toast.success("Logout successful!", {
+    //   duration: 2000,
+    //   style: { background: "green", color: "white", zIndex: 1 },
+    // });
     auth.logout();
     // Implement logout logic here
   };

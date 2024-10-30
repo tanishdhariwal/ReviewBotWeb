@@ -1,13 +1,10 @@
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
-const axios = require("axios");
 
 const signup = async (req, res) => {
   const { username, email, password } = req.body;
   if (!username || !email || !password) {
-    return res
-      .status(400)
-      .json({ error: "Please provide name email and password" });
+    return res.status(400).json({ error: "Please provide name email and password" });
   }
   try {
     const user = new User({ username, email, password });
@@ -32,12 +29,12 @@ const login = async (req, res) => {
   try {
     let gotuser = await User.findOne({ email: email });
     if (!gotuser) {
-      return res.status(400).json({ error: "User not found" });
+      return res.status(400).json({ error: "Invalid email or password" });
     }
 
     let matched = await gotuser.comparePass(password);
     if (!matched) {
-      return res.status(400).json({ error: "Incorrect password" });
+      return res.status(400).json({ error: "Invalid email or password" });
     }
 
     res.clearCookie(process.env.COOKIE_NAME, {
@@ -67,7 +64,7 @@ const login = async (req, res) => {
 
     return res
       .status(200)
-      .json({ message: "ok", "username": gotuser.username ,"email": gotuser.email });
+      .json({ message: "ok", username: gotuser.username, email: gotuser.email });
   } catch (error) {
     console.error("Error during login:", error);
     return res.status(500).json({ error: "Internal server error" });
@@ -81,74 +78,48 @@ const verifyuser = async (req, res) => {
 
     const user = await User.findById(res.locals.jwtData.id);
     if (!user) {
-      console.log("User not found");
-      return res.status(401).send("User not registered or Token malfunctioned");
+      return res.status(400).json({ error: "User not found" });
     }
 
     console.log("User found:", user);
 
     if (user._id.toString() !== res.locals.jwtData.id) {
-      console.log("Permissions didn't match");
-      return res.status(401).send("Permissions didn't match");
+      return res.status(400).json({ error: "Invalid token" });
     }
 
     console.log("Permissions matched");
     console.log("User:", user.username, user.email);
     return res
       .status(200)
-      .json({ "message": "Ok", "username": user.username, "email": user.email });
+      .json({ message: "Ok", username: user.username, email: user.email });
   } catch (error) {
     console.log("Error during verification:", error);
-    return res.status(500).json({ message: "Error", cause: error.message });
+    return res.status(500).json({ error: "Internal server error" });
   }
 };
 
-
 const logout = async (req, res) => {
   try {
-    const user = await User.findById(res.locals.jwtData.id);
-    if (!user) {
-      return res.status(401).send("User not registered or Token malfunctioned");
-    }
-    if (user._id.toString() !== res.locals.jwtData.id) {
-      return res.status(401).send("Permissions didn't match");
-    }
     res.clearCookie(process.env.COOKIE_NAME, {
       httpOnly: true,
       domain: process.env.FRONTEND_URL,
       signed: true,
       path: "/",
     });
-
-    return res
-      .status(200)
-      .json({ message: "Ok", name: user.name, email: user.email });
+    return res.status(200).json({ message: "Logout successful" });
   } catch (error) {
-    console.log(error);
-    return res.status(500).json({ message: "Error", cause: error.message });
+    console.error("Error during logout:", error);
+    return res.status(500).json({ error: "Internal server error" });
   }
 };
 
 const get_response = async (req, res) => {
   try {
-    const { text } = req.body;
-    const token = req.signedCookies[process.env.COOKIE_NAME];
-    console.log("Token:", text);
-    // Forward the request to FastAPI with the JWT token
-    const response = await axios.post(
-      `http://${process.env.FRONTEND_URL}:8000/generate`,
-      { query: text }, // Ensure the request body matches the expected schema
-      {
-        headers: {
-          Authorization: `Bearer ${token}`, 
-        },
-      }
-    );
-
-    res.status(200).json(response.data);
+    // the main logic for the chatbot inka pettali
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: error.message });
+    console.error("Error:", error);
+    return res.status(500).json({ error: "Internal server error" });
   }
 };
+
 module.exports = { signup, login, logout, verifyuser, get_response };

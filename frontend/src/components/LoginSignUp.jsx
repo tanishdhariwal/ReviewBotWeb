@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -12,7 +12,7 @@ import {
   Button,
 } from "@material-tailwind/react";
 import { FaUser, FaLock, FaEnvelope, FaEye, FaEyeSlash } from "react-icons/fa";
-import { SignUpUser, LoginUser } from "../Helpers/apiComms";
+import { SignUpUser } from "../Helpers/apiComms";
 import { useAuth } from "../Context/AuthContext";
 import toast, { Toaster } from 'react-hot-toast';
 
@@ -29,37 +29,27 @@ export default function LoginSignUp() {
     e.preventDefault();
     const payload = { email, password, username };
     console.log(payload);
+    const toastId = toast.loading(isSignin ? "Signing up..." : "Logging in...");
     try {
       if (!isSignin) {
-        const toastId = toast.loading("Logging in...");
-        try {
-            const Loginpayload = { email, password }; 
-          const response = await auth.login(Loginpayload);
-          if (response.message == "ok") {
-            // throw new Error("Invalid login");
-            toast.success("Login successful!", { id: toastId, style: { zIndex: 1 } });
-          }else{
-            toast.error("Login Failed", {id:toastId})
-          }
+        const Loginpayload = { email, password };
+        const response = await auth.login(Loginpayload);
+        if (response.success) {
+          toast.success(response.message, { id: toastId, style: { zIndex: 1 } });
           navigate("/");
-        } catch (error) {
-          console.error("Login failed:", error);
-          toast.error("Login failed. Please check your credentials and try again.", { id: toastId });
+        } else {
+          toast.error(response.message, { id: toastId });
         }
       } else {
-        const toastId = toast.loading("Signing up...");
-        try {
-          await SignUpUser(payload);
-          toast.success("Sign up successful! Please log in.", { id: toastId });
-          setisSignin(false);
-          navigate("/login"); 
-        } catch (error) {
-          console.error("Sign up failed:", error);
-          toast.error("Sign up failed. Please try again.", { id: toastId });
-        }
+        await SignUpUser(payload);
+        toast.success("Sign up successful! Please log in.", { id: toastId });
+        setisSignin(false);
       }
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Login/Sign up failed:", error);
+      toast.error("Login/Sign up failed. Please try again.", { id: toastId });
+    } finally {
+      toast.dismiss(toastId);
     }
   };
 
