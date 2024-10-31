@@ -3,14 +3,14 @@ import { useNavigate } from "react-router-dom";
 import { LoginUser, LogoutUser, checkAuthStatus } from "../Helpers/apiComms";
 import LoaderModal from "../components/Common/Loader";
 import { Toaster, toast } from "react-hot-toast";
-import { AuthContextType } from "./User";
+import { AuthContextType, User } from "./User";
 
 const AuthContext = createContext(null | new AuthContextType());
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(() => {
     const storedUser = localStorage.getItem("user");
-    return storedUser ? JSON.parse(storedUser) : null;
+    return storedUser ? JSON.parse(storedUser) : null | new User();
   });
   const [isLoggedIn, setIsLoggedIn] = useState(
     () => !!localStorage.getItem("user")

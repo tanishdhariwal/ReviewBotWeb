@@ -12,9 +12,9 @@ import LoaderModal from './components/Common/Loader';
 function App() {
   const { isLoggedIn, loading } = useAuth();
 
-  if (loading) {
-    return <LoaderModal />;
-  }
+  // if (loading) {
+  //   return <LoaderModal />;
+  // }
 
   return (
     <>

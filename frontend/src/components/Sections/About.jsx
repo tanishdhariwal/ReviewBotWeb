@@ -8,7 +8,7 @@ const teamMembers = [
   {
     name: "Bharadwaj Reddy Vancha",
     description: "Full-stack developer with a passion for React and Node.js",
-    image: "/placeholder.svg?height=200&width=300",
+    image: "https://i.pinimg.com/736x/8d/c8/6f/8dc86f723d091565d49653efebc1af03.jpg",
     github: "https://github.com/alice",
     linkedin: "https://linkedin.com/in/alice",
     instagram: "https://instagram.com/alice",
@@ -16,8 +16,8 @@ const teamMembers = [
   },
   {
     name: "Kushal Bang",
-    description: "UI/UX designer creating beautiful and intuitive interfaces",
-    image: "/placeholder.svg?height=200&width=300",
+    description: "Full-stack developer with a passion for React and Node.js",
+    image: "https://i.pinimg.com/736x/7f/71/c4/7f71c49250176c1bec930f4da0e2055a.jpg",
     github: "https://github.com/bob",
     linkedin: "https://linkedin.com/in/bob",
     instagram: "https://instagram.com/bob",
@@ -25,8 +25,8 @@ const teamMembers = [
   },
   {
     name: "Abhinav",
-    description: "DevOps engineer ensuring smooth deployments and scalability",
-    image: "/placeholder.svg?height=200&width=300",
+    description: "Full-stack developer with a passion for React and Node.js",
+    image: "https://i.pinimg.com/564x/c4/2b/1f/c42b1f344c9b2e4e6d5580b87860d094.jpg",
     github: "https://github.com/charlie",
     linkedin: "https://linkedin.com/in/charlie",
     instagram: "https://instagram.com/charlie",
@@ -34,8 +34,8 @@ const teamMembers = [
   },
   {
     name: "Tanish Dhariwal",
-    description: "Product manager with a keen eye for market trends",
-    image: "/placeholder.svg?height=200&width=300",
+    description: "Full-stack developer with a passion for React and Node.js",
+    image: "https://i.pinimg.com/736x/a2/5d/7d/a25d7d199534433db30e4bb2c8ddbc4e.jpg",
     github: "https://github.com/diana",
     linkedin: "https://linkedin.com/in/diana",
     instagram: "https://instagram.com/diana",
@@ -43,8 +43,8 @@ const teamMembers = [
   },
   {
     name: "Tanay Bansal",
-    description: "Security expert keeping our systems safe and sound",
-    image: "/placeholder.svg?height=200&width=300",
+    description: "Full-stack developer with a passion for React and Node.js",
+    image: "https://i.pinimg.com/564x/fc/2a/a3/fc2aa3137772116ce0de5bc67d59b431.jpg",
     github: "https://github.com/ethan",
     linkedin: "https://linkedin.com/in/ethan",
     instagram: "https://instagram.com/ethan",
@@ -52,8 +52,8 @@ const teamMembers = [
   },
   {
     name: "Gaurav Jain",
-    description: "Data scientist turning raw data into actionable insights",
-    image: "/placeholder.svg?height=200&width=300",
+    description: "Full-stack developer with a passion for React and Node.js",
+    image: "https://i.pinimg.com/736x/e0/6a/61/e06a61c28e68cfebecffd2ee5d3d7614.jpg",
     github: "https://github.com/fiona",
     linkedin: "https://linkedin.com/in/fiona",
     instagram: "https://instagram.com/fiona",
@@ -79,7 +79,7 @@ const MemberCard = ({ member }) => {
           </div>
           <div className="relative w-full h-48">
             <img
-              src={"https://placehold.co/600x400"}
+              src={member.image}
               alt={member.name}
               style={{ width: '100%', height: '100%', objectFit: 'cover' }}
               className="transition-transform duration-300 ease-in-out transform hover:scale-110"
