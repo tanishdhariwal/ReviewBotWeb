@@ -27,8 +27,8 @@ export const LogoutUser = async () => {
   await axios.get(`/logout`);
 };
 
-export const getChatResponse = async (text) => {
-  const response = await axios.post(`/chat_response`, { text });
+export const getChatResponse = async (text, productUrl) => {
+  const response = await axios.post(`/chat_response`, { text, productUrl });
   if (response.status !== 200) {
     throw new Error(response.data);
   }

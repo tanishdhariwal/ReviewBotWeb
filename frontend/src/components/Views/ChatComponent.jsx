@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { getChatResponse } from '../../Helpers/apiComms' // Import the getChatResponse function
 import { useAuth } from '../../Context/AuthContext'
 
-export default function ChatComponent() {
+export default function ChatComponent({ productUrl }) { // Accept productUrl as prop
   const [chatMessages, setChatMessages] = useState([])
   const [currentMessage, setCurrentMessage] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -42,7 +42,7 @@ export default function ChatComponent() {
       setIsLoading(true)
 
       try {
-        const data = await getChatResponse(currentMessage)
+        const data = await getChatResponse(currentMessage, productUrl); // Pass productUrl
         const botMessage = {
           id: (Date.now() + 1).toString(),
           content: data.response, // Extract the response field from the API response

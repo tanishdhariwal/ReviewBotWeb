@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv').config();
 const bcrypt = require('bcryptjs');
+const chatSchema = require('./Chat');
 
 const UserSchema = new mongoose.Schema({
     username: {
@@ -20,7 +21,14 @@ const UserSchema = new mongoose.Schema({
         required: true,
         minlength: 4,
     }
-
+    ,
+    chatProducts: [{
+        ProductASIN: {
+            type: String,
+            required: true,
+            unique: true
+        }
+    }]
      
 });
 

@@ -1,14 +1,33 @@
 import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom'; // Import useLocation
 import { Star, ThumbsUp, ThumbsDown, DollarSign, Award, Zap, Truck, Repeat } from 'lucide-react';
 import { motion } from 'framer-motion';
 import ChatComponent from './ChatComponent'; // Import the new ChatComponent
 
 export default function ProductDetails() {
   const [isLoaded, setIsLoaded] = useState(false);
+  const location = useLocation(); // Use useLocation to get URL parameters
+  const [productDetails, setProductDetails] = useState(null); // State for product details
+  const [productUrl, setProductUrl] = useState(''); // State for product URL
 
   useEffect(() => {
     setIsLoaded(true);
-  }, []);
+
+    const params = new URLSearchParams(location.search);
+    const productUrl = params.get('url');
+    setProductUrl(productUrl); // Store product URL
+
+    // Use hardcoded product details for now
+    const details = {
+      name: 'Premium Wireless Headphones',
+      description: 'Experience crystal-clear audio with our Premium Wireless Headphones.',
+      imageUrl: 'https://mir-s3-cdn-cf.behance.net/project_modules/1400/d30e9647291143.587609fa2b328.jpg',
+      price: '$249.99',
+      // ...other details...
+    };
+
+    setProductDetails(details);
+  }, [location]);
 
   const metrics = [
     { name: 'Quality', value: 85, color: 'bg-blue-600' },
@@ -28,7 +47,7 @@ export default function ProductDetails() {
           transition={{ duration: 0.5 }}
           className="text-3xl font-bold text-gray-800 mb-4"
         >
-          Premium Wireless Headphones
+          {productDetails ? productDetails.name : 'Loading...'}
         </motion.h1>
         
         <div className="flex flex-wrap mb-8">
@@ -36,8 +55,8 @@ export default function ProductDetails() {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5 }}
-            src="https://mir-s3-cdn-cf.behance.net/project_modules/1400/d30e9647291143.587609fa2b328.jpg" 
-            alt="Premium Wireless Headphones" 
+            src={productDetails ? productDetails.imageUrl : ''} 
+            alt={productDetails ? productDetails.name : ''} 
             className="w-full md:w-1/3 rounded-lg mb-4 md:mb-0 md:mr-6" 
           />
           <div className="w-full md:w-3/5">
@@ -47,7 +66,7 @@ export default function ProductDetails() {
               transition={{ delay: 0.2, duration: 0.5 }}
               className="text-gray-600 mb-4"
             >
-              Experience crystal-clear audio with our Premium Wireless Headphones. Featuring advanced noise-cancellation technology, comfortable over-ear design, and long-lasting battery life.
+              {productDetails ? productDetails.description : ''}
             </motion.p>
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
@@ -65,7 +84,7 @@ export default function ProductDetails() {
               className="flex items-center mb-4"
             >
               <DollarSign className="text-green-600 w-5 h-5 mr-1" />
-              <span className="text-gray-700 font-semibold">$249.99</span>
+              <span className="text-gray-700 font-semibold">{productDetails ? productDetails.price : ''}</span>
             </motion.div>
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
@@ -139,7 +158,7 @@ export default function ProductDetails() {
           </div>
         </motion.div>
 
-        <ChatComponent /> {/* Use the new ChatComponent */}
+        <ChatComponent productUrl={productUrl} /> {/* Pass productUrl to ChatComponent */}
       </div>
     </div>
   );

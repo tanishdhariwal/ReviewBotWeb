@@ -37,12 +37,14 @@ const login = async (req, res) => {
       return res.status(400).json({ error: "Invalid email or password" });
     }
 
-    res.clearCookie(process.env.COOKIE_NAME, {
-      httpOnly: true,
-      domain: process.env.FRONTEND_URL,
-      signed: true,
-      path: "/",
-    });
+    // res.clearCookie(process.env.COOKIE_NAME, {
+    //   httpOnly: true,
+    //   domain: process.env.FRONTEND_URL,
+    //   signed: true,
+    //   path: "/",
+    // });
+
+    // just chill, we can use it if we get any serious issues 
 
     const token = jwt.sign(
       { id: gotuser._id, username: gotuser.username },

@@ -1,6 +1,6 @@
 const express = require("express");
-const dotenv = require("dotenv").config();
-const router = express.Router();
+// const dotenv = require("dotenv").config();
+const userRouter = express.Router();
 const {
   login,
   signup,
@@ -10,14 +10,14 @@ const {
 } = require("../Controllers/userControllers");
 const { verifyToken } = require("../utils/tokenManager");
 
-router.post("/signup", signup);
-router.post("/login", login);
-router.get("/logout", verifyToken, logout);
-router.get("/authstatus", verifyToken, verifyuser);
-router.post("/chat_response", verifyToken, get_response); 
+userRouter.post("/signup", signup);
+userRouter.post("/login", login);
+userRouter.get("/logout", verifyToken, logout);
+userRouter.get("/authstatus", verifyToken, verifyuser);
+userRouter.post("/chat_response", verifyToken, get_response); 
 
-router.get("/", (req, res) => {
+userRouter.get("/", (req, res) => {
   res.status(200).send("Hello from the server");
 });
 
-module.exports = router;
+module.exports = userRouter;
