@@ -12,8 +12,8 @@ import {
   Button,
 } from "@material-tailwind/react";
 import { FaUser, FaLock, FaEnvelope, FaEye, FaEyeSlash } from "react-icons/fa";
-import { SignUpUser } from "../Helpers/apiComms";
-import { useAuth } from "../Context/AuthContext";
+import { SignUpUser } from "../../Helpers/apiComms";
+import { useAuth } from "../../Context/AuthContext";
 import toast, { Toaster } from 'react-hot-toast';
 
 export default function LoginSignUp() {

@@ -20,7 +20,7 @@ import {
   FaComments,
   FaSignOutAlt,
 } from "react-icons/fa";
-import { useAuth } from "../Context/AuthContext";
+import { useAuth } from "../../Context/AuthContext";
 import toast from "react-hot-toast";
 
 export default function Profile() {

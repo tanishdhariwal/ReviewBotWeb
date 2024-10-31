@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
 import { Send, Loader2, User } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { getChatResponse } from '../Helpers/apiComms' // Import the getChatResponse function
-import { useAuth } from '../Context/AuthContext'
+import { getChatResponse } from '../../Helpers/apiComms' // Import the getChatResponse function
+import { useAuth } from '../../Context/AuthContext'
 
 export default function ChatComponent() {
   const [chatMessages, setChatMessages] = useState([])

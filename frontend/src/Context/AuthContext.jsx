@@ -1,7 +1,7 @@
 import { createContext, useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { LoginUser, LogoutUser, checkAuthStatus } from "../Helpers/apiComms";
-import LoaderModal from "../components/shared/Loader";
+import LoaderModal from "../components/Common/Loader";
 import { Toaster, toast } from "react-hot-toast";
 import { AuthContextType } from "./User";
 

@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import { Search, Star, BarChart2, TrendingUp, X } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { useAuth } from "../Context/AuthContext";
-import CubeLoader from "./shared/CubeLoader";
+import { useAuth } from "../../Context/AuthContext";
+import CubeLoader from "../Common/CubeLoader";
 import toast, { Toaster } from 'react-hot-toast';
 
 export default function HomePage() {

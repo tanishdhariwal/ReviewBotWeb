@@ -7,8 +7,8 @@ const {
   logout,
   verifyuser,
   get_response,
-} = require("../utils/userControllers");
-const { verifyToken } = require("../tokenManaging/tokenManager");
+} = require("../Controllers/userControllers");
+const { verifyToken } = require("../utils/tokenManager");
 
 router.post("/signup", signup);
 router.post("/login", login);
