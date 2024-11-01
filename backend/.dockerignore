@@ -3,6 +3,5 @@ dist
 .git
 .dockerignore
 testings
-testings-2
 .vscode
 testing-3
