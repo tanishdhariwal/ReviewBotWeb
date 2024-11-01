@@ -16,6 +16,10 @@ class QueryInput(BaseModel):
     query:str
 
 
+class Url(BaseModel):
+    url: str
+
+
 class TextInput(BaseModel):
     text: str
 

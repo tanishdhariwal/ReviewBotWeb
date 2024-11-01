@@ -2,7 +2,7 @@ import random
 from fastapi import APIRouter, Depends, HTTPException, status, Request
 from typing import List
 from pymongo import MongoClient
-from app.Schemas.models import User, TextInput, responses, QueryInput  # Assuming you have a User model defined in models.py
+from app.Schemas.models import User, TextInput, responses, Url, QueryInput  # Assuming you have a User model defined in models.py
 from app.DB.session import dbconnection  # Import the dbConnection function
 from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
 from jose import JWTError, jwt
@@ -10,6 +10,9 @@ import os
 from dotenv import load_dotenv
 from tqdm import tqdm
 import time
+from app.Helpers.scraperAPI import scrape_data
+from urllib.parse import urlparse, parse_qs
+import re
 
 load_dotenv()
 
@@ -43,8 +46,11 @@ async def get_random_text(input: TextInput, token: dict = Depends(verify_token))
         username = token.get("username")
         time.sleep(5)
         print("I came here bruh !!")
+
         random_response = random.choice(responses)
+
         print(input, " ---> ", random_response)
+
         random_response = random_response + "----------- " + username
         return {"response": random_response}
     except Exception as e:
@@ -68,7 +74,9 @@ def load_model_and_tokenizer():
             trust_remote_code=True,
         )
         print("Model is loaded !")
+
         tokenizer = AutoTokenizer.from_pretrained("microsoft/Phi-3.5-mini-instruct")
+
         print("Tokenizer loaded")
 
         pipe = pipeline(
@@ -125,3 +133,54 @@ async def get_all_users(db: MongoClient = Depends(dbconnection)):
     if not users:
         raise HTTPException(status_code=404, detail="No users found")
     return users
+
+
+@router.post("/scrape_url")
+async def scraping(input: Url):
+    print(f"Received scraping request with input: {input}")
+
+    parsed_url = urlparse(input.url)
+
+    print(f"Parsed URL: {parsed_url}")
+
+    if not all([parsed_url.scheme, parsed_url.netloc]):
+        print("Invalid URL provided")
+        raise HTTPException(status_code=400, detail="Invalid URL")
+
+    # Extract ASIN from the URL
+    asin = extract_asin_from_url(input.url)
+    print(f"Extracted ASIN: {asin}")
+
+    if not asin:
+        print("ASIN not found in URL")
+        raise HTTPException(status_code=400, detail="ASIN not found in URL")
+    try:
+        data = scrape_data(asin)
+        print(f"Scraped data: {data}")
+        return data
+    except Exception as e:
+        print("Error occurred during scraping")
+        raise HTTPException(status_code=500, detail="Internal Server Error")
+
+def extract_asin_from_url(url):
+    print(f"Extracting ASIN from URL: {url}")
+    # Function to extract ASIN from Amazon product URL
+    asin_pattern = re.compile(r"/(?:dp|product)/([A-Z0-9]{10})", re.IGNORECASE)
+    match = asin_pattern.search(url)
+    if match:
+        asin = match.group(1)
+        print(f"ASIN found: {asin}")
+        return asin
+    else:
+        # Try extracting ASIN from query parameters if available
+        parsed_url = urlparse(url)
+        query_params = parse_qs(parsed_url.query)
+        print(f"Query parameters: {query_params}")
+        if 'ASIN' in query_params:
+            asin = query_params['ASIN'][0]
+            print(f"ASIN found in query parameters: {asin}")
+            return asin
+        else:
+            print("ASIN not found in URL")
+            return None
+

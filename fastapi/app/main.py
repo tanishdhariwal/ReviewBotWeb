@@ -7,10 +7,11 @@ from contextlib import asynccontextmanager
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Load the model and tokenizer once when the application starts
-    load_model_and_tokenizer()
+    # load_model_and_tokenizer()
+    # pass
     yield
     # Unload the model and tokenizer when the application shuts down
-    unload_model_and_tokenizer()
+    # unload_model_and_tokenizer()
 
 app = FastAPI(lifespan=lifespan)
 
