@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Search, Star, BarChart2, TrendingUp, X } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "../../Context/AuthContext";
 import CubeLoader from "../Common/CubeLoader";
@@ -8,15 +8,24 @@ import toast, { Toaster } from 'react-hot-toast';
 
 export default function HomePage() {
   const auth = useAuth();
+  const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     console.log(auth.isLoggedIn + " is the status");
   }, [auth.isLoggedIn]);
 
+  useEffect(() => {
+    if (location.state && location.state.successMessage) {
+      toast.success(location.state.successMessage, { duration: 4000 });
+      // Reset the location state to prevent duplicate toasts
+      navigate(location.pathname, { replace: true });
+    }
+  }, [location, navigate]);
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [url, setUrl] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false); // State to manage modal visibility
-  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
@@ -80,7 +89,7 @@ export default function HomePage() {
   ];
 
   return (
-    <div className="relative">
+    <div className="">
       <Toaster />
       {isLoading && (
         <div className="fixed inset-0 flex items-center justify-center bg-transparent  backdrop-blur-sm z-50">

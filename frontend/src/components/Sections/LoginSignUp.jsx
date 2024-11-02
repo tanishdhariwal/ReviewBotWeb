@@ -27,29 +27,33 @@ export default function LoginSignUp() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const toastId = toast.loading(isSignin ? "Signing up..." : "Logging in...", { duration: Infinity });
     const payload = { email, password, username };
     console.log(payload);
-    const toastId = toast.loading(isSignin ? "Signing up..." : "Logging in...");
     try {
       if (!isSignin) {
         const Loginpayload = { email, password };
         const response = await auth.login(Loginpayload);
         if (response.success) {
-          toast.success(response.message, { id: toastId, style: { zIndex: 1 } });
-          navigate("/");
+          toast.dismiss(toastId);
+          navigate("/", { state: { successMessage: response.message } });
         } else {
-          toast.error(response.message, { id: toastId });
+          toast.dismiss(toastId);
+          toast.error(response.message);
         }
       } else {
-        await SignUpUser(payload);
-        toast.success("Sign up successful! Please log in.", { id: toastId });
-        setisSignin(false);
+        const response = await SignUpUser(payload);
+        toast.dismiss(toastId);
+        if (response.success) {
+          toast.success("Sign up successful! Please log in.", { duration: 4000 });
+          setisSignin(false);
+        } else {
+          toast.error(response.message);
+        }
       }
     } catch (error) {
-      console.error("Login/Sign up failed:", error);
-      toast.error("Login/Sign up failed. Please try again.", { id: toastId });
-    } finally {
       toast.dismiss(toastId);
+      toast.error("Login/Sign up failed. Please try again.");
     }
   };
 
