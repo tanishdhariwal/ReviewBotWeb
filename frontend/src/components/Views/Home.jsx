@@ -4,7 +4,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "../../Context/AuthContext";
 import CubeLoader from "../Common/CubeLoader";
-import toast, { Toaster } from 'react-hot-toast';
+import toast, { Toaster } from "react-hot-toast";
 
 export default function HomePage() {
   const auth = useAuth();
@@ -27,7 +27,7 @@ export default function HomePage() {
   const [url, setUrl] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false); // State to manage modal visibility
   const [isLoading, setIsLoading] = useState(false);
-  
+
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   const handleSubmit = (e) => {
@@ -36,25 +36,34 @@ export default function HomePage() {
   };
 
   const handleNavigateToReviewChat = () => {
-    const urlPattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
-      '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.?)+[a-z]{2,}|'+ // domain name
-      '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
-      '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
-      '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
-      '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+    const urlPattern = new RegExp(
+      "^(https?:\\/\\/)?" + // protocol
+        "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.?)+[a-z]{2,}|" + // domain name
+        "((\\d{1,3}\\.){3}\\d{1,3}))" + // OR ip (v4) address
+        "(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*" + // port and path
+        "(\\?[;&a-z\\d%_.~+=-]*)?" + // query string
+        "(\\#[-a-z\\d_]*)?$",
+      "i"
+    ); // fragment locator
 
-    if (!urlPattern.test(url)) {
-      toast.error("Please enter a valid URL.");
-      
-    }
+    // if (!urlPattern.test(url)) {
+    //   toast.error("Please enter a valid URL.");
+
+    // }
 
     if (url !== "") {
       // setIsLoading(true);
-      toast.loading("Loading...", { duration: 6000,style: { zIndex: 1 } });
-      setTimeout(() => {
-        setIsLoading(false);
-        navigate(`/review-chat?url=${url}`);
-      }, 6000);
+      toast.loading("Loading...", { duration: 6000, style: { zIndex: 1 } });
+      const data = checkASIN({ url: url });
+      console.log(data);
+      if (!data.isValid) {
+        toast.error("Please enter a valid URL.");
+      } else {
+        setTimeout(() => {
+          setIsLoading(false);
+          navigate(`/review-chat?url=${url}`);
+        }, 6000);
+      }
     }
   };
 
@@ -98,110 +107,112 @@ export default function HomePage() {
       )}
       {
         <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-100">
-        <main className="pt-2 flex flex-col items-center justify-center min-h-screen px-4">
-          <h1 className="text-4xl font-bold text-gray-800 mb-8 text-center">
-            Summarize Product Reviews
-          </h1>
-  
-          <form onSubmit={handleSubmit} className="w-full max-w-md mb-8">
-            <div className="flex items-center border-b-2 border-blue-500 py-2">
-              <input
-                className="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
-                type="url"
-                placeholder="Enter product URL"
-                aria-label="Product URL"
-                value={url}
-                onChange={(e) => setUrl(e.target.value)}
-                required
-              />
-              <button
-                className="flex-shrink-0 bg-blue-500 hover:bg-blue-700 border-blue-500 hover:border-blue-700 text-sm border-4 text-white py-1 px-2 rounded"
-                type="submit"
-                onClick={handleNavigateToReviewChat}
+          <main className="pt-2 flex flex-col items-center justify-center min-h-screen px-4">
+            <h1 className="text-4xl font-bold text-gray-800 mb-8 text-center">
+              Summarize Product Reviews
+            </h1>
+
+            <form onSubmit={handleSubmit} className="w-full max-w-md mb-8">
+              <div className="flex items-center border-b-2 border-blue-500 py-2">
+                <input
+                  className="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
+                  type="url"
+                  placeholder="Enter product URL"
+                  aria-label="Product URL"
+                  value={url}
+                  onChange={(e) => setUrl(e.target.value)}
+                  required
+                />
+                <button
+                  className="flex-shrink-0 bg-blue-500 hover:bg-blue-700 border-blue-500 hover:border-blue-700 text-sm border-4 text-white py-1 px-2 rounded"
+                  type="submit"
+                  onClick={handleNavigateToReviewChat}
+                >
+                  <Search className="h-5 w-5" />
+                </button>
+              </div>
+            </form>
+
+            <div className="flex flex-wrap justify-center gap-4">
+              <Link
+                to="/top-rated"
+                className="bg-white bg-opacity-20 backdrop-filter backdrop-blur-lg hover:bg-opacity-30 text-gray-800 font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out flex items-center"
               >
-                <Search className="h-5 w-5" />
+                <Star className="h-5 w-5 mr-2" />
+                Top Rated Products
+              </Link>
+              <Link
+                to="/trending"
+                className="bg-white bg-opacity-20 backdrop-filter backdrop-blur-lg hover:bg-opacity-30 text-gray-800 font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out flex items-center"
+              >
+                <TrendingUp className="h-5 w-5 mr-2" />
+                Trending Products
+              </Link>
+              <button
+                onClick={handleOpenModal}
+                className="bg-white bg-opacity-20 backdrop-filter backdrop-blur-lg hover:bg-opacity-30 text-gray-800 font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out flex items-center"
+              >
+                <BarChart2 className="h-5 w-5 mr-2" />
+                Recently Reviewed Products
               </button>
             </div>
-          </form>
-  
-          <div className="flex flex-wrap justify-center gap-4">
-            <Link
-              to="/top-rated"
-              className="bg-white bg-opacity-20 backdrop-filter backdrop-blur-lg hover:bg-opacity-30 text-gray-800 font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out flex items-center"
-            >
-              <Star className="h-5 w-5 mr-2" />
-              Top Rated Products
-            </Link>
-            <Link
-              to="/trending"
-              className="bg-white bg-opacity-20 backdrop-filter backdrop-blur-lg hover:bg-opacity-30 text-gray-800 font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out flex items-center"
-            >
-              <TrendingUp className="h-5 w-5 mr-2" />
-              Trending Products
-            </Link>
-            <button
-              onClick={handleOpenModal}
-              className="bg-white bg-opacity-20 backdrop-filter backdrop-blur-lg hover:bg-opacity-30 text-gray-800 font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out flex items-center"
-            >
-              <BarChart2 className="h-5 w-5 mr-2" />
-              Recently Reviewed Products
-            </button>
-          </div>
-  
-          {/* Modal */}
-          <AnimatePresence>
-            {isModalOpen && auth.isLoggedIn && (
-              <motion.div
-                className="fixed inset-0 flex items-center justify-center bg-white-900 bg-opacity-50 backdrop-filter backdrop-blur-lg"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-              >
+
+            {/* Modal */}
+            <AnimatePresence>
+              {isModalOpen && auth.isLoggedIn && (
                 <motion.div
-                  className="bg-white bg-opacity-20 backdrop-filter backdrop-blur-lg rounded-lg p-6 max-w-3xl w-full shadow-lg"
-                  initial={{ y: "-50%", opacity: 0 }}
-                  animate={{ y: "0%", opacity: 1 }}
-                  exit={{ y: "-50%", opacity: 0 }}
-                  transition={{ duration: 0.3 }}
+                  className="fixed inset-0 flex items-center justify-center bg-white-900 bg-opacity-50 backdrop-filter backdrop-blur-lg"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
                 >
-                  <div className="flex justify-between items-center mb-4">
-                    <h2 className="text-lg font-semibold text-gray-800">
-                      Previously Searched Products
-                    </h2>
-                    <button onClick={handleCloseModal}>
-                      <X className="h-5 w-5 text-gray-500 hover:text-gray-700" />
-                    </button>
-                  </div>
-                  <div className="max-h-96 overflow-y-auto">
-                    <ul className="space-y-2">
-                      {previousChats.length > 0 ? (
-                        previousChats.map((chat, index) => (
-                          <li
-                            key={index}
-                            className="flex justify-between items-center gap-10 border-b py-2 px-9 text-gray-700"
-                          >
-                            <span
-                              className="truncate max-w-xs"
-                              title={chat.product}
+                  <motion.div
+                    className="bg-white bg-opacity-20 backdrop-filter backdrop-blur-lg rounded-lg p-6 max-w-3xl w-full shadow-lg"
+                    initial={{ y: "-50%", opacity: 0 }}
+                    animate={{ y: "0%", opacity: 1 }}
+                    exit={{ y: "-50%", opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <div className="flex justify-between items-center mb-4">
+                      <h2 className="text-lg font-semibold text-gray-800">
+                        Previously Searched Products
+                      </h2>
+                      <button onClick={handleCloseModal}>
+                        <X className="h-5 w-5 text-gray-500 hover:text-gray-700" />
+                      </button>
+                    </div>
+                    <div className="max-h-96 overflow-y-auto">
+                      <ul className="space-y-2">
+                        {previousChats.length > 0 ? (
+                          previousChats.map((chat, index) => (
+                            <li
+                              key={index}
+                              className="flex justify-between items-center gap-10 border-b py-2 px-9 text-gray-700"
                             >
-                              {chat.product}
-                            </span>
-                            <span className="whitespace-nowrap">{chat.date}</span>
+                              <span
+                                className="truncate max-w-xs"
+                                title={chat.product}
+                              >
+                                {chat.product}
+                              </span>
+                              <span className="whitespace-nowrap">
+                                {chat.date}
+                              </span>
+                            </li>
+                          ))
+                        ) : (
+                          <li className="text-gray-700">
+                            No previous chats found.
                           </li>
-                        ))
-                      ) : (
-                        <li className="text-gray-700">
-                          No previous chats found.
-                        </li>
-                      )}
-                    </ul>
-                  </div>
+                        )}
+                      </ul>
+                    </div>
+                  </motion.div>
                 </motion.div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </main>
-      </div>
+              )}
+            </AnimatePresence>
+          </main>
+        </div>
       }
     </div>
   );
