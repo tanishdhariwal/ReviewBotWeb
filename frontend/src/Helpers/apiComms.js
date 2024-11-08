@@ -28,14 +28,14 @@ export const LogoutUser = async () => {
 };
 
 
-export const checkASIN = async(urldata)=>{
-  const response = await axios.post(`/asin`, urldata);
-  // in response, we want 2 things one to see if URL is valid or not and second to know if it's in Db or not
-  if (response.status !== 200) {
-    throw new Error(response.data);
+export const checkASIN = async (urldata) => {
+  try {
+    const response = await axios.post(`/product_url_validation`, urldata);
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response.data.error || "Validation failed.");
   }
-  return response.data;
-}
+};
 
 export const getChatResponse = async (text, productUrl) => {
   const response = await axios.post(`/chat_response`, { text, productUrl });

@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "../../Context/AuthContext";
 import CubeLoader from "../Common/CubeLoader";
 import toast, { Toaster } from "react-hot-toast";
+import { checkASIN } from "../../Helpers/apiComms";
 
 export default function HomePage() {
   const auth = useAuth();
@@ -35,35 +36,20 @@ export default function HomePage() {
     console.log("Submitted URL:", url);
   };
 
-  const handleNavigateToReviewChat = () => {
-    const urlPattern = new RegExp(
-      "^(https?:\\/\\/)?" + // protocol
-        "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.?)+[a-z]{2,}|" + // domain name
-        "((\\d{1,3}\\.){3}\\d{1,3}))" + // OR ip (v4) address
-        "(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*" + // port and path
-        "(\\?[;&a-z\\d%_.~+=-]*)?" + // query string
-        "(\\#[-a-z\\d_]*)?$",
-      "i"
-    ); // fragment locator
-
-    // if (!urlPattern.test(url)) {
-    //   toast.error("Please enter a valid URL.");
-
-    // }
-
+  const handleNavigateToReviewChat = async () => {
     if (url !== "") {
-      // setIsLoading(true);
-      toast.loading("Loading...", { duration: 6000, style: { zIndex: 1 } });
-      const data = checkASIN({ url: url });
-      console.log(data);
-      if (!data.isValid) {
-        toast.error("Please enter a valid URL.");
-      } else {
-        setTimeout(() => {
-          setIsLoading(false);
+      try {
+        const data = await checkASIN({ url });
+        if (data.isValid) {
           navigate(`/review-chat?url=${url}`);
-        }, 6000);
+        } else {
+          toast.error("URL is not valid.");
+        }
+      } catch (error) {
+        toast.error(error.message || "URL validation failed.");
       }
+    } else {
+      toast.error("Please enter a URL.");
     }
   };
 

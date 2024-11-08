@@ -28,7 +28,7 @@ def scrape_data(asin_no, country="in"):
         'country': country,
         'tld': 'in',
         "OUTPUT_FORMAT": "json",
-        "REVIEW_TYPE": "all"
+        "REVIEW_TYPE": "avp_only_reviews"   # taking only verified purchase reviews hehe
     }
     print(f"Payload for request: {payload}")
     try:
