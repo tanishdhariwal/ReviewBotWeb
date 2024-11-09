@@ -16,6 +16,7 @@ class QueryInput(BaseModel):
 
 class Url(BaseModel):
     url: str
+    asin: str
 
 class TextInput(BaseModel):
     text: str

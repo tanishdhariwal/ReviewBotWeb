@@ -28,11 +28,13 @@ def scrape_data(asin_no, country="in"):
         'country': country,
         'tld': 'in',
         "OUTPUT_FORMAT": "json",
-        "REVIEW_TYPE": "avp_only_reviews"   # taking only verified purchase reviews hehe
+        "REVIEW_TYPE": "all"   # taking only verified purchase reviews hehe
     }
     print(f"Payload for request: {payload}")
     try:
+        print("Sending request to ScraperAPI")
         r = requests.get('https://api.scraperapi.com/structured/amazon/review', params=payload)
+        print("Received response from ScraperAPI")
         print(f"Response status code: {r.status_code}")
         data = r.json()
         if r.status_code == 200:

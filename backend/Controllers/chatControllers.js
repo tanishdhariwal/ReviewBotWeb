@@ -61,7 +61,7 @@ const generateChatResponse = async (req, res) => {
   res.status(200).json({ response: botResponse });
 };
 
-const productUrlValidation = async (req, res) => {
+const productUrlValidation = async (req, res,next) => {
   const { url } = req.body;
   
   // Validate URL format and extract ASIN
@@ -69,7 +69,10 @@ const productUrlValidation = async (req, res) => {
   if (!asin) {
     return res.status(400).json({ isValid: false, error: "URL is not valid." });
   }
-  
+  next();
+};
+
+const scrapeURL = async(req,res)=>{
   try {
     const db = await dbconnection(); 
     // console.log("\n\nvejvnbskdcvbsdc\n\nvkjsbvsldkv\n\n");
@@ -77,12 +80,21 @@ const productUrlValidation = async (req, res) => {
     if (product) {
       return res.status(200).json({ isValid: true, existsInDB: true });
     } else {
-      return res.status(200).json({ isValid: true, existsInDB: false });
+      
+      const scrapingDetails = await axios.post('http://localhost:8000/scrape_url', { "url" : url , "asin":asin });
+      // return res.status(200).json({ "heyy": "i am here" });
+      if (scrapingDetails.data.success) {
+        console.log("Scraping successful.");
+        return res.status(200).json({ isValid: true, existsInDB: false, message: "Scraping successful." });
+      } else {
+        return res.status(500).json({ isValid: false, error: "Scraping failed." });
+      }
+      // return res.status(200).json({ isValid: true, existsInDB: false });
     }
   } catch (error) {
-    return res.status(500).json({ isValid: false, error: "Database error." });
+    return res.status(500).json({ isValid: false, error: "Database error.", errorDetails: error });
   }
-};
+}
 
 const extractASINFromUrl = (url) => {
   const asinPattern = /\/(?:dp|product)\/([A-Z0-9]{10})/i;
@@ -92,5 +104,5 @@ const extractASINFromUrl = (url) => {
 
 module.exports = {
   generateChatResponse,
-  productUrlValidation,
+  productUrlValidation,scrapeURL
 };

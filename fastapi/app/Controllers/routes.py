@@ -1,6 +1,7 @@
 import random
 from fastapi import APIRouter, Depends, HTTPException, status, Request
 from typing import List
+from pydantic import BaseModel
 from pymongo import MongoClient
 from app.Schemas.models import User, TextInput, responses, Url, QueryInput  # Assuming you have a User model defined in models.py
 from app.DB.session import dbconnection  # Import the dbConnection function
@@ -148,7 +149,10 @@ async def scraping(input: Url):
         raise HTTPException(status_code=400, detail="Invalid URL")
 
     # Extract ASIN from the URL
-    asin = extract_asin_from_url(input.url)
+    extracted_asin_from_url = extract_asin_from_url(input.url)
+    print(f"Extracted ASIN from URL: {extracted_asin_from_url}")
+
+    asin = input.asin
     print(f"Extracted ASIN: {asin}")
 
     if not asin:
@@ -173,6 +177,7 @@ def extract_asin_from_url(url):
         return asin
     else:
         # Try extracting ASIN from query parameters if available
+        
         parsed_url = urlparse(url)
         query_params = parse_qs(parsed_url.query)
         print(f"Query parameters: {query_params}")
@@ -184,3 +189,17 @@ def extract_asin_from_url(url):
             print("ASIN not found in URL")
             return None
 
+
+
+class Test(BaseModel):
+    asin :str
+
+@router.post("/testing")
+async def testing(input: Test):
+    print(input)
+
+    data = scrape_data(input.asin)
+    print(f"Scraped data: {data}")
+
+    return {"message": data}
+    
