@@ -5,8 +5,8 @@
   "elements": [
     {
       "type": "text",
-      "version": 214,
-      "versionNonce": 1361188673,
+      "version": 215,
+      "versionNonce": 613444694,
       "isDeleted": false,
       "id": "kye7qVzIHdPM7MGW_xKMT",
       "fillStyle": "solid",
@@ -26,7 +26,7 @@
       "frameId": null,
       "roundness": null,
       "boundElements": [],
-      "updated": 1731142102021,
+      "updated": 1731258531953,
       "link": null,
       "locked": false,
       "fontSize": 20,
@@ -37,7 +37,7 @@
       "containerId": null,
       "originalText": "2-11-24\n",
       "lineHeight": 1.25,
-      "baseline": 42
+      "baseline": 43
     },
     {
       "type": "rectangle",
@@ -72,8 +72,8 @@
     },
     {
       "type": "text",
-      "version": 56,
-      "versionNonce": 1528740175,
+      "version": 57,
+      "versionNonce": 2084285450,
       "isDeleted": false,
       "id": "WlI_acRA_cjJj-NCyWKoe",
       "fillStyle": "solid",
@@ -95,7 +95,7 @@
       "frameId": null,
       "roundness": null,
       "boundElements": [],
-      "updated": 1731142102023,
+      "updated": 1731258531959,
       "link": null,
       "locked": false,
       "fontSize": 20,
@@ -106,12 +106,12 @@
       "containerId": null,
       "originalText": "1) Toasts fixed \n2) Fast API scraping and vector DB making is done\n3) removed strict mode hehe\n4) ASIN extraction is done\n5) reviews to Vector DB and storing in Mongo is done\n\nthings that are done by frfr\n",
       "lineHeight": 1.25,
-      "baseline": 192
+      "baseline": 193
     },
     {
       "type": "text",
-      "version": 1441,
-      "versionNonce": 1983874849,
+      "version": 1442,
+      "versionNonce": 934048150,
       "isDeleted": false,
       "id": "vZ-OwUGOLIAe3TVLp91cK",
       "fillStyle": "solid",
@@ -133,7 +133,7 @@
       "frameId": null,
       "roundness": null,
       "boundElements": [],
-      "updated": 1731142102026,
+      "updated": 1731258531967,
       "link": null,
       "locked": false,
       "fontSize": 17.15555826822916,
@@ -144,12 +144,12 @@
       "containerId": null,
       "originalText": "things need to be done  ASAP to finish the basic Version -01\n1) Setting up the actions in the profile page, \nand writing functionlities for it\n\n2) Add Dark Mode Feature\n\n3) URL validation,---- possibly low priority\n4) check the ASIN in express itself, and \nif there, then \nfetch the embedding, as well as the senti paragraph , load the Vec Db,\ninitialize the chatBot, and reroute to ChatBot\nelse{\n    Scrape it,\n_____________________\nDo the senti analysis, summarise the reviews, and then store it\n_____________________\n&\nembedded it,\nstore it \n, get the embeddings again from DB and set the vector DB\nif u are doing SS with FAISS\n\nelse{\njust send the Query, get the retreival results from mongo, and \nDo the AG part in RAG\n\n}\nfetch the response from the LLM\nsend it to express, \n\nstore in the exchanges\n\nrender it in frontend, when \nresponse, is there, \nreload is happening\netc\n}",
       "lineHeight": 1.25,
-      "baseline": 787
+      "baseline": 786
     },
     {
       "type": "text",
-      "version": 246,
-      "versionNonce": 884520815,
+      "version": 247,
+      "versionNonce": 1019058890,
       "isDeleted": false,
       "id": "Nw0DNSuLsBfOZMWcH7HVN",
       "fillStyle": "solid",
@@ -171,7 +171,7 @@
       "frameId": null,
       "roundness": null,
       "boundElements": [],
-      "updated": 1731142102027,
+      "updated": 1731258531969,
       "link": null,
       "locked": false,
       "fontSize": 20,
@@ -182,7 +182,7 @@
       "containerId": null,
       "originalText": "Things to do in further levels:\n1) suggesting the querys\n2) change the color theme\n3) improving components\n4) adding a Home page for ourselves\n5) adding pricing\n6) managing the token limit\n7) -----------------------------",
       "lineHeight": 1.25,
-      "baseline": 192
+      "baseline": 193
     },
     {
       "type": "rectangle",
@@ -248,8 +248,8 @@
     },
     {
       "type": "text",
-      "version": 121,
-      "versionNonce": 434371329,
+      "version": 122,
+      "versionNonce": 731238102,
       "isDeleted": false,
       "id": "zsmzWBY2qX3waVQqd2ptA",
       "fillStyle": "solid",
@@ -269,7 +269,7 @@
       "frameId": null,
       "roundness": null,
       "boundElements": [],
-      "updated": 1731142102028,
+      "updated": 1731258531972,
       "link": null,
       "locked": false,
       "fontSize": 25.729961782659934,
@@ -280,12 +280,12 @@
       "containerId": null,
       "originalText": "02-11-2024- meeting \nkey takeaways",
       "lineHeight": 1.25,
-      "baseline": 54
+      "baseline": 55
     },
     {
       "type": "text",
-      "version": 746,
-      "versionNonce": 1655566735,
+      "version": 747,
+      "versionNonce": 1553183114,
       "isDeleted": false,
       "id": "7x2mkP17pMyXm5kxF5YuI",
       "fillStyle": "solid",
@@ -307,7 +307,7 @@
       "frameId": null,
       "roundness": null,
       "boundElements": [],
-      "updated": 1731142102029,
+      "updated": 1731258531973,
       "link": null,
       "locked": false,
       "fontSize": 20,
@@ -318,12 +318,12 @@
       "containerId": null,
       "originalText": "1) URL validation and DB ASIN check for the URL\n2) if not  in DB, send a req to the Fastapi server to scrape\nand make the product VDB along with the other product details\n\n3) redirect to the chat component\n______________________________________\n4) on every message from user\n-- plan the actions in the FASTAPI\n-- take the query and search and fetch the response\n-- use local storage for caching the context",
       "lineHeight": 1.25,
-      "baseline": 242
+      "baseline": 243
     },
     {
       "type": "text",
-      "version": 140,
-      "versionNonce": 1552872161,
+      "version": 141,
+      "versionNonce": 752976918,
       "isDeleted": false,
       "id": "II-4Me717kGz3u99pNvB_",
       "fillStyle": "solid",
@@ -345,7 +345,7 @@
       "frameId": null,
       "roundness": null,
       "boundElements": [],
-      "updated": 1731142102029,
+      "updated": 1731258531974,
       "link": null,
       "locked": false,
       "fontSize": 20,
@@ -356,7 +356,7 @@
       "containerId": null,
       "originalText": "TODO by 1 week from 7-11-24 i.e. 14-11-24",
       "lineHeight": 1.25,
-      "baseline": 17
+      "baseline": 18
     },
     {
       "type": "rectangle",
@@ -400,8 +400,8 @@
     },
     {
       "type": "text",
-      "version": 21,
-      "versionNonce": 775350191,
+      "version": 22,
+      "versionNonce": 788066378,
       "isDeleted": false,
       "id": "Y2yCxRiVPXxx1b9kdUQ3E",
       "fillStyle": "solid",
@@ -423,7 +423,7 @@
       "frameId": null,
       "roundness": null,
       "boundElements": [],
-      "updated": 1731142102029,
+      "updated": 1731258531974,
       "link": null,
       "locked": false,
       "fontSize": 20,
@@ -434,7 +434,7 @@
       "containerId": null,
       "originalText": "URL",
       "lineHeight": 1.25,
-      "baseline": 17
+      "baseline": 18
     },
     {
       "type": "arrow",
@@ -488,8 +488,8 @@
     },
     {
       "type": "text",
-      "version": 18,
-      "versionNonce": 584052417,
+      "version": 19,
+      "versionNonce": 226791766,
       "isDeleted": false,
       "id": "bJTowMW4sdwJGIgTc9V1J",
       "fillStyle": "solid",
@@ -511,7 +511,7 @@
       "frameId": null,
       "roundness": null,
       "boundElements": [],
-      "updated": 1731142102030,
+      "updated": 1731258531975,
       "link": null,
       "locked": false,
       "fontSize": 20,
@@ -522,7 +522,7 @@
       "containerId": null,
       "originalText": "not valid ",
       "lineHeight": 1.25,
-      "baseline": 17
+      "baseline": 18
     },
     {
       "type": "rectangle",
@@ -612,8 +612,8 @@
     },
     {
       "type": "text",
-      "version": 92,
-      "versionNonce": 628890063,
+      "version": 93,
+      "versionNonce": 1741182730,
       "isDeleted": false,
       "id": "RMlrTkBZvcJwrZ09k4l6V",
       "fillStyle": "solid",
@@ -635,7 +635,7 @@
       "frameId": null,
       "roundness": null,
       "boundElements": [],
-      "updated": 1731142102030,
+      "updated": 1731258531975,
       "link": null,
       "locked": false,
       "fontSize": 20,
@@ -646,7 +646,7 @@
       "containerId": null,
       "originalText": "Throw the error back to \nthe frontend with a toast",
       "lineHeight": 1.25,
-      "baseline": 42
+      "baseline": 43
     },
     {
       "type": "rectangle",
@@ -735,8 +735,8 @@
     },
     {
       "type": "text",
-      "version": 46,
-      "versionNonce": 323382945,
+      "version": 47,
+      "versionNonce": 416544406,
       "isDeleted": false,
       "id": "VCrMMtgaAXtuPNYNclzsz",
       "fillStyle": "solid",
@@ -758,7 +758,7 @@
       "frameId": null,
       "roundness": null,
       "boundElements": [],
-      "updated": 1731142102030,
+      "updated": 1731258531975,
       "link": null,
       "locked": false,
       "fontSize": 20,
@@ -769,7 +769,7 @@
       "containerId": null,
       "originalText": "Vald URL",
       "lineHeight": 1.25,
-      "baseline": 17
+      "baseline": 18
     },
     {
       "type": "rectangle",
@@ -903,8 +903,8 @@
     },
     {
       "type": "text",
-      "version": 73,
-      "versionNonce": 2106984431,
+      "version": 74,
+      "versionNonce": 125625802,
       "isDeleted": false,
       "id": "FysaW1zyBRH1055lf-8kV",
       "fillStyle": "solid",
@@ -926,7 +926,7 @@
       "frameId": null,
       "roundness": null,
       "boundElements": [],
-      "updated": 1731142102030,
+      "updated": 1731258531976,
       "link": null,
       "locked": false,
       "fontSize": 20,
@@ -937,7 +937,7 @@
       "containerId": null,
       "originalText": "Checking in \nProducts Collection",
       "lineHeight": 1.25,
-      "baseline": 42
+      "baseline": 43
     },
     {
       "type": "arrow",
@@ -1035,8 +1035,8 @@
     },
     {
       "type": "text",
-      "version": 106,
-      "versionNonce": 1419899521,
+      "version": 107,
+      "versionNonce": 1736750038,
       "isDeleted": false,
       "id": "kOPNYnc8JATCL6jtqkB9q",
       "fillStyle": "solid",
@@ -1058,7 +1058,7 @@
       "frameId": null,
       "roundness": null,
       "boundElements": [],
-      "updated": 1731142102030,
+      "updated": 1731258531976,
       "link": null,
       "locked": false,
       "fontSize": 20,
@@ -1069,7 +1069,7 @@
       "containerId": null,
       "originalText": "ASIN already Exists",
       "lineHeight": 1.25,
-      "baseline": 17
+      "baseline": 18
     },
     {
       "type": "arrow",
@@ -1167,8 +1167,8 @@
     },
     {
       "type": "text",
-      "version": 194,
-      "versionNonce": 881668623,
+      "version": 195,
+      "versionNonce": 1194433674,
       "isDeleted": false,
       "id": "8CkzK6Fc5QdLVAvD5jEFi",
       "fillStyle": "solid",
@@ -1190,7 +1190,7 @@
       "frameId": null,
       "roundness": null,
       "boundElements": [],
-      "updated": 1731142102031,
+      "updated": 1731258531977,
       "link": null,
       "locked": false,
       "fontSize": 20,
@@ -1201,7 +1201,7 @@
       "containerId": null,
       "originalText": "ASIN Not exists,\n\n1) call the scraping \nroute of the \nFASTAPI\n\n2) The scraping \nroute calls the\nfunction that scrapes \nand stores the \nProduct IN DB ",
       "lineHeight": 1.25,
-      "baseline": 267
+      "baseline": 268
     },
     {
       "type": "rectangle",
@@ -1353,8 +1353,8 @@
     },
     {
       "type": "text",
-      "version": 959,
-      "versionNonce": 195164769,
+      "version": 960,
+      "versionNonce": 866896150,
       "isDeleted": false,
       "id": "0bf7HZkiMhPgg9ZdZnXeQ",
       "fillStyle": "solid",
@@ -1376,7 +1376,7 @@
       "frameId": null,
       "roundness": null,
       "boundElements": [],
-      "updated": 1731142102031,
+      "updated": 1731258531977,
       "link": null,
       "locked": false,
       "fontSize": 20,
@@ -1387,7 +1387,72 @@
       "containerId": null,
       "originalText": "1) THE ASIN is sent to the review-chat-component\n2) a request is made to the products collection\nto fetch the data to display in the component\n\n3) the corresponding Embeddings are loaded in the fastapi too\n4) the user sends the message in frontend\n5) the express loads the chats and the exchanges, and sends\na request to the fastapi with the query\n It goes all the way to the fastapi, and then the fastapi loads the vector\nDb, the embedding from the Products collection, and takes in this query and \nproduce an response, and send it back to express server, and it saves the \nmessage in the chat exchanges under the user in the chats with that asin\nand it also updates the frontend chat component too",
       "lineHeight": 1.25,
-      "baseline": 317
+      "baseline": 318
+    },
+    {
+      "id": "uuqNscG5SULRFdDdXN2Yv",
+      "type": "rectangle",
+      "x": 440.86688856627484,
+      "y": 1501.5044150859492,
+      "width": 946.7761637768167,
+      "height": 618.9554695474326,
+      "angle": 0,
+      "strokeColor": "#1e1e1e",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [],
+      "frameId": null,
+      "roundness": {
+        "type": 3
+      },
+      "seed": 774341130,
+      "version": 261,
+      "versionNonce": 1248075094,
+      "isDeleted": false,
+      "boundElements": null,
+      "updated": 1731258700700,
+      "link": null,
+      "locked": false
+    },
+    {
+      "id": "10XVAdCJ7RQ6ImvWOkNdT",
+      "type": "text",
+      "x": 494.8457653291856,
+      "y": 1629.7170078467645,
+      "width": 836.9792314281417,
+      "height": 444.82554848183565,
+      "angle": 0,
+      "strokeColor": "#1e1e1e",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [],
+      "frameId": null,
+      "roundness": null,
+      "seed": 823066250,
+      "version": 418,
+      "versionNonce": 195399318,
+      "isDeleted": false,
+      "boundElements": null,
+      "updated": 1731258706062,
+      "link": null,
+      "locked": false,
+      "text": "WAIT UNTIL \nSCRAPER API\n WORKS",
+      "fontSize": 118.620146261823,
+      "fontFamily": 1,
+      "textAlign": "left",
+      "verticalAlign": "top",
+      "baseline": 400.99999999999943,
+      "containerId": null,
+      "originalText": "WAIT UNTIL \nSCRAPER API\n WORKS",
+      "lineHeight": 1.25
     }
   ],
   "appState": {

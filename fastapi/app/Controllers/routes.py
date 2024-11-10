@@ -135,7 +135,7 @@ async def get_all_users(db: MongoClient = Depends(dbconnection)):
         raise HTTPException(status_code=404, detail="No users found")
     return users
 
-
+    
 @router.post("/scrape_url")
 async def scraping(input: Url):
     print(f"Received scraping request with input: {input}")
