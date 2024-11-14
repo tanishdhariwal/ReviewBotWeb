@@ -55,4 +55,4 @@ def scrape_data(asin_no, domain="in"):
     except Exception as e: 
         print("Exception occurred while scraping data" + str(e))
         return {"success": "false", "error": str(e)}
-scrape_data("B0D1VLS5KJ")
+# scrape_data("B0D1VLS5KJ")

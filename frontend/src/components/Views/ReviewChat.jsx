@@ -9,6 +9,7 @@ export default function ProductDetails() {
   const location = useLocation(); // Use useLocation to get URL parameters
   const [productDetails, setProductDetails] = useState(null); // State for product details
   const [productUrl, setProductUrl] = useState(''); // State for product URL
+  const [asin, setAsin] = useState(null);
 
   useEffect(() => {
     setIsLoaded(true);
@@ -28,6 +29,35 @@ export default function ProductDetails() {
 
     setProductDetails(details);
   }, [location]);
+
+  useEffect(() => {
+    const asinFromState = location.state?.asin;
+    const storedAsin = localStorage.getItem('asin');
+
+    if (asinFromState) {
+      if (asinFromState !== storedAsin) {
+        // ASIN is different, update local storage and state
+        localStorage.setItem('asin', asinFromState);
+        setAsin(asinFromState);
+      } else {
+        // ASIN is the same, proceed normally
+        setAsin(asinFromState);
+      }
+    } else if (storedAsin) {
+      // No ASIN in state, use ASIN from local storage
+      setAsin(storedAsin);
+    } else {
+      // Handle the case where no ASIN is available
+      console.error('No ASIN available');
+    }
+  }, [location.state]);
+
+  useEffect(() => {
+    if (asin) {
+      console.log('ASIN:', asin);
+      // Add any logic that depends on the ASIN here
+    }
+  }, [asin]);
 
   const metrics = [
     { name: 'Quality', value: 85, color: 'bg-blue-600' },
@@ -56,7 +86,7 @@ export default function ProductDetails() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5 }}
             src={productDetails ? productDetails.imageUrl : ''} 
-            alt={productDetails ? productDetails.name : ''} 
+            alt={productDetails ? productDetails.name  + `${asin}`: ''} 
             className="w-full md:w-1/3 rounded-lg mb-4 md:mb-0 md:mr-6" 
           />
           <div className="w-full md:w-3/5">

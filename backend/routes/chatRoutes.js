@@ -3,7 +3,7 @@ const chatRouter = express.Router();
 const verifyToken = require("../utils/tokenManager").verifyToken;
 const {
   generateChatResponse,
-  productUrlValidation,
+  productUrlCheck,
   scrapeURL,
 } = require("../Controllers/chatControllers"); // Import controller
 
@@ -14,6 +14,6 @@ chatRouter.get("/new", (req, res) => {
 });
 
 chatRouter.post("/chat_response", verifyToken, generateChatResponse);
-chatRouter.post("/product_url_validation", productUrlValidation, scrapeURL);
+chatRouter.post("/product_url_validation", productUrlCheck, scrapeURL);
 
 module.exports = chatRouter;

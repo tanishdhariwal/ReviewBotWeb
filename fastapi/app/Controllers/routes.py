@@ -11,9 +11,10 @@ import os
 from dotenv import load_dotenv
 from tqdm import tqdm
 import time
-from app.Helpers.scraperAPI import scrape_data
+from app.Helpers.scrapeAndStore import scrape_data
 from urllib.parse import urlparse, parse_qs
 import re
+from app.Model.NLPModel import answer_query
 
 load_dotenv()
 
@@ -138,30 +139,29 @@ async def get_all_users(db: MongoClient = Depends(dbconnection)):
     
 @router.post("/scrape_url")
 async def scraping(input: Url):
-    print(f"Received scraping request with input: {input}")
+    print(f"Received scraping request with asin: {input.asin}")
 
-    parsed_url = urlparse(input.url)
+    # parsed_url = urlparse(input.url)
 
-    print(f"Parsed URL: {parsed_url}")
+    # print(f"Parsed URL: {parsed_url}")
 
-    if not all([parsed_url.scheme, parsed_url.netloc]):
-        print("Invalid URL provided")
-        raise HTTPException(status_code=400, detail="Invalid URL")
+    # if not all([parsed_url.scheme, parsed_url.netloc]):
+    #     print("Invalid URL provided")
+    #     raise HTTPException(status_code=400, detail="Invalid URL")
 
-    # Extract ASIN from the URL
-    extracted_asin_from_url = extract_asin_from_url(input.url)
-    print(f"Extracted ASIN from URL: {extracted_asin_from_url}")
+    # # Extract ASIN from the URL
+    # extracted_asin_from_url = extract_asin_from_url(input.url)
+    # print(f"Extracted ASIN from URL: {extracted_asin_from_url}")
 
     asin = input.asin
     print(f"Extracted ASIN: {asin}")
 
-    if not asin:
-        print("ASIN not found in URL")
-        raise HTTPException(status_code=400, detail="ASIN not found in URL")
     try:
         data = scrape_data(asin)
+        productCollection = dbconnection()["products"]
+        productCollection.insert_one(data)
         print(f"Scraped data: {data}")
-        return data
+        return {"isScraped": True }
     except Exception as e:
         print("Error occurred during scraping")
         raise HTTPException(status_code=500, detail="Internal Server Error")
@@ -190,9 +190,17 @@ def extract_asin_from_url(url):
             return None
 
 
-
 class Test(BaseModel):
     asin :str
+
+router.get("/get_LLM_response")
+def get_LLM_response(input : Test ):
+    query = input.asin
+    response = answer_query(query)
+    
+    print(f"Response: {response}")
+    return {"response": response}
+
 
 @router.post("/testing")
 async def testing(input: Test):

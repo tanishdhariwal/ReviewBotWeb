@@ -76,14 +76,14 @@ const login = async (req, res) => {
 const verifyuser = async (req, res) => {
   console.log("verifying user");
   try {
-    console.log("JWT Data:", res.locals.jwtData);
-
+    // console.log("JWT Data:", res.locals.jwtData);
+  
     const user = await User.findById(res.locals.jwtData.id);
     if (!user) {
       return res.status(400).json({ error: "User not found" });
     }
 
-    console.log("User found:", user);
+    // console.log("User found:", user);
 
     if (user._id.toString() !== res.locals.jwtData.id) {
       return res.status(400).json({ error: "Invalid token" });
