@@ -27,10 +27,11 @@ export const LogoutUser = async () => {
   await axios.get(`/logout`);
 };
 
-
-export const checkURL = async (urldata) => {
+export const checkURL = async (asinData) => {
   try {
-    const response = await axios.post(`/product_url_validation`, urldata);
+    alert("inside checkURL but before response");
+    const response = await axios.post(`/product_url_validation`, asinData);
+    alert("inside checkURL but after response");
     return response.data;
   } catch (error) {
     throw new Error(error.response.data.error || "Validation failed.");
@@ -43,4 +44,10 @@ export const getChatResponse = async (text, productUrl) => {
     throw new Error(response.data);
   }
   return response.data;
+};
+
+export const extractASINFromUrl = (url) => {
+  const asinPattern = /\/(?:dp|product)\/([^\/]+)/i;
+  const match = url.match(asinPattern);
+  return match ? { "asin": match[1] } : { "asin": "false" };
 };

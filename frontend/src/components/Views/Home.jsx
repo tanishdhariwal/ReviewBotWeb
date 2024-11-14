@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "../../Context/AuthContext";
 import CubeLoader from "../Common/CubeLoader";
 import toast, { Toaster } from "react-hot-toast";
-import { checkURL } from "../../Helpers/apiComms";
+import { checkURL, extractASINFromUrl } from "../../Helpers/apiComms";
 
 export default function HomePage() {
   const auth = useAuth();
@@ -31,22 +31,31 @@ export default function HomePage() {
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Submitted URL:", url);
-  };
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   console.log("Submitted URL:", url);
+  // };
 
   const handleNavigateToReviewChat = async () => {
+    console.log("URL:", url);
     if (url !== "") {
       try {
-        const data = await checkURL({ url });
-        if (data.isValid) {
-          navigate(`/review-chat?url=${url}`);
+        const validationResponse = extractASINFromUrl(url);
+        console.log(validationResponse.asin);
+
+        if (validationResponse.asin !== "false") {
+          const data = await checkURL({ asin: validationResponse.asin });
+
+          if (data.isValid) {
+            navigate(`/review-chat`, { state: { asin: validationResponse.asin } });
+          } else {
+            toast.error("Unable to help right now");
+          }
         } else {
           toast.error("URL is not valid.");
         }
       } catch (error) {
-        toast.error(error.message || "URL validation failed.");
+        toast.error("An error occurred.");
       }
     } else {
       toast.error("Please enter a URL.");
@@ -98,7 +107,7 @@ export default function HomePage() {
               Summarize Product Reviews
             </h1>
 
-            <form onSubmit={handleSubmit} className="w-full max-w-md mb-8">
+            <form className="w-full max-w-md mb-8">
               <div className="flex items-center border-b-2 border-blue-500 py-2">
                 <input
                   className="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
@@ -111,7 +120,7 @@ export default function HomePage() {
                 />
                 <button
                   className="flex-shrink-0 bg-blue-500 hover:bg-blue-700 border-blue-500 hover:border-blue-700 text-sm border-4 text-white py-1 px-2 rounded"
-                  type="submit"
+                  type="button" // Change type to "button" to prevent form submission
                   onClick={handleNavigateToReviewChat}
                 >
                   <Search className="h-5 w-5" />

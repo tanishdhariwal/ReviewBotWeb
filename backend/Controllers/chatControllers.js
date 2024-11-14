@@ -1,6 +1,7 @@
 const User = require("../models/User");
 const Chat = require('../models/Chat');
 const dbconnection = require('../DB/dbconnection'); // Correct import for dbconnection
+const axios = require('axios'); // Import axios
 
 const generateChatResponse = async (req, res) => {
   const { text, productUrl } = req.body; // Get text and productUrl from request body
@@ -61,48 +62,44 @@ const generateChatResponse = async (req, res) => {
   res.status(200).json({ response: botResponse });
 };
 
-const productUrlValidation = async (req, res,next) => {
-  const { url } = req.body;
-  
-  // Validate URL format and extract ASIN
-  const asin = extractASINFromUrl(url);
-  if (!asin) {
-    return res.status(400).json({ isValid: false, error: "URL is not valid." });
-  }
-  next();
-};
-
-const scrapeURL = async(req,res)=>{
+const productUrlCheck = async (req, res, next) => {
+  const { asin } = req.body;
   try {
-    const db = await dbconnection(); 
-    // console.log("\n\nvejvnbskdcvbsdc\n\nvkjsbvsldkv\n\n");
-    const product = await db.collection('products').findOne({ "product_asin_no": asin });
+    const db = await dbconnection();
+    const productsCollection = db.collection('products');
+    // console.log("I just got the products collection", await productsCollection.find().limit(1).toArray());
+    const product = await productsCollection.findOne({ product_asin_no: asin });
     if (product) {
       return res.status(200).json({ isValid: true, existsInDB: true });
     } else {
-      
-      const scrapingDetails = await axios.post('http://localhost:8000/scrape_url', { "url" : url , "asin":asin });
-      // return res.status(200).json({ "heyy": "i am here" });
-      if (scrapingDetails.data.success) {
-        console.log("Scraping successful.");
-        return res.status(200).json({ isValid: true, existsInDB: false, message: "Scraping successful." });
-      } else {
-        return res.status(500).json({ isValid: false, error: "Scraping failed." });
-      }
-      // return res.status(200).json({ isValid: true, existsInDB: false });
+      req.asin = asin;
+      next();
+    }
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ isValid: false, error: "Database error." });
+  }
+};
+
+const scrapeURL = async (req, res) => {
+  const asin = req.asin;
+
+  try {
+    const response = await axios.post('http://localhost:8000/scrape_url', { asin });
+
+    if (response.data.isScraped) {
+      return res.status(200).json({ isValid: true, existsInDB: true, message: "Scraping successful." });
+    } else {
+      return res.status(500).json({ isValid: false, error: "Scraping failed." });
     }
   } catch (error) {
-    return res.status(500).json({ isValid: false, error: "Database error.", errorDetails: error });
+    console.error(error);
+    return res.status(500).json({ isValid: false, error: "Error during scraping." });
   }
-}
-
-const extractASINFromUrl = (url) => {
-  const asinPattern = /\/(?:dp|product)\/([A-Z0-9]{10})/i;
-  const match = url.match(asinPattern);
-  return match ? match[1] : null;
 };
 
 module.exports = {
   generateChatResponse,
-  productUrlValidation,scrapeURL
+  productUrlCheck,
+  scrapeURL
 };
