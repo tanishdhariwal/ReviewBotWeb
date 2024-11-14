@@ -24,7 +24,7 @@ def add_review(curr_data, review_data):
         return curr_data
         
     except Exception as e:
-        print(f"Exception occurred while transforming data: {e}")
+        print(f"Exception occurred while adding review data: {e}")
         return {"success": "false", "error": str(e)}
         
     
@@ -35,14 +35,29 @@ def transform_data(data, ASIN_NO):
             raise ValueError("Input data is not a dictionary")
         formated_data = {
             "product_asin_no": ASIN_NO,
-            "tile": data["title"],
+            "title": data["title"],
             "brand":data["brand"],
-            "price": data["price"],
-            "image_url": data["images"],
+            "price": data["list_price"],
+            "description": data["description"],
+            "image_url": data["images"][:5],
             "features": data["feature_bullets"],
             "average_rating": data["average_rating"],
             "reviews": []
         }
+        for review in data["customer_reviews"]:
+            
+            date_str = review["date"]
+        
+            review_date = " ".join(date_str.split(" ")[-3:])
+            review_embeddings = tokenize(review["review_snippet"])
+            title_embeddings = tokenize(review["review_title"])            
+
+            formated_data["reviews"].append({
+                "title": title_embeddings,
+                "review": review_embeddings,  
+                "star": review["rating"],
+                "date": review_date
+            })
 
     
         return formated_data

@@ -23,16 +23,20 @@ def scrape_data(asin_no, domain="in"):
     product_url = "https://api.scrapingdog.com/amazon/product"
     review_url = "https://api.scrapingdog.com/amazon/reviews"
     try:
+        formatted_data = {}
         r = requests.get(product_url, params=payload)
         print("Received product response from ScraperAPI")
         if r.status_code == 200:
             product_data = r.json()
             formatted_data = transform_data(product_data, asin_no)
-        for i in range(5):
+        else:
+            print(f"failed, response status code of product scrape is {r.status_code}")
+            raise Exception(f"Failed to get product data: {r.status_code}")
+            
+        print(f"trying to get reviews response from ScraperAPI")
+        for i in range(2,5):
             payload["page"] = str(i)
-            print("Sending request to scraper")
             r = requests.get(review_url, params=payload)
-            print("Received response from ScraperAPI, Response status code: {r.status_code}")
             
             if r.status_code == 200:
                 
@@ -40,13 +44,13 @@ def scrape_data(asin_no, domain="in"):
                 if(review_data["customer_reviews"] == []):
                     break
                 formatted_data = add_review(formatted_data, review_data)
-                print("Successfully transformed the data")
+                
             else:
-                print("response status code of review scrape is not 200")
-                if(formatted_data["reviews"] == []):
-                    print("failed to get any reviews")
-                    
-                break
+                print(f"response status code of review scrape is {r.status_code}")  
+                if("reviews" not in formatted_data):
+                    break
+                raise Exception(f"Failed to get review data: {r.status_code}")                  
+        print(f"added {len(formatted_data["reviews"])} reviews")
                 
         if isinstance(formatted_data, dict):
             print("updating data to MongoDB")
@@ -61,5 +65,5 @@ def scrape_data(asin_no, domain="in"):
         else:
             return {"success": "false", "error": "Unexpected formatted data format"}
     except Exception as e: 
-        print("Exception occurred while scraping data" + str(e))
+        print("Exception occurred while scraping data " + str(e))
         return {"success": "false", "error": str(e)}
