@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "../../Context/AuthContext";
 import CubeLoader from "../Common/CubeLoader";
 import toast, { Toaster } from "react-hot-toast";
-import { checkASIN } from "../../Helpers/apiComms";
+import { checkURL } from "../../Helpers/apiComms";
 
 export default function HomePage() {
   const auth = useAuth();
@@ -39,7 +39,7 @@ export default function HomePage() {
   const handleNavigateToReviewChat = async () => {
     if (url !== "") {
       try {
-        const data = await checkASIN({ url });
+        const data = await checkURL({ url });
         if (data.isValid) {
           navigate(`/review-chat?url=${url}`);
         } else {

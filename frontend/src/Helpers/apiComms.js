@@ -28,7 +28,7 @@ export const LogoutUser = async () => {
 };
 
 
-export const checkASIN = async (urldata) => {
+export const checkURL = async (urldata) => {
   try {
     const response = await axios.post(`/product_url_validation`, urldata);
     return response.data;
