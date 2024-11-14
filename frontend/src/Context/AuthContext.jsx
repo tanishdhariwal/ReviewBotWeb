@@ -30,7 +30,7 @@ export const AuthProvider = ({ children }) => {
         } else {
           setIsLoggedIn(false);
           localStorage.removeItem("user");
-          navigate("/login");
+          // navigate("/login");
         }
       } catch (error) {
         console.error("Error checking auth status:", error);

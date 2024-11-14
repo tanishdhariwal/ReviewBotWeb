@@ -1,13 +1,13 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import { useAuth } from './Context/AuthContext';
-import Home from './components/Views//Home';
-import About from './components/Sections/About';
-import ReviewChat from './components/Views/ReviewChat';
-import Profile from './components/Views/Profile';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import Header from './components/Common/Header';
+import About from './components/Sections/About';
 import LoginSignUp from './components/Sections/LoginSignUp';
-import LoaderModal from './components/Common/Loader';
+import Home from './components/Views//Home';
+import Profile from './components/Views/Profile';
+import ReviewChat from './components/Views/ReviewChat';
+import { useAuth } from './Context/AuthContext';
+import LandingPage from './LandingPage';
 
 function App() {
   const { isLoggedIn, loading } = useAuth();
@@ -21,8 +21,10 @@ function App() {
       <>
         {isLoggedIn && <Header />}
         <Routes>
+          
           {isLoggedIn ? (
             <>
+              <Route path='/landing' element={<LandingPage />} />
               <Route path="/" element={<Home />} />
               <Route path="/about" element={<About />} />
               <Route path="/review-chat" element={<ReviewChat />} />
