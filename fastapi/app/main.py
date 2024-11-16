@@ -1,16 +1,15 @@
 from typing import Union
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI
-from app.Controllers.routes import router, load_model_and_tokenizer, unload_model_and_tokenizer
+from app.Controllers.routes import router
 from contextlib import asynccontextmanager
+from app.Model.NLPModel import load_model
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Load the model and tokenizer once when the application starts
-    # load_model_and_tokenizer()
     # pass
+    load_model()
     yield
-    # Unload the model and tokenizer when the application shuts down
     # unload_model_and_tokenizer()
 
 app = FastAPI(lifespan=lifespan)
