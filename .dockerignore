@@ -1,0 +1,5 @@
+# Exclude specific files
+sample.excalidraw
+architecture.dio
+README
+.gitignore

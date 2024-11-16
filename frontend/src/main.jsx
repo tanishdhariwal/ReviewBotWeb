@@ -12,7 +12,7 @@ axios.defaults.baseURL = "http://localhost:5000";
 axios.defaults.withCredentials = true;
 
 createRoot(document.getElementById("root")).render(
-  // <StrictMode>
+  //<StrictMode>
     <Router>
       <AuthProvider>
         <ThemeProvider>
