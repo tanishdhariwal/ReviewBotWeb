@@ -14,7 +14,7 @@ userRouter.post("/signup", signup);
 userRouter.post("/login", login);
 userRouter.get("/logout", verifyToken, logout);
 userRouter.get("/authstatus", verifyToken, verifyuser);
-userRouter.post("/chat_response", verifyToken, get_response); 
+// userRouter.post("/chat_response", get_response); 
 
 userRouter.get("/", (req, res) => {
   res.status(200).send("Hello from the server");

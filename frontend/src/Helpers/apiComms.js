@@ -39,7 +39,9 @@ export const checkURL = async (asinData) => {
 };
 
 export const getChatResponse = async (text, productUrl) => {
-  const response = await axios.post(`/chat_response`, { text, productUrl });
+  console.log('in getChatResponse')
+  const response = await axios.post(`/chat_response`, { "text":text, "productUrl":productUrl });
+  console.log('response:', response)
   if (response.status !== 200) {
     throw new Error(response.data);
   }

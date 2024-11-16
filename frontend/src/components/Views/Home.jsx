@@ -41,6 +41,7 @@ export default function HomePage() {
     if (url !== "") {
       try {
         const validationResponse = extractASINFromUrl(url);
+        alert("ASIN: " + validationResponse.asin);
         console.log(validationResponse.asin);
 
         if (validationResponse.asin !== "false") {

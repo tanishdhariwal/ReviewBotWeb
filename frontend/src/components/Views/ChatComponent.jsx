@@ -42,7 +42,9 @@ export default function ChatComponent({ productUrl }) { // Accept productUrl as 
       setIsLoading(true)
 
       try {
+        console.log('in handleSendMessage')
         const data = await getChatResponse(currentMessage, productUrl); // Pass productUrl
+        console.log('data:', data)
         const botMessage = {
           id: (Date.now() + 1).toString(),
           content: data.response, // Extract the response field from the API response
