@@ -1,13 +1,25 @@
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
+const icons = require("../utils/Icons");
+const bcrypt = require("bcryptjs");
 
 const signup = async (req, res) => {
   const { username, email, password } = req.body;
   if (!username || !email || !password) {
-    return res.status(400).json({ error: "Please provide name email and password" });
+    return res
+      .status(400)
+      .json({ error: "Please provide name email and password" });
   }
   try {
-    const user = new User({ username, email, password });
+    const randomIcon = icons[Math.floor(Math.random() * icons.length)];
+    const user = new User({
+      username,
+      email,
+      password,
+      profileImage: randomIcon,
+      plan: "free",
+      credits: 100,
+    });
     await user.save();
     res.status(201).json({ message: "User created successfully" });
   } catch (error) {
@@ -44,7 +56,7 @@ const login = async (req, res) => {
     //   path: "/",
     // });
 
-    // just chill, we can use it if we get any serious issues 
+    // just chill, we can use it if we get any serious issues
 
     const token = jwt.sign(
       { id: gotuser._id, username: gotuser.username },
@@ -66,7 +78,11 @@ const login = async (req, res) => {
 
     return res
       .status(200)
-      .json({ message: "ok", username: gotuser.username, email: gotuser.email });
+      .json({
+        message: "ok",
+        username: gotuser.username,
+        email: gotuser.email,
+      });
   } catch (error) {
     console.error("Error during login:", error);
     return res.status(500).json({ error: "Internal server error" });
@@ -77,7 +93,7 @@ const verifyuser = async (req, res) => {
   console.log("verifying user");
   try {
     // console.log("JWT Data:", res.locals.jwtData);
-  
+
     const user = await User.findById(res.locals.jwtData.id);
     if (!user) {
       return res.status(400).json({ error: "User not found" });
@@ -124,4 +140,48 @@ const get_response = async (req, res) => {
   }
 };
 
-module.exports = { signup, login, logout, verifyuser, get_response };
+const get_user = async (req, res) => {
+  try {
+    const user = await User.findById(res.locals.jwtData.id);
+    console.log("User:", user);
+    
+    if (!user) {
+      return res.status(400).json({ error: "User not found" });
+    }
+
+    return res.status(200).json({ user: user });
+  } catch (error) {
+    console.error("Error:", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+const changePassword = async (req, res) => {
+  const { currentPassword, newPassword } = req.body;
+  if (!currentPassword || !newPassword) {
+    return res.status(400).json({ error: "Please provide current and new password" });
+  }
+
+  try {
+    const user = await User.findById(res.locals.jwtData.id);
+    if (!user) {
+      return res.status(400).json({ error: "User not found" });
+    }
+
+    const matched = await user.comparePass(currentPassword);
+    if (!matched) {
+      return res.status(400).json({ error: "Current password is incorrect" });
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(newPassword, salt);
+    await user.save();
+
+    return res.status(200).json({ message: "Password changed successfully" });
+  } catch (error) {
+    console.error("Error during password change:", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+module.exports = { signup, login, logout, verifyuser, get_response, get_user, changePassword };

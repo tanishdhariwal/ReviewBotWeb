@@ -1,18 +1,21 @@
 import { useState, useEffect, useRef } from 'react'
 import { Send, Loader2, User } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { getChatResponse } from '../../Helpers/apiComms' // Import the getChatResponse function
+import { getChatResponse, get_user_chat } from '../../Helpers/apiComms' // Import the getChatResponse function
 import { useAuth } from '../../Context/AuthContext'
+import { Toaster, toast } from 'react-hot-toast' // Import react-hot-toast components
 
-export default function ChatComponent({ productUrl }) { // Accept productUrl as prop
+export default function ChatComponent({ ASIN_DETAILS }) { // Accept productUrl as prop
   const [chatMessages, setChatMessages] = useState([])
   const [currentMessage, setCurrentMessage] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const chatContainerRef = useRef(null)
   const auth = useAuth();
   const name = auth.user.username.charAt(0);
+  const productASIN = localStorage.getItem('asin') || ASIN_DETAILS.asin;
 
   useEffect(() => {
+    console.log('productASIN:  ', productASIN);
     fetchExistingChats()
   }, [])
 
@@ -23,10 +26,44 @@ export default function ChatComponent({ productUrl }) { // Accept productUrl as 
   }, [chatMessages])
 
   const fetchExistingChats = async () => {
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    setChatMessages([
-      { id: '1', content: "Hello! How can I assist you today?", sender: 'bot' },
-    ])
+    try {
+      const data = await get_user_chat({ "product_asin": productASIN })
+      console.log('data:', data);
+      if (data && data.exchanges && data.exchanges.length > 0) {
+        // Map exchanges to chat messages
+        const messages = data.exchanges.flatMap((exchange, index) => {
+          const msgs = [];
+          if (exchange.user_query && exchange.user_query.trim()) {
+            msgs.push({
+              id: `${index}-user`,
+              content: exchange.user_query,
+              sender: 'user',
+            });
+          }
+          if (exchange.bot_response && exchange.bot_response.trim()) {
+            msgs.push({
+              id: `${index}-bot`,
+              content: exchange.bot_response,
+              sender: 'bot',
+            });
+          }
+          return msgs;
+        });
+        setChatMessages(messages);
+      } else {
+        // No exchanges found, start with predefined message
+        setChatMessages([
+          { id: '1', content: "Hello! How can I assist you today?", sender: 'bot' },
+        ])
+      }
+    } catch (error) {
+      console.error('Error fetching existing chats:', error)
+      toast.error("Failed to load existing chats. Please try again.")
+      // Optionally, start with a predefined message
+      setChatMessages([
+        { id: '1', content: "Hello! How can I assist you today?", sender: 'bot' },
+      ])
+    }
   }
 
   const handleSendMessage = async (e) => {
@@ -43,7 +80,7 @@ export default function ChatComponent({ productUrl }) { // Accept productUrl as 
 
       try {
         console.log('in handleSendMessage')
-        const data = await getChatResponse(currentMessage, productUrl); // Pass productUrl
+        const data = await getChatResponse({ currentMessage, productASIN }); // Ensure correct payload structure
         console.log('data:', data)
         const botMessage = {
           id: (Date.now() + 1).toString(),
@@ -53,12 +90,7 @@ export default function ChatComponent({ productUrl }) { // Accept productUrl as 
         setChatMessages(prev => [...prev, botMessage])
       } catch (error) {
         console.error('Error fetching AI response:', error)
-        const botMessage = {
-          id: (Date.now() + 1).toString(),
-          content: "Sorry, I couldn't process your request. Please try again.",
-          sender: 'bot',
-        }
-        setChatMessages(prev => [...prev, botMessage])
+        toast.error("Sorry, I couldn't process your request. Please try again.")
       } finally {
         setIsLoading(false)
       }
@@ -169,6 +201,7 @@ export default function ChatComponent({ productUrl }) { // Accept productUrl as 
           </button>
         </form>
       </div>
+      <Toaster position="top-center" /> {/* Add Toaster component */}
     </div>
   )
 }

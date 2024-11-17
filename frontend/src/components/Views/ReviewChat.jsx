@@ -8,15 +8,16 @@ export default function ProductDetails() {
   const [isLoaded, setIsLoaded] = useState(false);
   const location = useLocation(); // Use useLocation to get URL parameters
   const [productDetails, setProductDetails] = useState(null); // State for product details
-  const [productUrl, setProductUrl] = useState(''); // State for product URL
+  // const [productUrl, setProductUrl] = useState(''); // State for product URL
   const [asin, setAsin] = useState(null);
 
   useEffect(() => {
     setIsLoaded(true);
 
-    const params = new URLSearchParams(location.search);
-    const productUrl = params.get('url');
-    setProductUrl(productUrl); // Store product URL
+    // const params = new URLSearchParams(location.search);
+    // const productUrl = params.get('url');
+    // setProductUrl(productUrl); // Store product URL
+    setAsin(localStorage.getItem('asin'));
 
     // Use hardcoded product details for now
     const details = {
@@ -188,7 +189,7 @@ export default function ProductDetails() {
           </div>
         </motion.div>
 
-        <ChatComponent productUrl={productUrl} /> {/* Pass productUrl to ChatComponent */}
+        <ChatComponent productASIN={{"asin":asin}} /> {/* Pass productASIN to ChatComponent */}
       </div>
     </div>
   );

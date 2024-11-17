@@ -6,15 +6,17 @@ const {
   signup,
   logout,
   verifyuser,
-  get_response,
+  get_user,
+  changePassword,
 } = require("../Controllers/userControllers");
 const { verifyToken } = require("../utils/tokenManager");
 
 userRouter.post("/signup", signup);
 userRouter.post("/login", login);
+userRouter.post("/change_password", verifyToken, changePassword);
 userRouter.get("/logout", verifyToken, logout);
 userRouter.get("/authstatus", verifyToken, verifyuser);
-// userRouter.post("/chat_response", get_response); 
+userRouter.get("/get_user", verifyToken, get_user); 
 
 userRouter.get("/", (req, res) => {
   res.status(200).send("Hello from the server");

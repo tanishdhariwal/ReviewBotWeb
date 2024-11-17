@@ -20,15 +20,22 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true,
         minlength: 4,
+    },
+    profileImage:{
+        type: String,
+        required: false,
+        default:"https://cdn.jsdelivr.net/gh/alohe/memojis/png/upstream_9.png"
+    },
+    credits:{
+        type: Number,
+        required: false,
+        default:100
+    },
+    plan:{
+        type: String,
+        required: false,
+        default:"free"
     }
-    ,
-    chatProducts: [{
-        ProductASIN: {
-            type: String,
-            required: true,
-            unique: true
-        }
-    }]
      
 });
 

@@ -41,13 +41,13 @@ export default function HomePage() {
     if (url !== "") {
       try {
         const validationResponse = extractASINFromUrl(url);
-        alert("ASIN: " + validationResponse.asin);
         console.log(validationResponse.asin);
 
         if (validationResponse.asin !== "false") {
           const data = await checkURL({ asin: validationResponse.asin });
 
           if (data.isValid) {
+            localStorage.setItem('asin', validationResponse.asin); // Store ASIN in local storage
             navigate(`/review-chat`, { state: { asin: validationResponse.asin } });
           } else {
             toast.error("Unable to help right now");
@@ -56,7 +56,7 @@ export default function HomePage() {
           toast.error("URL is not valid.");
         }
       } catch (error) {
-        toast.error("An error occurred.");
+        toast.error(error.message || "An error occurred."); // Display actual error message
       }
     } else {
       toast.error("Please enter a URL.");

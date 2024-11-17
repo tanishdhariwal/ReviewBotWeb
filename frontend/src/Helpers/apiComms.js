@@ -38,18 +38,50 @@ export const checkURL = async (asinData) => {
   }
 };
 
-export const getChatResponse = async (text, productUrl) => {
-  console.log('in getChatResponse')
-  const response = await axios.post(`/chat_response`, { "text":text, "productUrl":productUrl });
-  console.log('response:', response)
-  if (response.status !== 200) {
-    throw new Error(response.data);
+export const getChatResponse = async (payload) => {
+  try {
+    console.log('in getChatResponse')
+    const response = await axios.post(`/chat_response`, payload);
+    console.log('response:', response)
+    return response.data;
+  } catch (error) {
+    console.error('Error in getChatResponse:', error)
+    throw error; // Rethrow the error to be caught in the component
   }
-  return response.data;
 };
 
 export const extractASINFromUrl = (url) => {
   const asinPattern = /\/(?:dp|product)\/([^\/]+)/i;
   const match = url.match(asinPattern);
   return match ? { "asin": match[1] } : { "asin": "false" };
+};
+
+export const get_user_chat = async (UID_ASIN_PAYLOAD) => {
+  try {
+    const response = await axios.post(`/get_user_chat`, UID_ASIN_PAYLOAD);
+    return response.data;
+  } catch (error) {
+    console.error('Error in get_user_chat:', error)
+    throw error; // Rethrow the error to be caught in the component
+  }
+};
+
+export const getUserDetails = async () => {
+  try {
+    const response = await axios.get(`/get_user`);
+    return response.data.user;
+  } catch (error) {
+    console.error('Error in getUserDetails:', error);
+    throw error;
+  }
+};
+
+export const changePassword = async (currentPassword, newPassword) => {
+  try {
+    const response = await axios.post(`/change_password`, { currentPassword, newPassword });
+    return response.data;
+  } catch (error) {
+    console.error('Error in changePassword:', error);
+    throw error;
+  }
 };

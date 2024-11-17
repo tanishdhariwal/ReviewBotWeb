@@ -1,139 +1,45 @@
 const User = require("../models/User");
-const Chat = require('../models/Chat');
-const dbconnection = require('../DB/dbconnection'); // Correct import for dbconnection
-const axios = require('axios'); // Import axios
-
-// const generateChatResponse = async (req, res) => {
-//   const { text, productUrl } = req.body; // Get text and productUrl from request body
-//   const userId = res.locals.jwtData.id; // From token payload
-
-
-//   const user = await User.findById(userId);
-//   if (!user) {
-//     return res.status(400).json({ error: "User not found" });
-//   }
-
-//   // Extract ASIN from productUrl
-//   const extractASIN = (url) => {
-//     const match = url.match(/\/([A-Z0-9]{10})(?:[/?]|$)/);
-//     return match ? match[1] : null;
-//   };
-//   const ProductASIN = extractASIN(productUrl);
-//   if (!ProductASIN) {
-//     return res.status(400).json({ error: "Invalid product URL." });
-//   }
-
-//   // Get or create chat for this user and product
-//   let chat = await Chat.findOne({ user_id: userId, ProductASIN: ProductASIN });
-//   if (!chat) {
-//     // Create new chat
-//     chat = new Chat({
-//       user_id: userId,
-//       ProductASIN: ProductASIN,
-//       exchanges: [],
-//       productUrl: productUrl,
-//     });
-//   }
-
-//   // Add the user's message to exchanges
-//   chat.exchanges.push({
-//     message: text,
-//     sender: 'user',
-//   });
-
-//   // Generate a response (hardcoded for now)
-//   const botResponse = "This is a hardcoded response.";
-
-//   // Add bot's response to exchanges
-//   chat.exchanges.push({
-//     message: botResponse,
-//     sender: 'bot',
-//   });
-
-//   // Save chat
-//   await chat.save();
-
-//   // Update user's chatProducts
-//   if (!user.chatProducts.includes(ProductASIN)) {
-//     user.chatProducts.push(ProductASIN);
-//     await user.save();
-//   }
-
-//   res.status(200).json({ response: botResponse });
-// };
+const Chat = require("../models/Chat");
+const dbconnection = require("../DB/dbconnection"); // Correct import for dbconnection
+const axios = require("axios"); // Import axios
 
 const generateChatResponse = async (req, res) => {
-  const { text, productUrl } = req.body; // Get text and productASIN from request body
-  const userId = res.locals.jwtData.id; // From token payload
+  const { currentMessage, productASIN } = req.body;
+  const userId = res.locals.jwtData.id;
   console.log("User ID:", userId);
-  console.log("aa gaya bckend me")
   try {
-    // const user = await User.findById(userId);
-    // console.log("User:", user);
-    // if (!user) {
-    //   return res.status(400).json({ error: "User not found" });
-    // }
-
-    // // Check if the product exists in the database
-    // const db = await dbconnection();
-    // const productsCollection = db.collection('products');
-    // const product = await productsCollection.findOne({ product_asin_no: productASIN });
-
-    // if (!product) {
-    //   return res.status(400).json({ error: "Product not found in the database." });
-    // }
-
     // Generate a response using the NLP model
-    const llmResponse = await axios.post('http://localhost:8000/get_LLM_response', { "asin": text });
+    const llmResponse = await axios.post(
+      "http://localhost:8000/get_LLM_response",
+      { asin: productASIN, query: currentMessage }
+    );
     const botResponse = llmResponse.data.response;
 
-    // Get or create chat for this user and product
-    // let chat = await Chat.findOne({ user_id: userId, ProductASIN: productASIN });
-    // if (!chat) {
-    //   // Create new chat
-    //   chat = new Chat({
-    //     user_id: userId,
-    //     ProductASIN: productASIN,
-    //     exchanges: [],
-    //     productUrl: product.productUrl, // Assuming productUrl is stored in the product document
-    //   });
-    // }
+    // Update the chat document with the new exchange
+    const newExchange = {
+      bot_response: botResponse,
+      user_query: currentMessage,
+      timestamp: new Date(),
+    };
 
-    // // Add the user's message to exchanges
-    // chat.exchanges.push({
-    //   message: text,
-    //   sender: 'user',
-    // });
-
-    // // Add bot's response to exchanges
-    // chat.exchanges.push({
-    //   message: botResponse,
-    //   sender: 'bot',
-    // });
-
-    // // Save chat
-    // await chat.save();
-
-    // Update user's chatProducts
-    // if (!user.chatProducts.includes(productASIN)) {
-    //   user.chatProducts.push(productASIN);
-    //   await user.save();
-    // }
+    await Chat.updateOne(
+      { user_id: userId, product_asin: productASIN },
+      { $push: { exchanges: newExchange } },
+      { upsert: true }
+    );
 
     res.status(200).json({ response: botResponse });
   } catch (error) {
-    console.error(error);
+    console.error("Error in generateChatResponse:", error);
     res.status(500).json({ error: "Internal server error." });
   }
 };
-
-
 
 const productUrlCheck = async (req, res, next) => {
   const { asin } = req.body;
   try {
     const db = await dbconnection();
-    const productsCollection = db.collection('products');
+    const productsCollection = db.collection("products");
     // console.log("I just got the products collection", await productsCollection.find().limit(1).toArray());
     console.log("ASIN:", asin);
     const product = await productsCollection.findOne({ product_asin_no: asin });
@@ -153,21 +59,66 @@ const scrapeURL = async (req, res) => {
   const asin = req.asin;
 
   try {
-    const response = await axios.post('http://localhost:8000/scrape_url', { asin });
+    const response = await axios.post("http://localhost:8000/scrape_url", {
+      asin,
+    });
 
     if (response.data.isScraped) {
-      return res.status(200).json({ isValid: true, existsInDB: true, message: "Scraping successful." });
+      return res.status(200).json({
+        isValid: true,
+        existsInDB: true,
+        message: "Scraping successful.",
+      });
     } else {
-      return res.status(500).json({ isValid: false, error: "Scraping failed." });
+      return res
+        .status(500)
+        .json({ isValid: false, error: "Scraping failed." });
     }
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ isValid: false, error: "Error during scraping." });
+    return res
+      .status(500)
+      .json({ isValid: false, error: "Error during scraping." });
+  }
+};
+
+const getUserChat = async (req, res) => {
+  const userId = res.locals.jwtData.id;
+  const product_asin = req.body.product_asin;
+  console.log("User ID:", userId);
+  console.log("Product ASIN:", product_asin);
+  try {
+    const chat = await Chat.findOne({
+      user_id: userId,
+      product_asin: product_asin,
+    });
+    if (!chat) {
+      // Create a new chat with predefined message
+      const predefinedMessage = {
+        bot_response: "Hello! How can I assist you today?",
+        user_query: "",
+        timestamp: new Date(),
+      };
+
+      const newChat = new Chat({
+        user_id: userId,
+        product_asin: product_asin,
+        exchanges: [predefinedMessage],
+        created_at: new Date(),
+      });
+      await newChat.save();
+      return res.status(200).json(newChat); // Return the new chat
+    }
+    return res.status(200).json(chat);
+  } catch (error) {
+    console.error('Error in getUserChat:', error);
+    res.status(500).json({ error: 'Internal server error.' });
   }
 };
 
 module.exports = {
   generateChatResponse,
   productUrlCheck,
-  scrapeURL
+  scrapeURL,
+  getUserChat,
 };

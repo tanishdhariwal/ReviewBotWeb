@@ -191,11 +191,12 @@ def extract_asin_from_url(url):
 
 
 class Test(BaseModel):
-    asin :str
+    query :str
+    asin:str
 
 @router.post("/get_LLM_response")
 def get_LLM_response(input : Test ):
-    query = input.asin
+    query = input.query
     response = answer_query(query)
     
     print(f"Response: {response}")

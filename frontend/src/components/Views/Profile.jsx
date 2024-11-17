@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import { Link} from 'react-router-dom';
 import {
   Card,
   CardBody,
@@ -19,9 +20,11 @@ import {
   FaQuestionCircle,
   FaComments,
   FaSignOutAlt,
+  FaDollarSign,
 } from "react-icons/fa";
 import { useAuth } from "../../Context/AuthContext";
 import toast from "react-hot-toast";
+import { getUserDetails, changePassword } from "../../Helpers/apiComms";
 
 export default function Profile() {
   const [password, setPassword] = useState("");
@@ -30,6 +33,20 @@ export default function Profile() {
   const [openAccordion, setOpenAccordion] = useState(0);
   const auth = useAuth();
   const [username, setUsername] = useState(auth.user.username);
+  const [credits, setCredits] = useState(0);
+
+  useEffect(() => {
+    const fetchUserDetails = async () => {
+      try {
+        const userDetails = await getUserDetails();
+        setUsername(userDetails.username);
+        setCredits(userDetails.credits);
+      } catch (error) {
+        toast.error("Failed to fetch user details");
+      }
+    };
+    fetchUserDetails();
+  }, []);
 
   const handleOpenAccordion = (value) => {
     setOpenAccordion(openAccordion === value ? 0 : value);
@@ -39,10 +56,15 @@ export default function Profile() {
     console.log("Avatar changed:", e.target.files?.[0]);
   };
 
-  const handlePasswordChange = () => {
-    console.log("Password changed");
-    setPassword("");
-    setNewPassword("");
+  const handlePasswordChange = async () => {
+    try {
+      await changePassword(password, newPassword);
+      toast.success("Password changed successfully");
+      setPassword("");
+      setNewPassword("");
+    } catch (error) {
+      toast.error("Failed to change password");
+    }
   };
 
   const handleFeedbackSubmit = () => {
@@ -82,9 +104,9 @@ export default function Profile() {
               <Avatar
                 size="xxl"
                 alt="User Avatar"
-                src="/placeholder.svg"
+                src="https://cdn.jsdelivr.net/gh/alohe/memojis/png/vibrent_6.png"
                 className="cursor-pointer border-4 border-purple-200 hover:border-purple-300 transition-colors"
-                onClick={() => document.getElementById("avatar-input")?.click()}
+                // onClick={() => document.getElementById("avatar-input")?.click()}
               />
               <input
                 id="avatar-input"
@@ -93,13 +115,23 @@ export default function Profile() {
                 className="hidden"
                 onChange={handleAvatarChange}
               />
-              <Typography variant="h4" className="text-purple-600">
+              <Typography variant="h4" className="text-blue-700 flex flex-col items-center">
                 {username}
+                <div className="flex flex-col items-center mt-2">
+                  <div className="flex items-center">
+                    <span className="text-sm">Available Credits</span>
+                    <img className="w-7 h-7 ml-2" src="/credit.svg" alt="Credits" />
+                    <span className="ml-1 text-green-500">{credits}</span>
+                  </div>
+                  <Link to="*" className="mt-2 text-sm font-thin text-gray-900 hover:underline">
+                    Want more credits? Check out the pricing plans
+                  </Link>
+                </div>
               </Typography>
-              <div className="flex items-center space-x-2 border border-purple-200 focus:border-purple-500 p-2 rounded-md">
-                <FaUser className="h-5 w-5 text-purple-500" />
+              {/* <div className="flex items-center space-x-2 border border-purple-200 focus:border-purple-500 p-2 rounded-md">
+                <FaUser className="h-5 w-5 text-purple-100" />
                 <span>{username}</span>
-              </div>
+              </div> */}
               <Button
                 onClick={handleLogout}
                 className="w-full bg-red-500 hover:bg-red-600 flex items-center justify-center gap-2"

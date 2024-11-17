@@ -102,6 +102,8 @@ def answer_query(user_query,context = "", generation_args = generation_args_gene
     global pipe, RAG_PROMPT_TEMPLATE
     prompt = RAG_PROMPT_TEMPLATE.format(context = context, question = user_query)
     output = pipe(prompt, **generation_args)
+    print(RAG_PROMPT_TEMPLATE)
+    print(output[0]['generated_text'])
     return output[0]['generated_text']
 
 
