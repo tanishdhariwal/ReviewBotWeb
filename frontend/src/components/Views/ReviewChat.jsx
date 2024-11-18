@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom'; // Import useLocation
+import { useLocation, useNavigate } from 'react-router-dom'; // Import useLocation and useNavigate
 import { Star, ThumbsUp, ThumbsDown, DollarSign, Award, Zap, Truck, Repeat } from 'lucide-react';
 import { motion } from 'framer-motion';
 import ChatComponent from './ChatComponent'; // Import the new ChatComponent
@@ -7,6 +7,7 @@ import ChatComponent from './ChatComponent'; // Import the new ChatComponent
 export default function ProductDetails() {
   const [isLoaded, setIsLoaded] = useState(false);
   const location = useLocation(); // Use useLocation to get URL parameters
+  const navigate = useNavigate(); // Use useNavigate for navigation
   const [productDetails, setProductDetails] = useState(null); // State for product details
   // const [productUrl, setProductUrl] = useState(''); // State for product URL
   const [asin, setAsin] = useState(null);
@@ -50,6 +51,7 @@ export default function ProductDetails() {
     } else {
       // Handle the case where no ASIN is available
       console.error('No ASIN available');
+      navigate('/'); // Redirect to home if no ASIN is available
     }
   }, [location.state]);
 
@@ -189,7 +191,7 @@ export default function ProductDetails() {
           </div>
         </motion.div>
 
-        <ChatComponent productASIN={{"asin":asin}} /> {/* Pass productASIN to ChatComponent */}
+        <ChatComponent ASIN_DETAILS={{ asin }} /> {/* Pass productASIN to ChatComponent */}
       </div>
     </div>
   );

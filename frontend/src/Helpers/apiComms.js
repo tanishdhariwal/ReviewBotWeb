@@ -50,11 +50,17 @@ export const getChatResponse = async (payload) => {
   }
 };
 
-export const extractASINFromUrl = (url) => {
-  const asinPattern = /\/(?:dp|product)\/([^\/]+)/i;
-  const match = url.match(asinPattern);
+export const extractASINFromUrl = (url)=>{
+  // Match ASIN using a regex pattern, accounting for query strings
+  const asinRegex = /\/([A-Z0-9]{10})(?=\/|$|\?)/;
+  const match = url.match(asinRegex);
   return match ? { "asin": match[1] } : { "asin": "false" };
-};
+}
+// export const extractASINFromUrl = (url) => {
+//   const asinPattern = /\/(?:dp|product)\/([^\/]+)/i;
+//   const match = url.match(asinPattern);
+//   return match ? { "asin": match[1] } : { "asin": "false" };
+// };
 
 export const get_user_chat = async (UID_ASIN_PAYLOAD) => {
   try {
@@ -82,6 +88,16 @@ export const changePassword = async (currentPassword, newPassword) => {
     return response.data;
   } catch (error) {
     console.error('Error in changePassword:', error);
+    throw error;
+  }
+};
+
+export const getUserChats = async () => {
+  try {
+    const response = await axios.get(`/get_user_chats`);
+    return response.data;
+  } catch (error) {
+    console.error('Error in getUserChats:', error);
     throw error;
   }
 };

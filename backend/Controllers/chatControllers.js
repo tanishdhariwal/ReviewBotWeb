@@ -1,7 +1,8 @@
-const User = require("../models/User");
+// const User = require("../models/User");
 const Chat = require("../models/Chat");
 const dbconnection = require("../DB/dbconnection"); // Correct import for dbconnection
-const axios = require("axios"); // Import axios
+const axios = require("axios"); 
+const dotenv = require("dotenv").config();
 
 const generateChatResponse = async (req, res) => {
   const { currentMessage, productASIN } = req.body;
@@ -59,7 +60,7 @@ const scrapeURL = async (req, res) => {
   const asin = req.asin;
 
   try {
-    const response = await axios.post("http://localhost:8000/scrape_url", {
+    const response = await axios.post(`http://${process.env.FRONTEND_URL}:8000/scrape_url`, {
       asin,
     });
 
@@ -87,10 +88,15 @@ const getUserChat = async (req, res) => {
   const product_asin = req.body.product_asin;
   console.log("User ID:", userId);
   console.log("Product ASIN:", product_asin);
+
+  if (!product_asin) {
+    return res.status(400).json({ error: 'Product ASIN is required.' });
+  }
+
   try {
     const chat = await Chat.findOne({
-      user_id: userId,
-      product_asin: product_asin,
+      "user_id": userId,
+      "product_asin": product_asin,
     });
     if (!chat) {
       // Create a new chat with predefined message

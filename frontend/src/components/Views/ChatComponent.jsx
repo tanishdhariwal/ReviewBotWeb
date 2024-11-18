@@ -5,19 +5,21 @@ import { getChatResponse, get_user_chat } from '../../Helpers/apiComms' // Impor
 import { useAuth } from '../../Context/AuthContext'
 import { Toaster, toast } from 'react-hot-toast' // Import react-hot-toast components
 
-export default function ChatComponent({ ASIN_DETAILS }) { // Accept productUrl as prop
+export default function ChatComponent() { // Accept productUrl as prop
   const [chatMessages, setChatMessages] = useState([])
   const [currentMessage, setCurrentMessage] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const chatContainerRef = useRef(null)
   const auth = useAuth();
   const name = auth.user.username.charAt(0);
-  const productASIN = localStorage.getItem('asin') || ASIN_DETAILS.asin;
+  const productASIN = localStorage.getItem('asin');
 
   useEffect(() => {
+    console.log('name:  ', name);
+    // console.log('ASIN-details:  ', ASIN_DETAILS );
     console.log('productASIN:  ', productASIN);
     fetchExistingChats()
-  }, [])
+  }, [productASIN])
 
   useEffect(() => {
     if (chatContainerRef.current) {
@@ -27,7 +29,7 @@ export default function ChatComponent({ ASIN_DETAILS }) { // Accept productUrl a
 
   const fetchExistingChats = async () => {
     try {
-      const data = await get_user_chat({ "product_asin": productASIN })
+      const data = await get_user_chat({ product_asin: productASIN })
       console.log('data:', data);
       if (data && data.exchanges && data.exchanges.length > 0) {
         // Map exchanges to chat messages

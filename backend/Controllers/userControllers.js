@@ -2,6 +2,7 @@ const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const icons = require("../utils/Icons");
 const bcrypt = require("bcryptjs");
+const Chat = require("../models/Chat");
 
 const signup = async (req, res) => {
   const { username, email, password } = req.body;
@@ -76,13 +77,11 @@ const login = async (req, res) => {
       signed: true,
     });
 
-    return res
-      .status(200)
-      .json({
-        message: "ok",
-        username: gotuser.username,
-        email: gotuser.email,
-      });
+    return res.status(200).json({
+      message: "ok",
+      username: gotuser.username,
+      email: gotuser.email,
+    });
   } catch (error) {
     console.error("Error during login:", error);
     return res.status(500).json({ error: "Internal server error" });
@@ -144,7 +143,7 @@ const get_user = async (req, res) => {
   try {
     const user = await User.findById(res.locals.jwtData.id);
     console.log("User:", user);
-    
+
     if (!user) {
       return res.status(400).json({ error: "User not found" });
     }
@@ -159,7 +158,9 @@ const get_user = async (req, res) => {
 const changePassword = async (req, res) => {
   const { currentPassword, newPassword } = req.body;
   if (!currentPassword || !newPassword) {
-    return res.status(400).json({ error: "Please provide current and new password" });
+    return res
+      .status(400)
+      .json({ error: "Please provide current and new password" });
   }
 
   try {
@@ -184,4 +185,28 @@ const changePassword = async (req, res) => {
   }
 };
 
-module.exports = { signup, login, logout, verifyuser, get_response, get_user, changePassword };
+const get_user_chats = async (req, res) => {
+  const userId = res.locals.jwtData.id;
+  try {
+    const chats = await Chat.find({ user_id: userId });
+    if (!chats || chats.length === 0) {
+      return res.status(200).json([]);
+    }
+    const productAsins = chats.map(chat => chat.product_asin);
+    return res.status(200).json(productAsins);
+  } catch (error) {
+    console.error('Error in get_user_chats:', error);
+    return res.status(500).json({ error: 'Internal server error.' });
+  }
+};
+
+module.exports = {
+  signup,
+  login,
+  logout,
+  verifyuser,
+  get_response,
+  get_user,
+  changePassword,
+  get_user_chats,
+};

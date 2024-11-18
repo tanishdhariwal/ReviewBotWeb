@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "../../Context/AuthContext";
 import CubeLoader from "../Common/CubeLoader";
 import toast, { Toaster } from "react-hot-toast";
-import { checkURL, extractASINFromUrl } from "../../Helpers/apiComms";
+import { checkURL, extractASINFromUrl, getUserChats } from "../../Helpers/apiComms";
 
 export default function HomePage() {
   const auth = useAuth();
@@ -28,6 +28,7 @@ export default function HomePage() {
   const [url, setUrl] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false); // State to manage modal visibility
   const [isLoading, setIsLoading] = useState(false);
+  const [previousChats, setPreviousChats] = useState([]);
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
@@ -74,24 +75,25 @@ export default function HomePage() {
 
   const handleCloseModal = () => setIsModalOpen(false); // Function to close modal
 
-  // Mock data for previously searched products (Replace this with real data if available)
-  const previousChats = [
-    { product: "Headphones", date: "2024-09-20" },
-    { product: "Refrigerator", date: "2024-09-21" },
-    {
-      product: "Nokia smartest Smartphone unbr unbreakable with boom boom",
-      date: "2024-09-22",
-    },
-    // Add more items to test scrolling
-    { product: "Laptop", date: "2024-09-23" },
-    { product: "Tablet", date: "2024-09-24" },
-    { product: "Smartwatch", date: "2024-09-25" },
-    { product: "Camera", date: "2024-09-26" },
-    { product: "Printer", date: "2024-09-27" },
-    { product: "Monitor", date: "2024-09-28" },
-    { product: "Keyboard", date: "2024-09-29" },
-    { product: "Mouse", date: "2024-09-30" },
-  ];
+  const handleASINClick = (asin) => {
+    localStorage.setItem('asin', asin);
+    navigate('/review-chat');
+  };
+
+  useEffect(() => {
+    const fetchUserChats = async () => {
+      try {
+        const chats = await getUserChats();
+        setPreviousChats(chats);
+      } catch (error) {
+        console.error('Error fetching user chats:', error);
+      }
+    };
+
+    if (auth.isLoggedIn) {
+      fetchUserChats();
+    }
+  }, [auth.isLoggedIn]);
 
   return (
     <div className="">
@@ -180,20 +182,16 @@ export default function HomePage() {
                     <div className="max-h-96 overflow-y-auto">
                       <ul className="space-y-2">
                         {previousChats.length > 0 ? (
-                          previousChats.map((chat, index) => (
+                          previousChats.map((asin, index) => (
                             <li
                               key={index}
-                              className="flex justify-between items-center gap-10 border-b py-2 px-9 text-gray-700"
+                              onClick={() => handleASINClick(asin)}
+                              className="cursor-pointer flex justify-between items-center gap-10 border-b py-2 px-9 text-gray-700 hover:bg-gray-200"
                             >
-                              <span
-                                className="truncate max-w-xs"
-                                title={chat.product}
-                              >
-                                {chat.product}
+                              <span className="truncate max-w-xs" title={asin}>
+                                {asin}
                               </span>
-                              <span className="whitespace-nowrap">
-                                {chat.date}
-                              </span>
+                              {/* Include date or other details if available */}
                             </li>
                           ))
                         ) : (

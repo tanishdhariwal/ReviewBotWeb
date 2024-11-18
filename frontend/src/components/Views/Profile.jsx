@@ -34,6 +34,7 @@ export default function Profile() {
   const auth = useAuth();
   const [username, setUsername] = useState(auth.user.username);
   const [credits, setCredits] = useState(0);
+  const [avatar,setAvatar] = useState("");
 
   useEffect(() => {
     const fetchUserDetails = async () => {
@@ -41,6 +42,7 @@ export default function Profile() {
         const userDetails = await getUserDetails();
         setUsername(userDetails.username);
         setCredits(userDetails.credits);
+        setAvatar(userDetails.profileImage);
       } catch (error) {
         toast.error("Failed to fetch user details");
       }
@@ -104,7 +106,7 @@ export default function Profile() {
               <Avatar
                 size="xxl"
                 alt="User Avatar"
-                src="https://cdn.jsdelivr.net/gh/alohe/memojis/png/vibrent_6.png"
+                src={avatar}
                 className="cursor-pointer border-4 border-purple-200 hover:border-purple-300 transition-colors"
                 // onClick={() => document.getElementById("avatar-input")?.click()}
               />
