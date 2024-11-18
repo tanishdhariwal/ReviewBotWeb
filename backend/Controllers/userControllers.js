@@ -1,6 +1,6 @@
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
-const icons = require("../utils/Icons");
+const imageUrls = require("../utils/Icons");
 const bcrypt = require("bcryptjs");
 const Chat = require("../models/Chat");
 
@@ -12,7 +12,8 @@ const signup = async (req, res) => {
       .json({ error: "Please provide name email and password" });
   }
   try {
-    const randomIcon = icons[Math.floor(Math.random() * icons.length)];
+    const randomIcon = imageUrls[Math.floor(Math.random() * imageUrls.length)];
+    console.log("Random Icon:", randomIcon);
     const user = new User({
       username,
       email,

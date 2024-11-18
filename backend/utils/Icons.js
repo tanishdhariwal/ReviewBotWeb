@@ -38,6 +38,4 @@ const imageUrls = [
     "https://cdn.jsdelivr.net/gh/alohe/avatars/png/upstream_8.png"
   ];
   
-module.exports = {
-    imageUrls
-  };
+module.exports = imageUrls;
