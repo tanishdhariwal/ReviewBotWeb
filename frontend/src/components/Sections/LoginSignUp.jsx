@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -14,7 +14,7 @@ import {
 import { FaUser, FaLock, FaEnvelope, FaEye, FaEyeSlash } from "react-icons/fa";
 import { SignUpUser } from "../../Helpers/apiComms";
 import { useAuth } from "../../Context/AuthContext";
-import toast, { Toaster } from 'react-hot-toast';
+import toast, { Toaster } from "react-hot-toast";
 
 export default function LoginSignUp() {
   const [email, setEmail] = useState("");
@@ -25,9 +25,14 @@ export default function LoginSignUp() {
   const auth = useAuth();
   const [isSignin, setisSignin] = useState(true);
 
+  const [trail, setTrail] = useState([]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const toastId = toast.loading(isSignin ? "Signing up..." : "Logging in...", { duration: Infinity });
+    const toastId = toast.loading(
+      isSignin ? "Signing up..." : "Logging in...",
+      { duration: Infinity }
+    );
     const payload = { email, password, username };
     console.log(payload);
     try {
@@ -45,7 +50,9 @@ export default function LoginSignUp() {
         const response = await SignUpUser(payload);
         toast.dismiss(toastId);
         if (response.success) {
-          toast.success("Sign up successful! Please log in.", { duration: 4000 });
+          toast.success("Sign up successful! Please log in.", {
+            duration: 4000,
+          });
           setisSignin(false);
         } else {
           toast.error(response.message);
@@ -60,20 +67,73 @@ export default function LoginSignUp() {
   const toggleForm = () => setisSignin(!isSignin);
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
 
+  const handleMouseMove = (e) => {
+    setTrail((prevTrail) => [
+      ...prevTrail,
+      {
+        x: e.clientX,
+        y: e.clientY,
+        size: Math.random() * 2 + 4, // Random size for the comet particles
+        opacity: 1,
+        timestamp: Date.now(),
+      },
+    ]);
+  };
+
+  useEffect(() => {
+    window.addEventListener("mousemove", handleMouseMove);
+    const interval = setInterval(() => {
+      setTrail((prevTrail) =>
+        prevTrail.filter((trailItem) => Date.now() - trailItem.timestamp < 800)
+      );
+    }, 200);
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      clearInterval(interval);
+    };
+  }, []);
+
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-purple-900 via-indigo-800 to-blue-700 relative overflow-hidden">
+    <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-purple-900  to-[#130b48] relative overflow-hidden">
       <Toaster />
-      <div className="absolute inset-0 bg-white opacity-10 transform -skew-y-12"></div>
+      <div className="absolute shadow-lg blur-sm inset-0 backdrop-blur-sm bg-[#0D1117] transform -skew-y-12"></div>
+
+      {/* Comet Trail */}
+      {trail.map((particle, index) => (
+        <motion.div
+          key={index}
+          style={{
+            position: "absolute",
+            top: `${particle.y - particle.size / 2}px`,
+            left: `${particle.x - particle.size / 2}px`,
+            width: `${particle.size}px`,
+            height: `${particle.size}px`,
+            borderRadius: "50%",
+            backgroundColor: "white",
+            opacity: particle.opacity,
+          }}
+          animate={{
+            opacity: 0,
+            y: particle.y - 20, // Fade and move upward
+          }}
+          transition={{
+            opacity: { duration: 0.5 },
+            y: { duration: 0.5 },
+          }}
+        />
+      ))}
+
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
         className="w-full max-w-[400px] px-4 sm:px-0"
       >
-        <Card className="bg-white/80 backdrop-blur-md shadow-xl">
+        <Card className="bg-white/80 z-20 backdrop-blur-md shadow-xl">
           <CardHeader
             color="blue-gray"
-            className="mb-4 grid h-28 place-items-center bg-gradient-to-r from-purple-600 to-blue-500"
+            className="mb-4 grid h-28 place-items-center bg-gradient-to-tr from-deep-purple-800 to-blue-800"
           >
             <Typography variant="h3" color="white">
               {isSignin ? "Join Us" : "Welcome Back"}
@@ -96,7 +156,7 @@ export default function LoginSignUp() {
                       size="lg"
                       value={username}
                       onChange={(e) => setuserName(e.target.value)}
-                      icon={<FaUser className="h-5 w-5 text-blue-gray-300" />}
+                      icon={<FaUser className="h-5 w-5 text-blue-gray-900" />}
                     />
                   </motion.div>
                 )}
@@ -107,7 +167,7 @@ export default function LoginSignUp() {
                 size="lg"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                icon={<FaEnvelope className="h-5 w-5 text-blue-gray-300" />}
+                icon={<FaEnvelope className="h-5 w-5 text-blue-gray-900" />}
               />
               <div className="relative">
                 <Input
@@ -123,14 +183,14 @@ export default function LoginSignUp() {
                     onClick={togglePasswordVisibility}
                   >
                     {showPassword ? (
-                      <FaEyeSlash className="h-5 w-5 text-blue-gray-300" />
+                      <FaEyeSlash className="h-5 w-5 text-blue-gray-900" />
                     ) : (
-                      <FaEye className="h-5 w-5 text-blue-gray-300" />
+                      <FaEye className="h-5 w-5 text-blue-gray-900" />
                     )}
                   </div>
                 )}
                 <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                  <FaLock className="h-5 w-5 text-blue-gray-300" />
+                  <FaLock className="h-5 w-5 text-blue-gray-900" />
                 </div>
               </div>
               <div className="-ml-2.5">
@@ -144,21 +204,32 @@ export default function LoginSignUp() {
               fullWidth
               type="submit"
               onClick={handleSubmit}
-              className="bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 transition-all duration-300"
+              className="bg-gradient-to-r from-deep-purple-800 to-blue-800 hover:from-purple-700 hover:to-blue-600 transition-all ease-in duration-100"
             >
               {isSignin ? "Sign Up" : "Sign In"}
             </Button>
-            <Typography variant="small" className="mt-6 flex justify-center">
-              {isSignin ? "Already have an account?" : "Don't have an account?"}
-              <Typography
-                as="span"
-                variant="small"
-                color="blue"
-                className="ml-1 font-bold cursor-pointer hover:text-purple-500 transition-colors duration-300"
-                onClick={toggleForm}
-              >
-                {isSignin ? "Sign in" : "Sign up"}
-              </Typography>
+            <Typography variant="small" className="mt-4 text-center">
+              {isSignin ? (
+                <>
+                  Already have an account?{" "}
+                  <span
+                    className="text-blue-600 cursor-pointer"
+                    onClick={toggleForm}
+                  >
+                    Sign In
+                  </span>
+                </>
+              ) : (
+                <>
+                  Don't have an account?{" "}
+                  <span
+                    className="text-blue-600 cursor-pointer"
+                    onClick={toggleForm}
+                  >
+                    Sign Up
+                  </span>
+                </>
+              )}
             </Typography>
           </CardFooter>
         </Card>

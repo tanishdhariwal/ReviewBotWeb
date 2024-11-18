@@ -5,7 +5,7 @@ const router = express.Router();
 
 
 router.use(userRouter);
-router.use(chatRouter)
+router.use(chatRouter);
 
 
 module.exports = router;
