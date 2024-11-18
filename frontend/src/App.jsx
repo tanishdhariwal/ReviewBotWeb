@@ -8,6 +8,7 @@ import Profile from './components/Views/Profile';
 import ReviewChat from './components/Views/ReviewChat';
 import { useAuth } from './Context/AuthContext';
 import LandingPage from './LandingPage';
+import { Box } from './components/Box';
 
 function App() {
   const { isLoggedIn, loading } = useAuth();
@@ -28,6 +29,7 @@ function App() {
             <Route path="/review-chat" element={<ReviewChat />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="*" element={<Navigate to="/" />} />
+            <Route path="/Box" element={ <Box/> } />
           </>
         ) : (
           <>
