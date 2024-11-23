@@ -4,7 +4,8 @@ import { BrowserRouter as Router } from "react-router-dom";
 import App from "./App.jsx";
 import "./index.css";
 import axios from "axios";
-import { ThemeProvider } from "@material-tailwind/react";
+// import { ThemeProvider } from "@material-tailwind/react";
+import { ThemeProvider } from "./ThemeContext.jsx";
 import { AuthProvider } from "./Context/AuthContext.jsx";
 import { Toaster } from "react-hot-toast";
 
