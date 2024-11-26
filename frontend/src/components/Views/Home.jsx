@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react";
-import { Search, Star, BarChart2, TrendingUp, X } from "lucide-react";
+import { Menu, Search, Star, BarChart2, TrendingUp, X } from "lucide-react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "../../Context/AuthContext";
 import CubeLoader from "../Common/CubeLoader";
-import toast, { Toaster } from "react-hot-toast";
 import { checkURL, extractASINFromUrl, getUserChats } from "../../Helpers/apiComms";
 
 export default function HomePage() {
@@ -18,8 +17,6 @@ export default function HomePage() {
 
   useEffect(() => {
     if (location.state && location.state.successMessage) {
-      toast.success(location.state.successMessage, { duration: 4000 });
-      // Reset the location state to prevent duplicate toasts
       navigate(location.pathname, { replace: true });
     }
   }, [location, navigate]);
@@ -50,17 +47,11 @@ export default function HomePage() {
           if (data.isValid) {
             localStorage.setItem('asin', validationResponse.asin); // Store ASIN in local storage
             navigate(`/review-chat`, { state: { asin: validationResponse.asin } });
-          } else {
-            toast.error("Unable to help right now");
           }
-        } else {
-          toast.error("URL is not valid.");
         }
       } catch (error) {
-        toast.error(error.message || "An error occurred."); // Display actual error message
+        console.error(error.message || "An error occurred."); // Display actual error message
       }
-    } else {
-      toast.error("Please enter a URL.");
     }
   };
 
@@ -96,8 +87,58 @@ export default function HomePage() {
   }, [auth.isLoggedIn]);
 
   return (
-    <div className="">
-      <Toaster />
+    <div className="relative">
+      {/* Header with hamburger icon */}
+      <header className="sm:hidden flex justify-between items-center p-4">
+        <h1 className="text-xl font-bold">ReviewBot</h1>
+        <button onClick={toggleMenu} className="focus:outline-none">
+          {isMenuOpen ? (
+            <X className="h-6 w-6 " />
+          ) : (
+            <Menu className="h-6 w-6" />
+          )}
+        </button>
+      </header>
+
+      {/* Mobile menu dropping from the top */}
+      {isMenuOpen && (
+        <div className="sm:hidden fixed inset-0 bg-white bg-opacity-90 backdrop-filter backdrop-blur-lg z-50">
+          <div className="flex flex-col items-center gap-3 px-4 py-4">
+            <Link
+              to="/top-rated"
+              className="w-full bg-transparent hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 rounded-lg flex items-center justify-center"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              <Star className="h-4 w-4 mr-2" />
+              Top Rated Products
+            </Link>
+            <Link
+              to="/trending"
+              className="w-full bg-transparent hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 rounded-lg flex items-center justify-center"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              <TrendingUp className="h-4 w-4 mr-2" />
+              Trending Products
+            </Link>
+            <button
+              onClick={() => {
+                handleOpenModal();
+                setIsMenuOpen(false);
+              }}
+              className="w-full bg-transparent hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 rounded-lg flex items-center justify-center"
+            >
+              <BarChart2 className="h-4 w-4 mr-2" />
+              Recently Reviewed Products
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Hide existing navigation buttons on mobile */}
+      <div className="hidden sm:flex flex-col sm:flex-row flex-wrap justify-center gap-3 sm:gap-4 px-4 w-full max-w-md sm:max-w-none">
+        {/* ...existing navigation buttons... */}
+      </div>
+
       {isLoading && (
         <div className="fixed inset-0 flex items-center justify-center bg-transparent  backdrop-blur-sm z-50">
           <CubeLoader />
@@ -105,15 +146,15 @@ export default function HomePage() {
       )}
       {
         <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-100">
-          <main className="pt-2 flex flex-col items-center justify-center min-h-screen px-4">
-            <h1 className="text-4xl font-bold text-gray-800 mb-8 text-center">
+          <main className="pt-2 flex flex-col items-center justify-center min-h-screen px-4 sm:px-6">
+            <h1 className="text-2xl sm:text-4xl font-bold text-gray-800 mb-6 sm:mb-8 text-center px-4">
               Summarize Product Reviews
             </h1>
 
-            <form className="w-full max-w-md mb-8">
+            <form className="w-full max-w-md mb-6 sm:mb-8 px-4">
               <div className="flex items-center border-b-2 border-blue-500 py-2">
                 <input
-                  className="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
+                  className="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none text-sm sm:text-base"
                   type="url"
                   placeholder="Enter product URL"
                   aria-label="Product URL"
@@ -126,31 +167,31 @@ export default function HomePage() {
                   type="button" // Change type to "button" to prevent form submission
                   onClick={handleNavigateToReviewChat}
                 >
-                  <Search className="h-5 w-5" />
+                  <Search className="h-4 w-4 sm:h-5 sm:w-5" />
                 </button>
               </div>
             </form>
 
-            <div className="flex flex-wrap justify-center gap-4">
+            <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-3 sm:gap-4 px-4 w-full max-w-md sm:max-w-none">
               <Link
                 to="/top-rated"
-                className="bg-white bg-opacity-20 backdrop-filter backdrop-blur-lg hover:bg-opacity-30 text-gray-800 font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out flex items-center"
+                className="w-full sm:w-auto bg-white bg-opacity-20 backdrop-filter backdrop-blur-lg hover:bg-opacity-30 text-gray-800 font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out flex items-center justify-center"
               >
-                <Star className="h-5 w-5 mr-2" />
+                <Star className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
                 Top Rated Products
               </Link>
               <Link
                 to="/trending"
-                className="bg-white bg-opacity-20 backdrop-filter backdrop-blur-lg hover:bg-opacity-30 text-gray-800 font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out flex items-center"
+                className="w-full sm:w-auto bg-white bg-opacity-20 backdrop-filter backdrop-blur-lg hover:bg-opacity-30 text-gray-800 font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out flex items-center justify-center"
               >
-                <TrendingUp className="h-5 w-5 mr-2" />
+                <TrendingUp className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
                 Trending Products
               </Link>
               <button
                 onClick={handleOpenModal}
-                className="bg-white bg-opacity-20 backdrop-filter backdrop-blur-lg hover:bg-opacity-30 text-gray-800 font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out flex items-center"
+                className="w-full sm:w-auto bg-white bg-opacity-20 backdrop-filter backdrop-blur-lg hover:bg-opacity-30 text-gray-800 font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out flex items-center justify-center"
               >
-                <BarChart2 className="h-5 w-5 mr-2" />
+                <BarChart2 className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
                 Recently Reviewed Products
               </button>
             </div>
@@ -159,34 +200,34 @@ export default function HomePage() {
             <AnimatePresence>
               {isModalOpen && auth.isLoggedIn && (
                 <motion.div
-                  className="fixed inset-0 flex items-center justify-center bg-white-900 bg-opacity-50 backdrop-filter backdrop-blur-lg"
+                  className="fixed inset-0 flex items-center justify-center bg-white-900 bg-opacity-50 backdrop-filter backdrop-blur-lg p-4"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                 >
                   <motion.div
-                    className="bg-white bg-opacity-20 backdrop-filter backdrop-blur-lg rounded-lg p-6 max-w-3xl w-full shadow-lg"
+                    className="bg-white bg-opacity-20 backdrop-filter backdrop-blur-lg rounded-lg p-4 sm:p-6 w-full max-w-[90%] sm:max-w-3xl shadow-lg"
                     initial={{ y: "-50%", opacity: 0 }}
                     animate={{ y: "0%", opacity: 1 }}
                     exit={{ y: "-50%", opacity: 0 }}
                     transition={{ duration: 0.3 }}
                   >
                     <div className="flex justify-between items-center mb-4">
-                      <h2 className="text-lg font-semibold text-gray-800">
+                      <h2 className="text-base sm:text-lg font-semibold text-gray-800">
                         Previously Searched Products
                       </h2>
                       <button onClick={handleCloseModal}>
-                        <X className="h-5 w-5 text-gray-500 hover:text-gray-700" />
+                        <X className="h-4 w-4 sm:h-5 sm:w-5 text-gray-500 hover:text-gray-700" />
                       </button>
                     </div>
-                    <div className="max-h-96 overflow-y-auto">
+                    <div className="max-h-[60vh] sm:max-h-96 overflow-y-auto">
                       <ul className="space-y-2">
                         {previousChats.length > 0 ? (
                           previousChats.map((asin, index) => (
                             <li
                               key={index}
                               onClick={() => handleASINClick(asin)}
-                              className="cursor-pointer flex justify-between items-center gap-10 border-b py-2 px-9 text-gray-700 hover:bg-gray-200"
+                              className="cursor-pointer flex justify-between items-center gap-4 sm:gap-10 border-b py-2 px-4 sm:px-9 text-sm sm:text-base text-gray-700 hover:bg-gray-200"
                             >
                               <span className="truncate max-w-xs" title={asin}>
                                 {asin}

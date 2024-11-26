@@ -1,21 +1,34 @@
 import axios from 'axios';
+import toast from 'react-hot-toast';
 
 export const LoginUser = async (userData) => {
-  const { email, password } = userData;
-  const response = await axios.post(`/login`, { email, password });
-  if (response.status !== 200) {
-    throw new Error(response.data);
+  try {
+    const { email, password } = userData;
+    const response = await axios.post(`/login`, { email, password });
+    if (response.status !== 200) {
+      throw new Error(response.data);
+    }
+    toast.success("Login successful!");
+    return response.data;
+  } catch (error) {
+    toast.error("Login failed. Please try again.");
+    throw error;
   }
-  return response.data;
 };
 
 export const SignUpUser = async (userData) => {
-  const { username, email, password } = userData;
-  const response = await axios.post(`/signup`, { username, email, password });
-  if (response.status !== 201) {
-    throw new Error(response.data);
+  try {
+    const { username, email, password } = userData;
+    const response = await axios.post(`/signup`, { username, email, password });
+    if (response.status !== 201) {
+      throw new Error(response.data);
+    }
+    toast.success("Sign up successful!");
+    return response.data;
+  } catch (error) {
+    toast.error("Sign up failed. Please try again.");
+    throw error;
   }
-  return response.data;
 };
 
 export const checkAuthStatus = async () => {
@@ -29,24 +42,22 @@ export const LogoutUser = async () => {
 
 export const checkURL = async (asinData) => {
   try {
-    alert("inside checkURL but before response");
     const response = await axios.post(`/product_url_validation`, asinData);
-    alert("inside checkURL but after response");
+    toast.success("Product URL is valid.");
     return response.data;
   } catch (error) {
-    throw new Error(error.response.data.error || "Validation failed.");
+    toast.error("URL Validation failed.");
+    throw error;
   }
 };
 
 export const getChatResponse = async (payload) => {
   try {
-    console.log('in getChatResponse')
     const response = await axios.post(`/chat_response`, payload);
-    console.log('response:', response)
     return response.data;
   } catch (error) {
-    console.error('Error in getChatResponse:', error)
-    throw error; // Rethrow the error to be caught in the component
+    toast.error('Failed to get chat response.');
+    throw error;
   }
 };
 
@@ -77,7 +88,7 @@ export const getUserDetails = async () => {
     const response = await axios.get(`/get_user`);
     return response.data.user;
   } catch (error) {
-    console.error('Error in getUserDetails:', error);
+    toast.error('Error fetching user details.');
     throw error;
   }
 };
@@ -85,9 +96,10 @@ export const getUserDetails = async () => {
 export const changePassword = async (currentPassword, newPassword) => {
   try {
     const response = await axios.post(`/change_password`, { currentPassword, newPassword });
+    toast.success("Password changed successfully.");
     return response.data;
   } catch (error) {
-    console.error('Error in changePassword:', error);
+    toast.error('Failed to change password.');
     throw error;
   }
 };
@@ -97,7 +109,7 @@ export const getUserChats = async () => {
     const response = await axios.get(`/get_user_chats`);
     return response.data;
   } catch (error) {
-    console.error('Error in getUserChats:', error);
+    toast.error('Error fetching user chats.');
     throw error;
   }
 };

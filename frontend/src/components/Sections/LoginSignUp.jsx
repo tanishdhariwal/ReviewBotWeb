@@ -14,7 +14,6 @@ import {
 import { FaUser, FaLock, FaEnvelope, FaEye, FaEyeSlash } from "react-icons/fa";
 import { SignUpUser } from "../../Helpers/apiComms";
 import { useAuth } from "../../Context/AuthContext";
-import toast, { Toaster } from "react-hot-toast";
 
 export default function LoginSignUp() {
   const [email, setEmail] = useState("");
@@ -29,38 +28,23 @@ export default function LoginSignUp() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const toastId = toast.loading(
-      isSignin ? "Signing up..." : "Logging in...",
-      { duration: Infinity }
-    );
     const payload = { email, password, username };
-    console.log(payload);
     try {
       if (!isSignin) {
         const Loginpayload = { email, password };
         const response = await auth.login(Loginpayload);
         if (response.success) {
-          toast.dismiss(toastId);
           navigate("/", { state: { successMessage: response.message } });
         } else {
-          toast.dismiss(toastId);
-          toast.error(response.message);
         }
       } else {
         const response = await SignUpUser(payload);
-        toast.dismiss(toastId);
         if (response.success) {
-          toast.success("Sign up successful! Please log in.", {
-            duration: 4000,
-          });
           setisSignin(false);
         } else {
-          toast.error(response.message);
         }
       }
     } catch (error) {
-      toast.dismiss(toastId);
-      toast.error("Login/Sign up failed. Please try again.");
     }
   };
 
@@ -96,7 +80,6 @@ export default function LoginSignUp() {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-purple-900  to-[#130b48] relative overflow-hidden">
-      <Toaster />
       <div className="absolute shadow-lg blur-sm inset-0 backdrop-blur-sm bg-[#0D1117] transform -skew-y-12"></div>
 
       {/* Comet Trail */}

@@ -25,6 +25,7 @@ import {
 import { useAuth } from "../../Context/AuthContext";
 import toast from "react-hot-toast";
 import { getUserDetails, changePassword } from "../../Helpers/apiComms";
+import About from './../Sections/About';
 
 export default function Profile() {
   const [password, setPassword] = useState("");
@@ -211,8 +212,7 @@ export default function Profile() {
                   How do I change my avatar?
                 </AccordionHeader>
                 <AccordionBody className="text-purple-700">
-                  Click on your current avatar image to open the file picker.
-                  Select a new image file to update your avatar.
+                  Simple thing is to die and come alive with new face
                 </AccordionBody>
               </Accordion>
               <Accordion open={openAccordion === 2}>
@@ -223,9 +223,7 @@ export default function Profile() {
                   Is my feedback anonymous?
                 </AccordionHeader>
                 <AccordionBody className="text-purple-700">
-                  Your feedback is associated with your account to help us
-                  better address your concerns. However, we respect your privacy
-                  and handle all feedback confidentially.
+                  what will you do bro? ✌️
                 </AccordionBody>
               </Accordion>
               <Accordion open={openAccordion === 3}>
@@ -236,9 +234,7 @@ export default function Profile() {
                   How often can I change my password?
                 </AccordionHeader>
                 <AccordionBody className="text-purple-700">
-                  You can change your password as often as you like. We
-                  recommend updating your password regularly for security
-                  reasons.
+                  As many times as you come late to college
                 </AccordionBody>
               </Accordion>
             </CardBody>
