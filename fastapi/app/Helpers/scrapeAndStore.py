@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 from app.Helpers.embeddingAndFormat import transform_data, add_review
 from app.DB.session import dbconnection
 
-
+  
 load_dotenv()
 api_key = os.getenv('SCRAPER_API_KEY')
 if not api_key:
@@ -50,7 +50,7 @@ def scrape_data(asin_no, domain="in"):
                 if("reviews" not in formatted_data):
                     break
                 raise Exception(f"Failed to get review data: {r.status_code}")                  
-        print(f"added {len(formatted_data["reviews"])} reviews")
+        print(f"added {len(formatted_data['reviews'])} reviews")
                 
         if isinstance(formatted_data, dict):
             print("updating data to MongoDB")
