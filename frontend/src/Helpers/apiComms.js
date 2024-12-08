@@ -13,6 +13,7 @@ export const LoginUser = async (userData) => {
     return response.data;
   } catch (error) {
     toast.error("Server Issue bruh.");
+
     throw error;
   }
 };
@@ -30,6 +31,7 @@ export const SignUpUser = async (userData) => {
   } catch (error) {
     toast.dismiss(toastId);
     toast.error(error.message || "Sign up failed. Please try again.");
+
     throw error;
   }
 };
@@ -72,6 +74,7 @@ export const getChatResponse = async (payload) => {
     return response.data;
   } catch (error) {
     toast.error("Failed to get response. Please try again.");
+
     throw error;
   }
 };
@@ -98,7 +101,7 @@ export const getUserDetails = async () => {
     const response = await axios.get(`/get_user`);
     return response.data.user;
   } catch (error) {
-    console.error('Error in getUserDetails:', error);
+    toast.error('Error fetching user details.');
     throw error;
   }
 };
@@ -109,7 +112,7 @@ export const changePassword = async (currentPassword, newPassword) => {
     toast.success("Password changed successfully");
     return response.data;
   } catch (error) {
-    toast.error("Failed to change password");
+
     throw error;
   }
 };
@@ -119,7 +122,7 @@ export const getUserChats = async () => {
     const response = await axios.get(`/get_user_chats`);
     return response.data;
   } catch (error) {
-    console.error('Error in getUserChats:', error);
+    toast.error('Error fetching user chats.');
     throw error;
   }
 };

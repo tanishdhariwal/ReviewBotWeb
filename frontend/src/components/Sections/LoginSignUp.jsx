@@ -31,10 +31,12 @@ export default function LoginSignUp() {
         const response = await SignUpUser(payload);
         if (response.success) {
           setisSignin(false);
+
         }
       }
     } catch (error) {
       console.error(error);
+
     }
   };
 
@@ -51,6 +53,7 @@ export default function LoginSignUp() {
         {/* <motion.div className="w-full max-w-full sm:max-w-lg md:max-w-xl"> */}
           <div className="lg:w-[474px] md:w-[370px] md:rounded-[20px] mx-auto p-4 sm:p-6 md:p-8 shadow-[0px_0px_16px_0px_#ffffff4d] hover:shadow-[0px_0px_24px_0px_#ffffff4d] transition-all ease-in bg-white dark:bg-black">
             <h2 className="font-bold text-xl sm:text-2xl md:text-3xl text-neutral-800 dark:text-neutral-200">
+
               {isSignin ? "Join Us" : "Welcome Back"}
             </h2>
             <p className="text-neutral-600 text-sm sm:text-base md:text-lg max-w-sm mt-2 dark:text-neutral-300">

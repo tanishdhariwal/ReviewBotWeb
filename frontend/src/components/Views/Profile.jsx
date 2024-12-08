@@ -19,6 +19,7 @@ import { Textarea } from "../ui/textarea"
 
 const shimmer = `relative overflow-hidden before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_1.5s_infinite] before:bg-gradient-to-r before:from-transparent before:via-white/10 before:to-transparent`
 
+
 export default function Profile() {
   const [password, setPassword] = useState("")
   const [newPassword, setNewPassword] = useState("")
@@ -165,6 +166,7 @@ export default function Profile() {
           </Card>
         </motion.div>
 
+
         <motion.div whileHover={{ y: -5 }} transition={{ type: "spring", stiffness: 300 }}>
           <Card className={`bg-white/5 border-white/10 shadow-[0_0_15px_rgba(255,255,255,0.1)] ${shimmer}`}>
             <CardHeader>
@@ -196,6 +198,7 @@ export default function Profile() {
                     You can change your password as often as you like. We recommend updating your password regularly for security reasons.
                   </AccordionContent>
                 </AccordionItem>
+
               </Accordion>
             </CardContent>
           </Card>
