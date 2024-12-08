@@ -4,7 +4,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "../../Context/AuthContext";
 import CubeLoader from "../Common/CubeLoader";
-import toast, { Toaster } from "react-hot-toast";
+// import toast, { Toaster } from "react-hot-toast";
 import { checkURL, extractASINFromUrl, getUserChats } from "../../Helpers/apiComms";
 
 export default function HomePage() {
@@ -97,7 +97,7 @@ export default function HomePage() {
 
   return (
     <div className="">
-      <Toaster />
+      {/* <Toaster /> */}
       {isLoading && (
         <div className="fixed inset-0 flex items-center justify-center bg-transparent  backdrop-blur-sm z-50">
           <CubeLoader />

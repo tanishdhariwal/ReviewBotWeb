@@ -42,86 +42,20 @@ def verify_token(request: Request):
             headers={"WWW-Authenticate": "Bearer"},
         ) from e
 
-@router.post("/random_text")
-async def get_random_text(input: TextInput, token: dict = Depends(verify_token)):
-    try:
-        username = token.get("username")
-        time.sleep(5)
-        print("I came here bruh !!")
-
-        random_response = random.choice(responses)
-
-        print(input, " ---> ", random_response)
-
-        random_response = random_response + "----------- " + username
-        return {"response": random_response}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-# Load the model and tokenizer (you can load this once when the app starts)
-model = None
-tokenizer = None
-pipe = None
-model_loaded = False
-
-def load_model_and_tokenizer():
-    global model, tokenizer, pipe, model_loaded
-    if not model_loaded:
-        for _ in tqdm(range(100), desc="Loading model and tokenizer"):
-            time.sleep(0.01)  # Simulate loading time
-        model = AutoModelForCausalLM.from_pretrained(
-            "microsoft/Phi-3.5-mini-instruct",
-            device_map="cuda",
-            torch_dtype="auto",
-            trust_remote_code=True,
-        )
-        print("Model is loaded !")
-
-        tokenizer = AutoTokenizer.from_pretrained("microsoft/Phi-3.5-mini-instruct")
-
-        print("Tokenizer loaded")
-
-        pipe = pipeline(
-            "text-generation",
-            model=model,
-            tokenizer=tokenizer,
-        )
-        model_loaded = True
-
-def unload_model_and_tokenizer():
-    global model, tokenizer, pipe, model_loaded
-    model = None
-    tokenizer = None
-    pipe = None
-    model_loaded = False
-    print("Model and tokenizer unloaded")
-
-generation_args = {
-    "max_new_tokens": 700,
-    "return_full_text": False,
-    "temperature": 0.0,
-    "do_sample": False,
-}
-
 # Route to handle the generation
 @router.post("/generate")
 async def generate_text(query: QueryInput, token: dict = Depends(verify_token)):
     try:
         username = token.get("username")
-        print("I came here bruh !!")
-        messages = [
-            {"role": "system", "content": "You are an AI Assistant"},
-            {"role": "user", "content": query.query},
-        ]
-
-        # Simulate progress bar for prediction
-        for _ in tqdm(range(100), desc="Generating response"):
-            time.sleep(0.01)  # Simulate prediction time
-
-        output = pipe(messages, **generation_args)
-        return {"response": output[0]['generated_text'] + "----------- " + username}
+        print("I came here bruh !!" + username)
+        
+        response = answer_query(query.query)
+        
+        return {"response": response} 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    
+
 
 @router.get("/users", response_model=List[User])
 async def get_all_users(db: MongoClient = Depends(dbconnection)):
@@ -141,18 +75,6 @@ async def get_all_users(db: MongoClient = Depends(dbconnection)):
 async def scraping(input: Url):
     print(f"Received scraping request with asin: {input.asin}")
 
-    # parsed_url = urlparse(input.url)
-
-    # print(f"Parsed URL: {parsed_url}")
-
-    # if not all([parsed_url.scheme, parsed_url.netloc]):
-    #     print("Invalid URL provided")
-    #     raise HTTPException(status_code=400, detail="Invalid URL")
-
-    # # Extract ASIN from the URL
-    # extracted_asin_from_url = extract_asin_from_url(input.url)
-    # print(f"Extracted ASIN from URL: {extracted_asin_from_url}")
-
     asin = input.asin
     print(f"Extracted ASIN: {asin}")
 
@@ -165,30 +87,7 @@ async def scraping(input: Url):
     except Exception as e:
         print("Error occurred during scraping")
         raise HTTPException(status_code=500, detail="Internal Server Error")
-
-def extract_asin_from_url(url):
-    print(f"Extracting ASIN from URL: {url}")
-    # Function to extract ASIN from Amazon product URL
-    asin_pattern = re.compile(r"/(?:dp|product)/([A-Z0-9]{10})", re.IGNORECASE)
-    match = asin_pattern.search(url)
-    if match:
-        asin = match.group(1)
-        print(f"ASIN found: {asin}")
-        return asin
-    else:
-        # Try extracting ASIN from query parameters if available
-        
-        parsed_url = urlparse(url)
-        query_params = parse_qs(parsed_url.query)
-        print(f"Query parameters: {query_params}")
-        if 'ASIN' in query_params:
-            asin = query_params['ASIN'][0]
-            print(f"ASIN found in query parameters: {asin}")
-            return asin
-        else:
-            print("ASIN not found in URL")
-            return None
-
+    
 
 class Test(BaseModel):
     query :str
@@ -202,13 +101,4 @@ def get_LLM_response(input : Test ):
     print(f"Response: {response}")
     return {"response": response}
 
-
-@router.post("/testing")
-async def testing(input: Test):
-    print(input)
-
-    data = scrape_data(input.asin)
-    print(f"Scraped data: {data}")
-
-    return {"message": data}
     

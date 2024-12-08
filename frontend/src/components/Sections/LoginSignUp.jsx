@@ -1,27 +1,12 @@
-import { Button } from "../ui/button";
-import {
-  Card,
-  CardHeader,
-  CardContent,
-  CardFooter,
-} from "../ui/card";
-import { Input } from "../ui/input";
-import { Label } from "../ui/label";
-import { Checkbox } from "../ui/checkbox";
-import { AnimatePresence, motion } from "framer-motion";
-import React, { useEffect, useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
-import { FaEnvelope, FaEye, FaEyeSlash, FaLock, FaUser } from "react-icons/fa";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { cn } from "../../../lib/utils";
 import { useAuth } from "../../Context/AuthContext";
 import { SignUpUser } from "../../Helpers/apiComms";
-import { cn } from "../../../lib/utils";
-import {
-  IconBrandGithub,
-  IconBrandGoogle,
-  IconBrandOnlyfans,
-} from "@tabler/icons-react";
-import { HeroHighlight, Highlight } from "../ui/hero-highlight";
+import { Checkbox } from "../ui/checkbox";
+import { HeroHighlight } from "../ui/hero-highlight";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
 
 export default function LoginSignUp() {
   const [email, setEmail] = useState("");
@@ -34,38 +19,22 @@ export default function LoginSignUp() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const toastId = toast.loading(
-      isSignin ? "Signing up..." : "Logging in...",
-      { duration: Infinity }
-    );
     const payload = { email, password, username };
-    console.log(payload);
     try {
       if (!isSignin) {
         const Loginpayload = { email, password };
         const response = await auth.login(Loginpayload);
         if (response.success) {
-          toast.dismiss(toastId);
-          navigate("/", { state: { successMessage: response.message } });
-        } else {
-          toast.dismiss(toastId);
-          toast.error(response.message);
+          navigate("/");
         }
       } else {
         const response = await SignUpUser(payload);
-        toast.dismiss(toastId);
         if (response.success) {
-          toast.success("Sign up successful! Please log in.", {
-            duration: 4000,
-          });
           setisSignin(false);
-        } else {
-          toast.error(response.message);
         }
       }
     } catch (error) {
-      toast.dismiss(toastId);
-      toast.error("Login/Sign up failed. Please try again.");
+      console.error(error);
     }
   };
 
@@ -73,12 +42,11 @@ export default function LoginSignUp() {
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
 
   const handleSocialLogin = (provider) => {
-    alert(`Social login with ${provider} is not implemented yet.`);
+    // Removed alert - function is currently unused
   };
 
   return (
     <div className="bg-black">
-      <Toaster />
       <HeroHighlight className="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
         {/* <motion.div className="w-full max-w-full sm:max-w-lg md:max-w-xl"> */}
           <div className="lg:w-[474px] md:w-[370px] md:rounded-[20px] mx-auto p-4 sm:p-6 md:p-8 shadow-[0px_0px_16px_0px_#ffffff4d] hover:shadow-[0px_0px_24px_0px_#ffffff4d] transition-all ease-in bg-white dark:bg-black">
@@ -123,12 +91,12 @@ export default function LoginSignUp() {
                   onChange={(e) => setPassword(e.target.value)}
                 />
               </LabelInputContainer>
-              <div className="flex items-center mb-4">
+              {/* <div className="flex items-center mb-4">
                 <Checkbox id="remember" />
                 <Label htmlFor="remember" className="ml-2 text-neutral-700 dark:text-neutral-300">
                   Remember Me
                 </Label>
-              </div>
+              </div> */}
               <button
                 className="bg-gradient-to-br relative group/btn from-black dark:from-zinc-900 to-neutral-600 w-full text-white rounded-md h-10 font-medium"
                 type="submit"

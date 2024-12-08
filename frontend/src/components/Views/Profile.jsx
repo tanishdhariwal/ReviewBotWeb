@@ -1,22 +1,21 @@
 'use client'
 
-import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
-import {Link} from "react-router-dom"
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card"
-import { Button } from "../ui/button"
-import { Input } from "../ui/input"
-import { Textarea } from "../ui/textarea"
+import { DollarSign, LogOut } from 'lucide-react'
+import { useEffect, useState } from "react"
+import { Link } from "react-router-dom"
+import { useAuth } from "../../Context/AuthContext"
+import { getUserDetails } from "../../Helpers/apiComms"
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "../ui/accordion"
-import toast from "react-hot-toast"
-import { User, Lock, Mail, HelpCircle, MessageSquare, LogOut, DollarSign } from 'lucide-react'
-import { getUserDetails, changePassword } from "../../Helpers/apiComms"
-import { useAuth } from "../../Context/AuthContext"
+import { Button } from "../ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card"
+import { Input } from "../ui/input"
+import { Textarea } from "../ui/textarea"
 
 const shimmer = `relative overflow-hidden before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_1.5s_infinite] before:bg-gradient-to-r before:from-transparent before:via-white/10 before:to-transparent`
 
@@ -38,7 +37,6 @@ export default function Profile() {
         setCredits(userDetails.credits)
         setAvatar(userDetails.profileImage)
       } catch (error) {
-        toast.error("Failed to fetch user details")
       }
     };
     fetchUserDetails();
@@ -50,21 +48,15 @@ export default function Profile() {
     try {
       // Simulated API call
       await new Promise(resolve => setTimeout(resolve, 1000))
-      toast({
-        title: "Success",
-        description: "Password changed successfully",
-      })
       setPassword("")
       setNewPassword("")
     } catch (error) {
-      toast.error("Failed to change password");
     }
   };
 
   const handleFeedbackSubmit = () => {
     console.log("Feedback submitted:", feedback)
-    setFeedback("");
-    toast.success("Feedback submitted successfully")  
+    setFeedback("");  
   };
 
   const handleLogout = () => {

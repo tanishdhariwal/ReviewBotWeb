@@ -3,13 +3,11 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import Header from './components/Common/Header';
 import About from './components/Sections/About';
 import LoginSignUp from './components/Sections/LoginSignUp';
-import Home from './components/Views/Home';
+import HomeNew from './components/Views/HomeNew';
 import Profile from './components/Views/Profile';
 import ReviewChat from './components/Views/ReviewChat';
 import { useAuth } from './Context/AuthContext';
 import LandingPage from './LandingPage';
-import { Box } from './components/Box';
-import HomeNew from './components/Views/HomeNew';
 
 function App() {
   const { isLoggedIn, loading } = useAuth();
@@ -30,7 +28,7 @@ function App() {
             <Route path="/review-chat" element={<ReviewChat />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="*" element={<Navigate to="/" />} />
-            <Route path="/Box" element={ <Box/> } />
+            {/* <Route path="/Box" element={ <Box/> } /> */}
             {/* <Route path="/HomeNew" element={ <HomeNew/> } /> */}
           </>
         ) : (

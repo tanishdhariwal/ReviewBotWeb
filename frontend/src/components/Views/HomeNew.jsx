@@ -8,7 +8,6 @@ import { Input } from "../ui/input"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog"
 import { useAuth } from "../../Context/AuthContext"
 import CubeLoader from "../Common/CubeLoader"
-import toast, { Toaster } from "react-hot-toast"
 import { checkURL, extractASINFromUrl, getUserChats } from "../../Helpers/apiComms"
 
 export default function HomeNew() {
@@ -24,13 +23,6 @@ export default function HomeNew() {
     hover: { scale: 1.05 },
     tap: { scale: 0.95 },
     };
-
-  useEffect(() => {
-    if (location.state?.successMessage) {
-      toast.success(location.state.successMessage, { duration: 4000 });
-      navigate(location.pathname, { replace: true });
-    }
-  }, [location, navigate]);
 
   const handleRecentlyReviewedClick = () => {
     if (auth.isLoggedIn) {
@@ -55,19 +47,13 @@ export default function HomeNew() {
           if (data.isValid) {
             localStorage.setItem('asin', validationResponse.asin);
             navigate(`/review-chat`, { state: { asin: validationResponse.asin } });
-          } else {
-            toast.error("Unable to help right now");
           }
-        } else {
-          toast.error("URL is not valid.");
         }
       } catch (error) {
-        toast.error(error.message || "An error occurred.");
+        console.error(error);
       } finally {
         setIsLoading(false);
       }
-    } else {
-      toast.error("Please enter a URL.");
     }
   };
 
@@ -88,7 +74,6 @@ export default function HomeNew() {
 
   return (
     <div className="relative min-h-screen bg-gray-900 flex flex-col items-center justify-center p-4 overflow-hidden">
-      <Toaster />
       {isLoading && (
         <div className="fixed inset-0 flex items-center justify-center bg-transparent backdrop-blur-sm z-50">
           <CubeLoader />
