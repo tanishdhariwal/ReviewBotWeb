@@ -62,7 +62,7 @@ export default function NavBar({ isLoggedIn, username }) {
             {isLoggedIn ? (
               <Link to="/profile">
                 <img
-                  className="h-8 w-8 rounded-full"
+                  className="h-8 w-8 rounded-full border-2 border-blue-400 hover:border-blue-600 border-spacing-5"
                   src={`https://ui-avatars.com/api/?name=${username}`}
                   alt="Profile"
                 />

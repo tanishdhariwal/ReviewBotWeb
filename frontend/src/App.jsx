@@ -25,13 +25,13 @@ function App() {
         {isLoggedIn ? (
           <>
             <Route path='/landing' element={<LandingPage />} />
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<HomeNew />} />
             <Route path="/about" element={<About />} />
             <Route path="/review-chat" element={<ReviewChat />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="*" element={<Navigate to="/" />} />
             <Route path="/Box" element={ <Box/> } />
-            <Route path="/HomeNew" element={ <HomeNew/> } />
+            {/* <Route path="/HomeNew" element={ <HomeNew/> } /> */}
           </>
         ) : (
           <>

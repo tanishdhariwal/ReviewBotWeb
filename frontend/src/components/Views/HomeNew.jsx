@@ -102,7 +102,8 @@ export default function HomeNew() {
         animate={{ opacity: 1 }}
         transition={{ duration: 2 }}
       >
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-900 via-blue-900 to-gray-900" />
+        {/* <div className="absolute inset-0 bg-gradient-to-br from-purple-900 via-blue-900 to-gray-900" /> */}
+        <div className="absolute inset-0 bg-gradient-to-br from-black via-slate-950 to-black" />
         {[...Array(50)].map((_, i) => (
           <motion.div
             key={i}
@@ -184,7 +185,7 @@ export default function HomeNew() {
             <Button 
               type="button" 
               onClick={handleNavigateToReviewChat}
-              className="bg-gradient-to-br from-purple-800 via-indigo-700 to-purple-900 hover:from-purple-600 hover:via-indigo-500 hover:to-purple-600 text-white shadow-lg hover:shadow-purple-500/20 transition-all duration-300"
+              className="bg-gradient-to-br hover:from-purple-600 hover:via-indigo-600 hover:to-purple-600 from-purple-500 via-blue-500 to-purple-500 text-white shadow-lg hover:shadow-purple-500/20 transition-all duration-700 ease-in-out"
             >
               Summarize
             </Button>
