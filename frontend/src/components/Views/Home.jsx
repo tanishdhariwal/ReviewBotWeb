@@ -87,58 +87,8 @@ export default function HomePage() {
   }, [auth.isLoggedIn]);
 
   return (
-    <div className="relative">
-      {/* Header with hamburger icon */}
-      <header className="sm:hidden flex justify-between items-center p-4">
-        <h1 className="text-xl font-bold">ReviewBot</h1>
-        <button onClick={toggleMenu} className="focus:outline-none">
-          {isMenuOpen ? (
-            <X className="h-6 w-6 " />
-          ) : (
-            <Menu className="h-6 w-6" />
-          )}
-        </button>
-      </header>
-
-      {/* Mobile menu dropping from the top */}
-      {isMenuOpen && (
-        <div className="sm:hidden fixed inset-0 bg-white bg-opacity-90 backdrop-filter backdrop-blur-lg z-50">
-          <div className="flex flex-col items-center gap-3 px-4 py-4">
-            <Link
-              to="/top-rated"
-              className="w-full bg-transparent hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 rounded-lg flex items-center justify-center"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              <Star className="h-4 w-4 mr-2" />
-              Top Rated Products
-            </Link>
-            <Link
-              to="/trending"
-              className="w-full bg-transparent hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 rounded-lg flex items-center justify-center"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              <TrendingUp className="h-4 w-4 mr-2" />
-              Trending Products
-            </Link>
-            <button
-              onClick={() => {
-                handleOpenModal();
-                setIsMenuOpen(false);
-              }}
-              className="w-full bg-transparent hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 rounded-lg flex items-center justify-center"
-            >
-              <BarChart2 className="h-4 w-4 mr-2" />
-              Recently Reviewed Products
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Hide existing navigation buttons on mobile */}
-      <div className="hidden sm:flex flex-col sm:flex-row flex-wrap justify-center gap-3 sm:gap-4 px-4 w-full max-w-md sm:max-w-none">
-        {/* ...existing navigation buttons... */}
-      </div>
-
+    <div className="">
+      {/* <Toaster /> */}
       {isLoading && (
         <div className="fixed inset-0 flex items-center justify-center bg-transparent  backdrop-blur-sm z-50">
           <CubeLoader />

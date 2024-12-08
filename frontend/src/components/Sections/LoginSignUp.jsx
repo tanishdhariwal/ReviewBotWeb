@@ -1,19 +1,12 @@
-import { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
-import {
-  Card,
-  CardHeader,
-  CardBody,
-  CardFooter,
-  Typography,
-  Input,
-  Checkbox,
-  Button,
-} from "@material-tailwind/react";
-import { FaUser, FaLock, FaEnvelope, FaEye, FaEyeSlash } from "react-icons/fa";
-import { SignUpUser } from "../../Helpers/apiComms";
+import { cn } from "../../../lib/utils";
 import { useAuth } from "../../Context/AuthContext";
+import { SignUpUser } from "../../Helpers/apiComms";
+import { Checkbox } from "../ui/checkbox";
+import { HeroHighlight } from "../ui/hero-highlight";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
 
 export default function LoginSignUp() {
   const [email, setEmail] = useState("");
@@ -24,8 +17,6 @@ export default function LoginSignUp() {
   const auth = useAuth();
   const [isSignin, setisSignin] = useState(true);
 
-  const [trail, setTrail] = useState([]);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     const payload = { email, password, username };
@@ -34,189 +25,161 @@ export default function LoginSignUp() {
         const Loginpayload = { email, password };
         const response = await auth.login(Loginpayload);
         if (response.success) {
-          navigate("/", { state: { successMessage: response.message } });
-        } else {
+          navigate("/");
         }
       } else {
         const response = await SignUpUser(payload);
         if (response.success) {
           setisSignin(false);
-        } else {
+
         }
       }
     } catch (error) {
+      console.error(error);
+
     }
   };
 
   const toggleForm = () => setisSignin(!isSignin);
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
 
-  const handleMouseMove = (e) => {
-    setTrail((prevTrail) => [
-      ...prevTrail,
-      {
-        x: e.clientX,
-        y: e.clientY,
-        size: Math.random() * 2 + 4, // Random size for the comet particles
-        opacity: 1,
-        timestamp: Date.now(),
-      },
-    ]);
+  const handleSocialLogin = (provider) => {
+    // Removed alert - function is currently unused
   };
 
-  useEffect(() => {
-    window.addEventListener("mousemove", handleMouseMove);
-    const interval = setInterval(() => {
-      setTrail((prevTrail) =>
-        prevTrail.filter((trailItem) => Date.now() - trailItem.timestamp < 800)
-      );
-    }, 200);
-
-    return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-      clearInterval(interval);
-    };
-  }, []);
-
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-purple-900  to-[#130b48] relative overflow-hidden">
-      <div className="absolute shadow-lg blur-sm inset-0 backdrop-blur-sm bg-[#0D1117] transform -skew-y-12"></div>
+    <div className="bg-black">
+      <HeroHighlight className="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
+        {/* <motion.div className="w-full max-w-full sm:max-w-lg md:max-w-xl"> */}
+          <div className="lg:w-[474px] md:w-[370px] md:rounded-[20px] mx-auto p-4 sm:p-6 md:p-8 shadow-[0px_0px_16px_0px_#ffffff4d] hover:shadow-[0px_0px_24px_0px_#ffffff4d] transition-all ease-in bg-white dark:bg-black">
+            <h2 className="font-bold text-xl sm:text-2xl md:text-3xl text-neutral-800 dark:text-neutral-200">
 
-      {/* Comet Trail */}
-      {trail.map((particle, index) => (
-        <motion.div
-          key={index}
-          style={{
-            position: "absolute",
-            top: `${particle.y - particle.size / 2}px`,
-            left: `${particle.x - particle.size / 2}px`,
-            width: `${particle.size}px`,
-            height: `${particle.size}px`,
-            borderRadius: "50%",
-            backgroundColor: "white",
-            opacity: particle.opacity,
-          }}
-          animate={{
-            opacity: 0,
-            y: particle.y - 20, // Fade and move upward
-          }}
-          transition={{
-            opacity: { duration: 0.5 },
-            y: { duration: 0.5 },
-          }}
-        />
-      ))}
-
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="w-full max-w-[400px] px-4 sm:px-0"
-      >
-        <Card className="bg-white/80 z-20 backdrop-blur-md shadow-xl">
-          <CardHeader
-            color="blue-gray"
-            className="mb-4 grid h-28 place-items-center bg-gradient-to-tr from-deep-purple-800 to-blue-800"
-          >
-            <Typography variant="h3" color="white">
               {isSignin ? "Join Us" : "Welcome Back"}
-            </Typography>
-          </CardHeader>
-          <CardBody className="flex flex-col gap-4">
-            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-              <AnimatePresence mode="wait">
-                {isSignin && (
-                  <motion.div
-                    key="name"
-                    initial={{ opacity: 0, y: -20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    transition={{ duration: 0.3 }}
-                  >
+            </h2>
+            <p className="text-neutral-600 text-sm sm:text-base md:text-lg max-w-sm mt-2 dark:text-neutral-300">
+              Welcome to EasyPick
+            </p>
+            <form onSubmit={handleSubmit} className="my-8">
+              {isSignin && (
+                <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-4">
+                  <LabelInputContainer>
+                    <Label htmlFor="firstname">Username</Label>
                     <Input
+                      id="firstname"
+                      placeholder="Username"
                       type="text"
-                      label="Name"
-                      size="lg"
                       value={username}
                       onChange={(e) => setuserName(e.target.value)}
-                      icon={<FaUser className="h-5 w-5 text-blue-gray-900" />}
                     />
-                  </motion.div>
-                )}
-              </AnimatePresence>
-              <Input
-                type="email"
-                label="Email"
-                size="lg"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                icon={<FaEnvelope className="h-5 w-5 text-blue-gray-900" />}
-              />
-              <div className="relative">
+                  </LabelInputContainer>
+                </div>
+              )}
+              <LabelInputContainer className="mb-4">
+                <Label htmlFor="email">Email Address</Label>
                 <Input
+                  id="email"
+                  placeholder="Email address"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </LabelInputContainer>
+              <LabelInputContainer className="mb-4">
+                <Label htmlFor="password">Password</Label>
+                <Input
+                  id="password"
+                  placeholder="••••••••"
                   type={showPassword ? "text" : "password"}
-                  label="Password"
-                  size="lg"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
-                {password && (
-                  <div
-                    className="absolute inset-y-0 right-8 pr-3 flex items-center cursor-pointer"
-                    onClick={togglePasswordVisibility}
-                  >
-                    {showPassword ? (
-                      <FaEyeSlash className="h-5 w-5 text-blue-gray-900" />
-                    ) : (
-                      <FaEye className="h-5 w-5 text-blue-gray-900" />
-                    )}
-                  </div>
-                )}
-                <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                  <FaLock className="h-5 w-5 text-blue-gray-900" />
-                </div>
-              </div>
-              <div className="-ml-2.5">
-                <Checkbox label="Remember Me" />
+              </LabelInputContainer>
+              {/* <div className="flex items-center mb-4">
+                <Checkbox id="remember" />
+                <Label htmlFor="remember" className="ml-2 text-neutral-700 dark:text-neutral-300">
+                  Remember Me
+                </Label>
+              </div> */}
+              <button
+                className="bg-gradient-to-br relative group/btn from-black dark:from-zinc-900 to-neutral-600 w-full text-white rounded-md h-10 font-medium"
+                type="submit"
+                onClick={handleSubmit}
+              >
+                {isSignin ? "Sign Up" : "Sign In"} &rarr;
+                <BottomGradient />
+              </button>
+              <div className="bg-gradient-to-r from-transparent via-neutral-300 dark:via-neutral-700 to-transparent my-8 h-[1px] w-full" />
+              {/* <div className="flex flex-col space-y-4">
+                <button
+                  type="button"
+                  onClick={() => handleSocialLogin("GitHub")}
+                  className="relative group/btn flex space-x-2 items-center justify-start px-4 w-full text-black dark:text-white rounded-md h-10 font-medium"
+                >
+                  <IconBrandGithub className="h-4 w-4 text-neutral-800 dark:text-neutral-300" />
+                  <span className="text-neutral-700 dark:text-neutral-300 text-sm">
+                    GitHub
+                  </span>
+                  <BottomGradient />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleSocialLogin("Google")}
+                  className="relative group/btn flex space-x-2 items-center justify-start px-4 w-full text-black dark:text-white rounded-md h-10 font-medium"
+                >
+                  <IconBrandGoogle className="h-4 w-4 text-neutral-800 dark:text-neutral-300" />
+                  <span className="text-neutral-700 dark:text-neutral-300 text-sm">
+                    Google
+                  </span>
+                  <BottomGradient />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleSocialLogin("OnlyFans")}
+                  className="relative group/btn flex space-x-2 items-center justify-start px-4 w-full text-black dark:text-white rounded-md h-10 font-medium"
+                >
+                  <IconBrandOnlyfans className="h-4 w-4 text-neutral-800 dark:text-neutral-300" />
+                  <span className="text-neutral-700 dark:text-neutral-300 text-sm">
+                    OnlyFans
+                  </span>
+                  <BottomGradient />
+                </button>
+              </div> */}
+              <div className="mt-4 text-center">
+                <small className="text-neutral-700 dark:text-neutral-300">
+                  {isSignin ? (
+                    <>
+                      Already have an account?{" "}
+                      <span className="text-blue-500 cursor-pointer" onClick={toggleForm}>
+                        Sign In
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      Don't have an account?{" "}
+                      <span className="text-blue-500 cursor-pointer" onClick={toggleForm}>
+                        Sign Up
+                      </span>
+                    </>
+                  )}
+                </small>
               </div>
             </form>
-          </CardBody>
-          <CardFooter className="pt-0">
-            <Button
-              variant="gradient"
-              fullWidth
-              type="submit"
-              onClick={handleSubmit}
-              className="bg-gradient-to-r from-deep-purple-800 to-blue-800 hover:from-purple-700 hover:to-blue-600 transition-all ease-in duration-100"
-            >
-              {isSignin ? "Sign Up" : "Sign In"}
-            </Button>
-            <Typography variant="small" className="mt-4 text-center">
-              {isSignin ? (
-                <>
-                  Already have an account?{" "}
-                  <span
-                    className="text-blue-600 cursor-pointer"
-                    onClick={toggleForm}
-                  >
-                    Sign In
-                  </span>
-                </>
-              ) : (
-                <>
-                  Don't have an account?{" "}
-                  <span
-                    className="text-blue-600 cursor-pointer"
-                    onClick={toggleForm}
-                  >
-                    Sign Up
-                  </span>
-                </>
-              )}
-            </Typography>
-          </CardFooter>
-        </Card>
-      </motion.div>
+          </div>
+        {/* </motion.div> */}
+      </HeroHighlight>
     </div>
   );
 }
+
+const BottomGradient = () => (
+  <>
+    <span className="group-hover/btn:opacity-100 block transition duration-500 opacity-0 absolute h-px w-full -bottom-px inset-x-0 bg-gradient-to-r from-transparent via-cyan-500 to-transparent" />
+    <span className="group-hover/btn:opacity-100 blur-sm block transition duration-500 opacity-0 absolute h-px w-1/2 mx-auto -bottom-px inset-x-10 bg-gradient-to-r from-transparent via-indigo-500 to-transparent" />
+  </>
+);
+
+const LabelInputContainer = ({ children, className }) => (
+  <div className={cn("flex flex-col space-y-2 w-full", className)}>
+    {children}
+  </div>
+);

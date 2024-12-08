@@ -12,6 +12,9 @@ const signup = async (req, res) => {
       .json({ error: "Please provide name email and password" });
   }
   try {
+    // username = username.toString().trim();
+    // email = email.toString().trim().toLowerCase();
+    // password = password.toString().trim();
     const randomIcon = imageUrls[Math.floor(Math.random() * imageUrls.length)];
     console.log("Random Icon:", randomIcon);
     const user = new User({
@@ -23,12 +26,12 @@ const signup = async (req, res) => {
       credits: 100,
     });
     await user.save();
-    res.status(201).json({ message: "User created successfully" });
+    res.status(201).json({ success: true, message: "User created successfully" });
   } catch (error) {
     if (error.code === 11000) {
-      res.status(409).json({ error: "Duplicate entry: User already exists" });
+      res.status(409).json({ success: false, error: "Duplicate entry: User already exists" });
     } else {
-      res.status(500).json({ error: error.message });
+      res.status(500).json({ success: false, error: error.message });
     }
   }
 };
@@ -41,6 +44,8 @@ const login = async (req, res) => {
   }
 
   try {
+    // email = email.toString().trim().toLowerCase();
+    // password = password.toString().trim();
     let gotuser = await User.findOne({ email: email });
     if (!gotuser) {
       return res.status(400).json({ error: "Invalid email or password" });
