@@ -1,11 +1,24 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
+import { useTheme } from "../../ThemeContext"; // Import useTheme from ThemeContext
+import { Switch } from "@material-tailwind/react"; // Import Switch component
 
 export default function NavBar({ isLoggedIn, username }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const { theme, toggleTheme } = useTheme(); // Use the theme and toggleTheme from ThemeContext
+  const [isDarkMode, setIsDarkMode] = useState(theme === 'dark');
+
+  useEffect(() => {
+    setIsDarkMode(theme === 'dark');
+  }, [theme]);
+
+  const handleToggleTheme = () => {
+    toggleTheme();
+    setIsDarkMode(!isDarkMode);
+  };
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
@@ -31,7 +44,7 @@ export default function NavBar({ isLoggedIn, username }) {
   }
 
   return (
-    <nav className="fixed top-0 left-0 right-0 bg-white bg-opacity-20 backdrop-filter backdrop-blur-lg shadow-lg z-50">
+    <nav className={`fixed top-0 left-0 right-0 ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-white text-black'} bg-opacity-20 backdrop-filter backdrop-blur-lg shadow-lg z-50`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <Link to="/">
@@ -42,14 +55,14 @@ export default function NavBar({ isLoggedIn, username }) {
           <div className="hidden md:flex items-center space-x-4">
             <Link
               to="/about"
-              className="text-gray-800 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
+              className="hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
             >
               About
             </Link>
             {isLoggedIn ? (
               <Link to="/profile">
                 <img
-                  className="h-8 w-8 rounded-full"
+                  className="h-8 w-8 rounded-full border-2 border-blue-400 hover:border-blue-600 border-spacing-5"
                   src={`https://ui-avatars.com/api/?name=${username}`}
                   alt="Profile"
                 />
@@ -57,11 +70,17 @@ export default function NavBar({ isLoggedIn, username }) {
             ) : (
               <button
                 onClick={handleNavigateToLogin}
-                className="text-gray-800 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
+                className="hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
               >
                 Login
               </button>
             )}
+            <Switch
+              checked={isDarkMode}
+              onChange={handleToggleTheme}
+              color="blue"
+              label={isDarkMode ? "Dark Mode" : "Light Mode"}
+            />
           </div>
           <div className="md:hidden">
             <button
@@ -76,7 +95,7 @@ export default function NavBar({ isLoggedIn, username }) {
 
       {/* Sidebar */}
       <div
-        className={`fixed inset-0 left-0 w-64 bg-white shadow-lg transform ${
+        className={`fixed inset-0 left-0 w-64 ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-white text-black'} shadow-lg transform ${
           isMenuOpen ? "translate-x-0" : "-translate-x-full"
         } transition-transform duration-300 ease-in-out z-40`}
       >
@@ -101,7 +120,7 @@ export default function NavBar({ isLoggedIn, username }) {
                 handleNavigateToLogin();
                 toggleMenu();
               }}
-              className="text-gray-800 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
+              className="hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
             >
               Login
             </button>
@@ -109,10 +128,19 @@ export default function NavBar({ isLoggedIn, username }) {
           <Link
             to="/about"
             onClick={toggleMenu}
-            className="text-gray-800 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
+            className="hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
           >
             About
           </Link>
+          <Switch
+            checked={isDarkMode}
+            onChange={() => {
+              handleToggleTheme();
+              toggleMenu();
+            }}
+            color="blue"
+            label={isDarkMode ? "Dark Mode" : "Light Mode"}
+          />
         </div>
       </div>
 

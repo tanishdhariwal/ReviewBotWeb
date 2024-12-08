@@ -2,7 +2,6 @@ import { createContext, useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { LoginUser, LogoutUser, checkAuthStatus } from "../Helpers/apiComms";
 import LoaderModal from "../components/Common/Loader";
-import { Toaster, toast } from "react-hot-toast";
 import { AuthContextType, User } from "./User";
 
 const AuthContext = createContext(null | new AuthContextType());
@@ -71,9 +70,7 @@ const login = async (userData) => {
       setIsLoggedIn(false);
       localStorage.removeItem("user");
       navigate("/login");
-      toast.success("Logout successful!");
     } catch (error) {
-      toast.error("Error during logout");
     } finally {
       setLoading(false);
     }
@@ -85,7 +82,6 @@ const login = async (userData) => {
     <AuthContext.Provider value={value}>
       {loading && <LoaderModal />}
       {!loading && children}
-      <Toaster position="top-center" />
     </AuthContext.Provider>
   );
 };

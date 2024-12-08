@@ -50,6 +50,8 @@ def scrape_data(asin_no, domain="in"):
                 if("reviews" not in formatted_data):
                     break
                 raise Exception(f"Failed to get review data: {r.status_code}")                  
+        # print(f"added {len(formatted_data["reviews"])} reviews")
+
         print(f"added {len(formatted_data['reviews'])} reviews")
                 
         if isinstance(formatted_data, dict):

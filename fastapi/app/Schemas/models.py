@@ -13,6 +13,7 @@ class User(BaseModel):
 
 class QueryInput(BaseModel):
     query: str
+    asin: str
 
 class Url(BaseModel):
     asin: str
