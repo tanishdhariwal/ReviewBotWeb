@@ -15,6 +15,7 @@ from app.Helpers.scrapeAndStore import scrape_data
 from urllib.parse import urlparse, parse_qs
 import re
 from app.Model.NLPModel import answer_query
+from app.Helpers.RagHelper import getContext
 
 load_dotenv()
 
@@ -96,7 +97,8 @@ class Test(BaseModel):
 @router.post("/get_LLM_response")
 def get_LLM_response(input : Test ):
     query = input.query
-    response = answer_query(query)
+    context = getContext(input.asin, query)
+    response = answer_query(query, context=context)
     
     print(f"Response: {response}")
     return {"response": response}

@@ -12,3 +12,6 @@ def tokenize(text):
         embedding = outputs.last_hidden_state.mean(dim=1).squeeze().tolist()
         
     return embedding
+
+def decode(embedding: list):
+    return tokenizer.decode(embedding,  skip_special_tokens=True)

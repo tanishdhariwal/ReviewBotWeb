@@ -16,8 +16,10 @@ def add_review(curr_data, review_data):
             title_embeddings = tokenize(review["title"])            
 
             curr_data["reviews"].append({
+                "title": review["title"],
                 "title": title_embeddings,
-                "review": review_embeddings,  
+                "review": review["review"],
+                "review_embeddings": review_embeddings,  
                 "star": review["rating"],
                 "date": review_date
             })
@@ -53,8 +55,10 @@ def transform_data(data, ASIN_NO):
             title_embeddings = tokenize(review["review_title"])            
 
             formated_data["reviews"].append({
-                "title": title_embeddings,
-                "review": review_embeddings,  
+                "title": review["review_title"],
+                "title_embeddings": title_embeddings,
+                "review": review["review_snippet"],
+                "review_embeddings": review_embeddings,  
                 "star": review["rating"],
                 "date": review_date
             })
