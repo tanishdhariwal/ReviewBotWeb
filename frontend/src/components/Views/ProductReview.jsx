@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight, Star, ThumbsUp, ThumbsDown } from 'lucide-react';
+import ChatComponent from './ChatComponent'; // Import the new ChatComponent
 
 export const CombinedProductPage = () => {
   const [product, setProduct] = useState(null);
@@ -89,7 +90,7 @@ export const CombinedProductPage = () => {
         initial={{ opacity: 0, y: -50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="bg-slate-900 shadow-lg"
+        className="bg-transparent " // Changed bg-gray-900 to bg-blur-20
       >
         <div className="container mx-auto px-4 py-4 max-w-7xl">
           <h1 className="text-2xl md:text-3xl font-bold text-white">{product.title}</h1>
@@ -123,7 +124,7 @@ export const CombinedProductPage = () => {
                   transition={{ duration: 0.5 }}
                   src={product.media.images[selectedImageIndex]}
                   alt={`Product image ${selectedImageIndex + 1}`}
-                  className="w-full h-80 object-cover rounded-lg" // Changed h-full to h-64
+                  className="w-full h-96 object-cover rounded-lg" // Changed h-full to h-64
                 />
                 <button
                   className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black/50 text-white p-1 rounded-full hover:bg-black/70 transition-colors duration-200"
@@ -341,6 +342,14 @@ export const CombinedProductPage = () => {
             </div>
           </motion.div>
         </div>
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-lg rounded-lg p-6 shadow-xl mt-8"
+        >
+          <ChatComponent ASIN_DETAILS={{ asin: product.asin }} /> {/* Pass productASIN to ChatComponent */}
+        </motion.div>
       </motion.main>
     </div>
   );
