@@ -3,8 +3,9 @@ import os
 from dotenv import load_dotenv
 from app.Helpers.embeddingAndFormat import transform_data, add_review
 from app.DB.session import dbconnection
-
-  
+# import app.Model.LlamaModel as Model
+# import app.Helpers.RagHelper as rh
+import app.Model.NLPModel as Model
 load_dotenv()
 api_key = os.getenv('SCRAPER_API_KEY')
 if not api_key:
@@ -53,20 +54,27 @@ def scrape_data(asin_no, domain="in"):
         # print(f"added {len(formatted_data["reviews"])} reviews")
 
         print(f"added {len(formatted_data['reviews'])} reviews")
+        print("creating review summary")
+        results = ""
+        for doc in formatted_data["reviews"]:
+            results = results + "\n" + doc["review"]
+        # formatted_data["review_summary"] = lm.summarise_text(results, formatted_data["title"])
+        formatted_data["review_summary"] = Model.summarise_text(results, formatted_data["title"])
+        print("review summary created")
                 
         if isinstance(formatted_data, dict):
-            print("updating data to MongoDB")
+            # print("updating data to MongoDB")
             
-            products_collection.update_one(
-                {"product_asin_no": asin_no},
-                {"$set": formatted_data},
-                upsert=True
-            )
-            print("Data successfully saved to MongoDB")
+            # products_collection.update_one(
+            #     {"product_asin_no": asin_no},
+            #     {"$set": formatted_data},
+            #     upsert=True
+            # )
+            # print("Data successfully saved to MongoDB")
             return formatted_data
         else:
             return {"success": "false", "error": "Unexpected formatted data format"}
     except Exception as e: 
         print("Exception occurred while scraping data " + str(e))
         return {"success": "false", "error": str(e)}
-# scrape_data("B0D1VLS5KJ")
+# scrape_data("B0CYGYCRH8")

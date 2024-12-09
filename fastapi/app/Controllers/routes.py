@@ -82,8 +82,9 @@ async def scraping(input: Url):
     try:
         data = scrape_data(asin)
         productCollection = dbconnection()["products"]
+        print("updating data to MongoDB")
         productCollection.insert_one(data)
-        print(f"Scraped data: {data}")
+        print("Data successfully saved to MongoDB")
         return {"isScraped": True }
     except Exception as e:
         print("Error occurred during scraping")
