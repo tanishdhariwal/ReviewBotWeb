@@ -21,12 +21,12 @@ def answer_query(query, context=""):
 
     return response
 
-def summarise_text(reviews, product_name=""):
+def summarise_text(reviews,product_name = ""):
     
     prompt_template = f"""### system
-Using the information contained in the context, Give a summary of the context.
+Using the information of reviews by users on product:{product_name} contained in the context, Give a summary of the reviews.
 response should be concise and relevant.
-start the response with customer says: and then the summary
+start the response with users says:
 
 ### context
 {reviews}
