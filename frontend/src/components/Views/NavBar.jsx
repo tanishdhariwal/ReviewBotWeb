@@ -2,23 +2,17 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { useTheme } from "../../ThemeContext"; // Import useTheme from ThemeContext
-import { Switch } from "@material-tailwind/react"; // Import Switch component
 
 export default function NavBar({ isLoggedIn, username }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-  const { theme, toggleTheme } = useTheme(); // Use the theme and toggleTheme from ThemeContext
+  const { theme } = useTheme(); // Use the theme from ThemeContext
   const [isDarkMode, setIsDarkMode] = useState(theme === 'dark');
 
   useEffect(() => {
     setIsDarkMode(theme === 'dark');
   }, [theme]);
-
-  const handleToggleTheme = () => {
-    toggleTheme();
-    setIsDarkMode(!isDarkMode);
-  };
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
@@ -75,12 +69,6 @@ export default function NavBar({ isLoggedIn, username }) {
                 Login
               </button>
             )}
-            <Switch
-              checked={isDarkMode}
-              onChange={handleToggleTheme}
-              color="blue"
-              label={isDarkMode ? "Dark Mode" : "Light Mode"}
-            />
           </div>
           <div className="md:hidden">
             <button
@@ -132,15 +120,6 @@ export default function NavBar({ isLoggedIn, username }) {
           >
             About
           </Link>
-          <Switch
-            checked={isDarkMode}
-            onChange={() => {
-              handleToggleTheme();
-              toggleMenu();
-            }}
-            color="blue"
-            label={isDarkMode ? "Dark Mode" : "Light Mode"}
-          />
         </div>
       </div>
 
