@@ -26,4 +26,4 @@ def getContext(asin_no, user_query, top_k=3):
     except Exception as e:
         print(f"Exception occurred while fetching product data: {e}")
         return {"success": "false", "error": str(e)}
-print("context:",getContext("B0DNCK5CSW", "battery life"))
+# print("context:",getContext("B0DNCK5CSW", "battery life"))
