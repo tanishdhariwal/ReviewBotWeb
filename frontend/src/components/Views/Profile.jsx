@@ -87,7 +87,7 @@ export default function Profile() {
                   <DollarSign className="w-5 h-5 text-white" />
                   <span className="text-white">{credits} Credits</span>
                 </div>
-                <Link href="*" className="text-sm font-thin text-white/70 hover:text-white hover:underline">
+                <Link to='/pricing' className="text-sm font-thin text-white/70 hover:text-white hover:underline">
                   Check out pricing plans
                 </Link>
                 <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>

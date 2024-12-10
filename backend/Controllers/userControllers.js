@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const imageUrls = require("../utils/Icons");
 const bcrypt = require("bcryptjs");
 const Chat = require("../models/Chat");
-// const Product = require("../models/Product");
+const Product = require("../models/Product");
 
 const signup = async (req, res) => {
   const { username, email, password } = req.body;
@@ -195,14 +195,30 @@ const changePassword = async (req, res) => {
 const get_user_chats = async (req, res) => {
   const userId = res.locals.jwtData.id;
   try {
-    const chats = await Chat.find({ user_id: userId });
+    const chats = await Chat.find({ user_id: userId }).lean();
     if (!chats || chats.length === 0) {
       return res.status(200).json([]);
     }
     const productAsins = chats.map(chat => chat.product_asin);
-    // const product_names = Product.find({ asin: { $in: productAsins } }, { asin: 1, name: 1 });
-    // return res.status(200).json(product_names);
-    return res.status(200).json(productAsins);
+    const products = await Product.find(
+      { product_asin_no: { $in: productAsins } },
+      { product_asin_no: 1, title: 1 }
+    ).lean();
+
+    // Map product ASIN to product details
+    const productMap = {};
+    products.forEach(product => {
+      productMap[product.product_asin_no] = product;
+    });
+
+    // Combine chats with product info and timestamp
+    const chatsWithProductInfo = chats.map(chat => ({
+      product_asin_no: chat.product_asin,
+      title: productMap[chat.product_asin]?.title || 'Product Name not available',
+      created_at: chat.created_at, // Include chat timestamp
+    }));
+
+    return res.status(200).json(chatsWithProductInfo);
   } catch (error) {
     console.error('Error in get_user_chats:', error);
     return res.status(500).json({ error: 'Internal server error.' });

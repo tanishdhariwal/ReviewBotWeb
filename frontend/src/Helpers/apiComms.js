@@ -126,3 +126,13 @@ export const getUserChats = async () => {
     throw error;
   }
 };
+
+export const getProduct = async (asin) => {
+  try {
+    const response = await axios.get(`/get_product/${asin}`);
+    return response.data;
+  } catch (error) {
+    toast.error('Failed to fetch product details.');
+    throw error;
+  }
+};

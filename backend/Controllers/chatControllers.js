@@ -122,9 +122,34 @@ const getUserChat = async (req, res) => {
   }
 };
 
+const getProduct = async (req, res) => {
+  const { asin } = req.params;
+  try {
+    const db = await dbconnection();
+    const productsCollection = db.collection('products');
+    const product = await productsCollection.findOne({ product_asin_no: asin });
+    if (product) {
+      const { reviews, ...productDetails } = product; // Exclude reviews
+
+      // Ensure media.images exists
+      if (!productDetails.media || !productDetails.media.images) {
+        productDetails.media = { images: [] };
+      }
+
+      res.status(200).json(productDetails);
+    } else {
+      res.status(404).json({ error: 'Product not found.' });
+    }
+  } catch (error) {
+    console.error('Error in getProduct:', error);
+    res.status(500).json({ error: 'Internal server error.' });
+  }
+};
+
 module.exports = {
   generateChatResponse,
   productUrlCheck,
   scrapeURL,
   getUserChat,
+  getProduct,
 };
