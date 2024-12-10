@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const imageUrls = require("../utils/Icons");
 const bcrypt = require("bcryptjs");
 const Chat = require("../models/Chat");
+// const Product = require("../models/Product");
 
 const signup = async (req, res) => {
   const { username, email, password } = req.body;
@@ -199,6 +200,8 @@ const get_user_chats = async (req, res) => {
       return res.status(200).json([]);
     }
     const productAsins = chats.map(chat => chat.product_asin);
+    // const product_names = Product.find({ asin: { $in: productAsins } }, { asin: 1, name: 1 });
+    // return res.status(200).json(product_names);
     return res.status(200).json(productAsins);
   } catch (error) {
     console.error('Error in get_user_chats:', error);

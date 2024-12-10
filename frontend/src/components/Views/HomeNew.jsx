@@ -34,7 +34,7 @@ export default function HomeNew() {
 
   const handleASINClick = (asin) => {
     localStorage.setItem('asin', asin);
-    navigate('/review-chat');
+    navigate('/analysis');
   };
 
   const handleNavigateToReviewChat = async () => {
@@ -46,7 +46,7 @@ export default function HomeNew() {
           const data = await checkURL({ asin: validationResponse.asin });
           if (data.isValid) {
             localStorage.setItem('asin', validationResponse.asin);
-            navigate(`/review-chat`, { state: { asin: validationResponse.asin } });
+            navigate(`/analysis`, { state: { asin: validationResponse.asin } });
           }
         }
       } catch (error) {

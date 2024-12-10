@@ -100,7 +100,7 @@ export default function ChatComponent() { // Accept productUrl as prop
   // }
 
   return (
-    <div className="flex flex-col h-[500px] bg-gray-100 rounded-lg">
+    <div className="flex flex-col h-[500px] bg-gradient-to-br from-gray-900 to-black text-white rounded-lg">
       <div className="flex-1 overflow-hidden">
         <div className="h-full overflow-y-auto p-6 space-y-6" ref={chatContainerRef}>
           <AnimatePresence>
@@ -116,7 +116,7 @@ export default function ChatComponent() { // Accept productUrl as prop
                 }`}
               >
                 {message.sender === 'bot' && (
-                  <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">
+                  <div className="w-10 h-10 rounded-full bg-purple-500 flex items-center justify-center text-white font-bold">
                     AI
                   </div>
                 )}
@@ -124,7 +124,7 @@ export default function ChatComponent() { // Accept productUrl as prop
                   className={`p-2 px-4 rounded-2xl max-w-[70%] ${
                     message.sender === 'user'
                       ? 'bg-blue-500 text-white'
-                      : 'bg-white text-gray-800 shadow-md'
+                      : 'bg-gray-800 text-white shadow-md'
                   }`}
                   initial={{ scale: 0.9 }}
                   animate={{ scale: 1 }}
@@ -140,7 +140,7 @@ export default function ChatComponent() { // Accept productUrl as prop
                   </motion.p>
                 </motion.div>
                 {message.sender === 'user' && (
-                  <div className="w-10 h-10 rounded-full bg-gray-400 flex items-center justify-center text-white font-bold">
+                  <div className="w-10 h-10 rounded-full bg-gray-600 flex items-center justify-center text-white font-bold">
                     {name}
                   </div>
                 )}
@@ -154,7 +154,7 @@ export default function ChatComponent() { // Accept productUrl as prop
               exit={{ opacity: 0 }}
               className="flex items-center space-x-4"
             >
-              <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">
+              <div className="w-10 h-10 rounded-full bg-purple-500 flex items-center justify-center text-white font-bold">
                 AI
               </div>
               <motion.div className="flex space-x-2">
@@ -165,7 +165,7 @@ export default function ChatComponent() { // Accept productUrl as prop
                       scale: [1, 1.2, 1],
                       transition: { repeat: Infinity, duration: 0.8, delay: i * 0.2 },
                     }}
-                    className="bg-blue-500 rounded-full w-3 h-3"
+                    className="bg-purple-500 rounded-full w-3 h-3"
                   />
                 ))}
               </motion.div>
@@ -173,7 +173,7 @@ export default function ChatComponent() { // Accept productUrl as prop
           )}
         </div>
       </div>
-      <div className="p-4 bg-white border-t border-gray-200 rounded-xl">
+      <div className="p-4 bg-gradient-to-br from-gray-800 to-gray-900 rounded-b-xl">
         <form onSubmit={handleSendMessage} className="flex space-x-4">
           <input
             type="text"
@@ -181,12 +181,12 @@ export default function ChatComponent() { // Accept productUrl as prop
             onChange={(e) => setCurrentMessage(e.target.value)}
             // onKeyPress={handleKeyPress}
             placeholder="Type your message here..."
-            className="flex-grow px-4 py-3 text-lg bg-gray-100 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300"
+            className="flex-grow px-4 py-3 text-lg bg-gray-800 text-white rounded-full focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all duration-300"
           />
           <button
             type="submit"
             disabled={isLoading}
-            className="px-6 py-3 bg-blue-500 text-white rounded-full hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-6 py-3 bg-purple-500 text-white rounded-full hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isLoading ? (
               <Loader2 className="w-6 h-6 animate-spin" />
