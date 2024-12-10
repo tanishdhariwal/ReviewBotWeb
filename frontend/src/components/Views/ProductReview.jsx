@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight, Star, ThumbsUp, ThumbsDown } from 'lucide-react';
 import ChatComponent from './ChatComponent'; // Import the new ChatComponent
 
-export const CombinedProductPage = () => {
+export const Analysis = () => {
   const [product, setProduct] = useState(null);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
@@ -355,5 +355,5 @@ export const CombinedProductPage = () => {
   );
 };
 
-export default CombinedProductPage;
+export default Analysis;
 
