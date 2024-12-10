@@ -60,8 +60,8 @@ export default function HomeNew() {
   useEffect(() => {
     const fetchUserChats = async () => {
       try {
-        const chats = await getUserChats();
-        setPreviousChats(chats);
+        const products = await getUserChats();
+        setPreviousChats(products);
       } catch (error) {
         console.error('Error fetching user chats:', error);
       }
@@ -212,7 +212,8 @@ export default function HomeNew() {
         <AnimatePresence>
           {isModalOpen && auth.isLoggedIn && (
             <Dialog open={isModalOpen} onOpenChange={() => setIsModalOpen(false)}>
-              <DialogContent className="bg-gray-800 text-gray-100">
+              <DialogContent className="bg-gray-800 text-gray-100 max-w-3xl">
+                {/* Increased modal width with max-w-3xl */}
                 <DialogHeader>
                   <DialogTitle className="text-gray-100">Previously Searched Products</DialogTitle>
                 </DialogHeader>
@@ -223,18 +224,23 @@ export default function HomeNew() {
                   exit={{ opacity: 0 }}
                 >
                   {previousChats.length > 0 ? (
-                    previousChats.map((asin, index) => (
+                    previousChats.map((product, index) => (
                       <motion.li
                         key={index}
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: index * 0.1 }}
                         className="p-2 bg-gray-700 rounded-md hover:bg-gray-600 transition-colors cursor-pointer"
-                        onClick={() => handleASINClick(asin)}
+                        onClick={() => handleASINClick(product.product_asin_no)}
                       >
-                        <span className="truncate max-w-xs" title={asin}>
-                          {asin}
-                        </span>
+                        <div className="flex justify-between items-center">
+                          <span className="break-words whitespace-normal" title={product.title}>
+                            {product.title}
+                          </span>
+                          <span className="text-sm text-gray-400">
+                            {new Date(product.created_at).toLocaleDateString()}
+                          </span>
+                        </div>
                       </motion.li>
                     ))
                   ) : (

@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
- 
+
 const ExchangeSchema = new mongoose.Schema({
   bot_response: { type: String,  },
   user_query: { type: String,  },
