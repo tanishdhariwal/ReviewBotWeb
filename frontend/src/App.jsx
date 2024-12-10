@@ -8,6 +8,7 @@ import Profile from "./components/Views/Profile";
 import { useAuth } from "./Context/AuthContext";
 import LandingPage from "./LandingPage";
 import Analysis from "./components/Views/ProductReview";
+import Pricing from "./components/Views/Pricing";
 
 function App() {
   const { isLoggedIn, loading } = useAuth();
@@ -28,6 +29,7 @@ function App() {
             <Route path="/analysis" element={<Analysis />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="*" element={<Navigate to="/" />} />
+            <Route path="/pricing" element={<Pricing />} />
           </>
         ) : (
           <>
