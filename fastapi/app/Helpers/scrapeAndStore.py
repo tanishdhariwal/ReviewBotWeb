@@ -5,7 +5,7 @@ from app.Helpers.embeddingAndFormat import transform_data, add_review
 from app.DB.session import dbconnection
 # import app.Model.LlamaModel as Model
 # import app.Helpers.RagHelper as rh
-import app.Model.NLPModel as Model
+import app.Model.LlamaModel as Model
 load_dotenv()
 api_key = os.getenv('SCRAPER_API_KEY')
 if not api_key:

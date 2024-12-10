@@ -19,7 +19,7 @@ def answer_query(query, context=""):
     print(prompt_template)
     response = llm.complete(prompt_template)
 
-    return response
+    return response.text
 
 def summarise_text(reviews,product_name = ""):
     
@@ -33,4 +33,4 @@ start the response with users says:
 
 ### assistant answer"""
     response = llm.complete(prompt_template)
-    return response
+    return response.text
