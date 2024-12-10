@@ -3,9 +3,7 @@ import os
 from dotenv import load_dotenv
 from app.Helpers.embeddingAndFormat import transform_data, add_review
 from app.DB.session import dbconnection
-# import app.Model.LlamaModel as Model
-# import app.Helpers.RagHelper as rh
-import app.Model.NLPModel as Model
+
 load_dotenv()
 api_key = os.getenv('SCRAPER_API_KEY')
 if not api_key:
@@ -14,7 +12,7 @@ if not api_key:
 db = dbconnection()
 products_collection = db['products']
 
-def scrape_data(asin_no, domain="in"):
+def scrape_data(asin_no, domain="com"):
     print(f"Scraping data for ASIN: {asin_no}, domain: {domain}")
     payload = {
         "api_key": api_key,
@@ -47,34 +45,19 @@ def scrape_data(asin_no, domain="in"):
                 formatted_data = add_review(formatted_data, review_data)
                 
             else:
-                print(f"response status code of review scrape is {r.status_code}")  
-                if("reviews" not in formatted_data):
-                    break
-                raise Exception(f"Failed to get review data: {r.status_code}")                  
-        # print(f"added {len(formatted_data["reviews"])} reviews")
+                print(f"response status code of review scrape is {r.status_code} on page {i}")  
+                if("reviews" not in formatted_data):              
+                    raise Exception(f"Failed to get reviews data: {r.status_code}")
+                
 
-        print(f"added {len(formatted_data['reviews'])} reviews")
-        print("creating review summary")
-        results = ""
-        for doc in formatted_data["reviews"]:
-            results = results + "\n" + doc["review"]
-        # formatted_data["review_summary"] = lm.summarise_text(results, formatted_data["title"])
-        formatted_data["review_summary"] = Model.summarise_text(results, formatted_data["title"])
-        print("review summary created")
+        print(f"got {len(formatted_data['reviews'])} reviews")
                 
         if isinstance(formatted_data, dict):
-            # print("updating data to MongoDB")
-            
-            # products_collection.update_one(
-            #     {"product_asin_no": asin_no},
-            #     {"$set": formatted_data},
-            #     upsert=True
-            # )
-            # print("Data successfully saved to MongoDB")
             return formatted_data
         else:
             return {"success": "false", "error": "Unexpected formatted data format"}
+        
     except Exception as e: 
         print("Exception occurred while scraping data " + str(e))
-        return {"success": "false", "error": str(e)}
+        return {"success": "false", "error": str(e), "data": formatted_data}
 # scrape_data("B0CYGYCRH8")

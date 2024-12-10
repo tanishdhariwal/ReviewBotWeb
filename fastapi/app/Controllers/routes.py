@@ -14,8 +14,8 @@ import time
 from app.Helpers.scrapeAndStore import scrape_data
 from urllib.parse import urlparse, parse_qs
 import re
-from app.Model.NLPModel import answer_query
-from app.Helpers.RagHelper import getContext
+from app.Model.LlamaModel import answer_query, summarise_text
+
 
 load_dotenv()
 
@@ -81,10 +81,23 @@ async def scraping(input: Url):
 
     try:
         data = scrape_data(asin)
+        
+        reviews = ""
+        if "reviews" in data:
+            for doc in data["reviews"]:
+                reviews = reviews + "\n" + doc["review"]
+            print("Summarising reviews")
+            data["review_summary"] = summarise_text(reviews, data["title"])
+            print("Reviews summarised", data["review_summary"])
+        else:
+            print("No reviews found")
+            data["review_summary"] = ""
         productCollection = dbconnection()["products"]
-        print("updating data to MongoDB")
-        productCollection.insert_one(data)
-        print("Data successfully saved to MongoDB")
+        
+        print("trying updating data to MongoDB")
+        id = productCollection.insert_one(data)
+        print("Data successfully saved to MongoDB with id:",id)
+        
         return {"isScraped": True }
     except Exception as e:
         print("Error occurred during scraping")
@@ -97,9 +110,8 @@ class Test(BaseModel):
 
 @router.post("/get_LLM_response")
 def get_LLM_response(input : Test ):
-    query = input.query
-    context = getContext(input.asin, query)
-    response = answer_query(query, context=context)
+
+    response = answer_query(query=input.query,asin_no=input.asin)
     
     print(f"Response: {response}")
     return {"response": response}
