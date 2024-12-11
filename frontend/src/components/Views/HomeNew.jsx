@@ -1,14 +1,14 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { useNavigate, useLocation } from "react-router-dom"
-import { Button } from "../ui/button"
-import { Input } from "../ui/input"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog"
+import { AnimatePresence, motion } from 'framer-motion'
+import { useEffect, useState } from 'react'
+import { useLocation, useNavigate } from "react-router-dom"
 import { useAuth } from "../../Context/AuthContext"
-import CubeLoader from "../Common/CubeLoader"
 import { checkURL, extractASINFromUrl, getUserChats } from "../../Helpers/apiComms"
+import HexagonOverlay from '../Common/HexagonLoader'
+import { Button } from "../ui/button"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog"
+import { Input } from "../ui/input"
 
 export default function HomeNew() {
   const auth = useAuth();
@@ -75,8 +75,8 @@ export default function HomeNew() {
   return (
     <div className="relative min-h-screen bg-gray-900 flex flex-col items-center justify-center p-4 overflow-hidden">
       {isLoading && (
-        <div className="fixed inset-0 flex items-center justify-center bg-transparent backdrop-blur-sm z-50">
-          <CubeLoader />
+        <div className="fixed inset-0 flex items-center justify-center bg-transparent backdrop-blur-xl z-50">
+          <HexagonOverlay />
         </div>
       )}
 
