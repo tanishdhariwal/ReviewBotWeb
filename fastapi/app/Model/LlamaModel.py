@@ -53,7 +53,7 @@ def answer_query(query, asin_no, conversation_history = [], context=""):
 # {query}
 ### assistant answer"""
 
-    prompt_template = prompt_generator(context, query, conversation_history)
+    prompt_template = prompt_generator(query, context, conversation_history)
     print(prompt_template)
     response = llm.complete(prompt_template)
 
