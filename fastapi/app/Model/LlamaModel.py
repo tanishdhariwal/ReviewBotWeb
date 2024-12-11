@@ -26,9 +26,8 @@ def prompt_generator(question, context, conversation_history = []):
 
     # Add message history
     for message in conversation_history[-4:]:
-        template += f"<|start_header_id|>user<|end_header_id|>\n{message.get("user_query")}<|eot_id|>\n\n"
-        template += f"<|start_header_id|>assistant<|end_header_id|>\n{message.get("bot_response")}<|eot_id|>\n\n"
-
+        template += f"<|start_header_id|>user<|end_header_id|>\n{message.get('user_query')}<|eot_id|>\n\n"
+        template += f"<|start_header_id|>assistant<|end_header_id|>\n{message.get('bot_response')}<|eot_id|>\n\n"
 
     template += f"<|start_header_id|>user<|end_header_id|>\n{question}<|eot_id|>\n\n"
     template += "<|start_header_id|>assistant<|end_header_id|>\n"
