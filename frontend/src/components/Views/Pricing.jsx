@@ -74,9 +74,9 @@ export default function Pricing() {
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 text-white">
-            <div className="container mx-auto py-8 px-4 sm:py-12 sm:px-6 lg:py-16">
+            <div className="container mx-auto py-10 px-4 sm:py-20 sm:px-6 lg:py-20">
                 <motion.h1
-                    className="text-3xl sm:text-4xl md:text-5xl font-bold text-center mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600"
+                    className="text-3xl sm:text-4xl md:text-5xl font-bold text-center mb-4 lg:mt-0 mt-10 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600"
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6 }}
@@ -103,7 +103,7 @@ export default function Pricing() {
                     <Label htmlFor="annual-toggle" className="ml-2 text-sm sm:text-base">Annual (Save 10%)</Label>
                 </div>
 
-                <div className="flex flex-col lg:flex-row flex-wrap justify-center gap-8">
+                <div className="flex flex-col lg:flex-row flex-wrap justify-center items-center gap-8">
                     <AnimatePresence>
                         {pricingPlans.map((plan, index) => (
                             <motion.div
