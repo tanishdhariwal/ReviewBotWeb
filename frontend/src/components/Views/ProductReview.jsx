@@ -132,23 +132,37 @@ export const Analysis = () => {
           </div>
         </div>
 
-        <div className="mt-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2">
+        <div className="mt-8">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-lg rounded-lg p-6 shadow-xl"
+          >
+            <div className="space-y-4">
+              <div>
+                <h3 className="  w-full text-xl font-semibold text-white">Description</h3>
+                <p className="mt-2 text-sm md:text-base text-gray-300">{product.description || 'Unavailable'}</p>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+
+        <div className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div>
+            {/* Review Summary */}
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
               className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-lg rounded-lg p-6 shadow-xl"
             >
-              <div className="space-y-4">
-                <div>
-                  <h3 className="text-xl font-semibold text-white">Description</h3>
-                  <p className="mt-2 text-sm md:text-base text-gray-300">{product.description || 'Unavailable'}</p>
-                </div>
-              </div>
+              <h2 className="text-xl md:text-2xl font-bold text-white mb-4">Review Summary</h2>
+              <p className="text-sm md:text-base text-gray-300">{product.review_summary || 'Unavailable'}</p>
             </motion.div>
           </div>
-          <div className="lg:col-span-1">
+          <div>
+            {/* Customer Feedback */}
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -221,6 +235,7 @@ export const Analysis = () => {
           </div>
         </div>
 
+        {/* Move the ChatComponent below all sections */}
         <div className="mt-12">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
@@ -228,18 +243,9 @@ export const Analysis = () => {
             transition={{ duration: 0.5 }}
             className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-lg rounded-lg p-6 shadow-xl"
           >
-            <h2 className="text-xl md:text-2xl font-bold text-white mb-4">Review Summary</h2>
-            <p className="text-sm md:text-base text-gray-300">{product.review_summary || 'Unavailable'}</p>
+            <ChatComponent ASIN_DETAILS={{ asin: product.product_asin_no || 'Unavailable' }} />
           </motion.div>
         </div>
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-lg rounded-lg p-6 shadow-xl mt-8"
-        >
-          <ChatComponent ASIN_DETAILS={{ asin: product.product_asin_no || 'Unavailable' }} />
-        </motion.div>
       </motion.main>
     </div>
   );
