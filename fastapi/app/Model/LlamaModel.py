@@ -2,7 +2,7 @@ from llama_index.llms.ollama import Ollama
 from app.Helpers.RagHelper import getContext
 def load_model():
     global llm
-    llm = Ollama(model="llama3.2", request_timeout=60.0, temperature=0.2)
+    llm = Ollama(model="llama3.2", request_timeout=200.0, temperature=0.2)
 
 def prompt_generator(question, context, conversation_history = []):
     system_prompt = (
