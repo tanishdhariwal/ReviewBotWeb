@@ -107,11 +107,11 @@ async def scraping(input: Url):
 class Test(BaseModel):
     query :str
     asin:str
+    exchanges:List
 
 @router.post("/get_LLM_response")
 def get_LLM_response(input : Test ):
-
-    response = answer_query(query=input.query,asin_no=input.asin)
+    response = answer_query(query=input.query,asin_no=input.asin,conversation_history=input.exchanges)
     
     print(f"Response: {response}")
     return {"response": response}

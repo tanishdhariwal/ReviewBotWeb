@@ -25,11 +25,15 @@ jobs:
         run: |
           cd frontend
           npm install
+      - name: Build the code
+        run: |
+          cd frontend
+          npm run build
 
-      # - name: Build Frontend
-      #   run: |
-      #     cd frontend
-      #     npm run build
+      - name: Run Playwright Tests
+        run: |
+          cd frontend
+          npx playwright test
 
       # - name: Run Frontend Tests
       #   run: |

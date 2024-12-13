@@ -34,7 +34,7 @@ function App() {
         ) : (
           <>
             <Route path="/login" element={<LoginSignUp />} />
-            <Route path="/analysis" element={<Analysis />} />
+            {/* <Route path="/analysis" element={<Analysis />} /> */}
             <Route path="*" element={<Navigate to="/login" />} />
           </>
         )}

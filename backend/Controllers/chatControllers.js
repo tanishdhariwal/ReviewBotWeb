@@ -1,7 +1,7 @@
 // const User = require("../models/User");
 const Chat = require("../models/Chat");
 const dbconnection = require("../DB/dbconnection"); // Correct import for dbconnection
-const axios = require("axios"); 
+const axios = require("axios");
 const dotenv = require("dotenv").config();
 
 const generateChatResponse = async (req, res) => {
@@ -10,9 +10,11 @@ const generateChatResponse = async (req, res) => {
   console.log("User ID:", userId);
   try {
     // Generate a response using the NLP model
+    const userChat = await Chat.findOne({ user_id: userId, product_asin: productASIN });
+    const exchanges = userChat ? userChat.exchanges : [];
     const llmResponse = await axios.post(
       "http://localhost:8000/get_LLM_response",
-      { asin: productASIN, query: currentMessage }
+      { asin: productASIN, query: currentMessage, exchanges: exchanges }
     );
     const botResponse = llmResponse.data.response;
 
