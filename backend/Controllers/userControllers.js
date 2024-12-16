@@ -56,7 +56,8 @@ const login = async (req, res) => {
     if (!matched) {
       return res.status(400).json({ error: "Invalid email or password" });
     }
-
+    const devtype = req.headers["Device-type"];
+    console.log(devtype);
     // res.clearCookie(process.env.COOKIE_NAME, {
     //   httpOnly: true,
     //   domain: process.env.FRONTEND_URL,
@@ -66,13 +67,13 @@ const login = async (req, res) => {
 
     // just chill, we can use it if we get any serious issues
 
-    const token = jwt.sign(
-      { id: gotuser._id, username: gotuser.username },
-      process.env.JWT_SECRET,
-      {
-        expiresIn: "1h",
-      }
-    );
+  //   const token = jwt.sign(
+  //     { id: gotuser._id, username: gotuser.username },
+  //     process.env.JWT_SECRET,
+  //     {
+  //       expiresIn: "1h",
+  //     }
+  //   );
 
     if (req.headers["device-type"] === "Mobile") {
       console.log("Mobile device detected");

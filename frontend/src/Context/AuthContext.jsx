@@ -42,7 +42,8 @@ export const AuthProvider = ({ children }) => {
     }
     checkStatus();
   }, [navigate]);
-const login = async (userData) => {
+
+  const login = async (userData) => {
   try {
     setLoading(true);
     const payload = { email: userData.email, password: userData.password };

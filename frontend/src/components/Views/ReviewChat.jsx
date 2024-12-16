@@ -21,13 +21,6 @@ export default function ProductDetails() {
     setAsin(localStorage.getItem('asin'));
 
     // Use hardcoded product details for now
-    const details = {
-      name: 'Premium Wireless Headphones',
-      description: 'Experience crystal-clear audio with our Premium Wireless Headphones.',
-      imageUrl: 'https://mir-s3-cdn-cf.behance.net/project_modules/1400/d30e9647291143.587609fa2b328.jpg',
-      price: '$249.99',
-      // ...other details...
-    };
 
     setProductDetails(details);
   }, [location]);
@@ -62,14 +55,6 @@ export default function ProductDetails() {
     }
   }, [asin]);
 
-  const metrics = [
-    { name: 'Quality', value: 85, color: 'bg-blue-600' },
-    { name: 'Value for Money', value: 75, color: 'bg-green-600' },
-    { name: 'Customer Service', value: 90, color: 'bg-yellow-600' },
-    { name: 'Durability', value: 80, color: 'bg-purple-600' },
-    { name: 'Ease of Use', value: 95, color: 'bg-pink-600' },
-    { name: 'Features', value: 88, color: 'bg-indigo-600' },
-  ];
 
   return (
     <div className="pt-20 min-h-screen bg-gradient-to-br from-purple-50 to-blue-100 p-8">
