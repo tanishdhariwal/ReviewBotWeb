@@ -7,6 +7,7 @@ import { Checkbox } from "../ui/checkbox";
 import { HeroHighlight } from "../ui/hero-highlight";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 export default function LoginSignUp() {
   const [email, setEmail] = useState("");
@@ -86,13 +87,22 @@ export default function LoginSignUp() {
               </LabelInputContainer>
               <LabelInputContainer className="mb-4">
                 <Label htmlFor="password">Password</Label>
-                <Input
-                  id="password"
-                  placeholder="password"
-                  type={showPassword ? "text" : "password"}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
+                <div className="relative">
+                  <Input
+                    id="password"
+                    placeholder="password"
+                    type={showPassword ? "text" : "password"}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                  <button
+                    type="button"
+                    onClick={togglePasswordVisibility}
+                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500"
+                  >
+                    {showPassword ? <FaEyeSlash /> : <FaEye />}
+                  </button>
+                </div>
               </LabelInputContainer>
               {/* <div className="flex items-center mb-4">
                 <Checkbox id="remember" />

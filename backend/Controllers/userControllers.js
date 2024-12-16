@@ -12,6 +12,7 @@ const signup = async (req, res) => {
       .status(400)
       .json({ error: "Please provide name email and password" });
   }
+  console.log("came ")
   try {
     // username = username.toString().trim();
     // email = email.toString().trim().toLowerCase();
@@ -39,11 +40,10 @@ const signup = async (req, res) => {
 
 const login = async (req, res) => {
   const { email, password } = req.body;
-
   if (!email || !password) {
     return res.status(400).json({ error: "Please provide email and password" });
   }
-
+  console.log(req.headers);
   try {
     // email = email.toString().trim().toLowerCase();
     // password = password.toString().trim();
@@ -74,21 +74,32 @@ const login = async (req, res) => {
       }
     );
 
-    const expires = new Date(Date.now() + 3600000); // 1 hour
+    if (req.headers["device-type"] === "Mobile") {
+      console.log("Mobile device detected");
+      return res.status(200).json({
+        message: "ok",
+        username: gotuser.username,
+        email: gotuser.email,
+        token:token,
+      });
+    } else {
 
-    res.cookie(process.env.COOKIE_NAME, token, {
-      path: "/",
-      domain: process.env.FRONTEND_URL,
-      expires,
-      httpOnly: true,
-      signed: true,
-    });
+      const expires = new Date(Date.now() + 3600000); // 1 hour
 
-    return res.status(200).json({
-      message: "ok",
-      username: gotuser.username,
-      email: gotuser.email,
-    });
+      res.cookie(process.env.COOKIE_NAME, token, {
+        path: "/",
+        domain: process.env.FRONTEND_URL,
+        expires,
+        httpOnly: true,
+        signed: true,
+      });
+
+      return res.status(200).json({
+        message: "ok",
+        username: gotuser.username,
+        email: gotuser.email,
+      });
+    }
   } catch (error) {
     console.error("Error during login:", error);
     return res.status(500).json({ error: "Internal server error" });
