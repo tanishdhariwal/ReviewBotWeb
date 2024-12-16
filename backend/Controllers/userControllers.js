@@ -44,7 +44,7 @@ const login = async (req, res) => {
     return res.status(400).json({ error: "Please provide email and password" });
   }
 
-  try {
+  // try {
     // email = email.toString().trim().toLowerCase();
     // password = password.toString().trim();
     let gotuser = await User.findOne({ email: email });
@@ -56,7 +56,8 @@ const login = async (req, res) => {
     if (!matched) {
       return res.status(400).json({ error: "Invalid email or password" });
     }
-
+    const devtype = req.headers["Device-type"];
+    console.log(devtype);
     // res.clearCookie(process.env.COOKIE_NAME, {
     //   httpOnly: true,
     //   domain: process.env.FRONTEND_URL,
@@ -66,33 +67,35 @@ const login = async (req, res) => {
 
     // just chill, we can use it if we get any serious issues
 
-    const token = jwt.sign(
-      { id: gotuser._id, username: gotuser.username },
-      process.env.JWT_SECRET,
-      {
-        expiresIn: "1h",
-      }
-    );
+  //   const token = jwt.sign(
+  //     { id: gotuser._id, username: gotuser.username },
+  //     process.env.JWT_SECRET,
+  //     {
+  //       expiresIn: "1h",
+  //     }
+  //   );
 
-    const expires = new Date(Date.now() + 3600000); // 1 hour
+  //   const expires = new Date(Date.now() + 3600000); // 1 hour
 
-    res.cookie(process.env.COOKIE_NAME, token, {
-      path: "/",
-      domain: process.env.FRONTEND_URL,
-      expires,
-      httpOnly: true,
-      signed: true,
-    });
+  //   res.cookie(process.env.COOKIE_NAME, token, {
+  //     path: "/",
+  //     domain: process.env.FRONTEND_URL,
+  //     expires,
+  //     httpOnly: true,
+  //     signed: true,
+  //   });
 
-    return res.status(200).json({
-      message: "ok",
-      username: gotuser.username,
-      email: gotuser.email,
-    });
-  } catch (error) {
-    console.error("Error during login:", error);
-    return res.status(500).json({ error: "Internal server error" });
-  }
+  //   return res.status(200).json({
+  //     message: "ok",
+  //     username: gotuser.username,
+  //     email: gotuser.email,
+  //   });
+  // } catch (error) {
+  //   console.error("Error during login:", error);
+  //   return res.status(500).json({ error: "Internal server error" });
+  // }
+
+  return res.status(200).json({ message: "ok" });
 };
 
 const verifyuser = async (req, res) => {
