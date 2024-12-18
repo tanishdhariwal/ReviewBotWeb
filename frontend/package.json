@@ -32,6 +32,7 @@
     "react-image": "^4.1.0",
     "react-router-dom": "^6.26.2",
     "tailwind-merge": "^2.5.4",
+    "tailwind-scrollbar": "^3.1.0",
     "tailwindcss-filters": "^3.0.0"
   },
   "devDependencies": {

@@ -21,7 +21,6 @@ const HexagonOverlay = () => {
             border-right: 2.5vmin solid transparent;
             border-bottom: 4.5vmin solid #7c3aed;
             animation: blink 1s infinite;
-            filter: drop-shadow(0 0 3.75vmin #7c3aed);
           }
           .arrow.down {
             transform: rotate(180deg);

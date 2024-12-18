@@ -4,11 +4,13 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from "react-router-dom"
 import { useAuth } from "../../Context/AuthContext"
-import { checkURL, extractASINFromUrl, getUserChats } from "../../Helpers/apiComms"
+import { checkURL, deleteUserChat, extractASINFromUrl, getUserChats } from "../../Helpers/apiComms"
 import HexagonOverlay from '../Common/HexagonLoader'
 import { Button } from "../ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog"
 import { Input } from "../ui/input"
+// import { FaTrash } from 'react-icons/fa'; // Import delete icon
+import { Trash2Icon } from "lucide-react"
 
 export default function HomeNew() {
   const auth = useAuth();
@@ -37,6 +39,15 @@ export default function HomeNew() {
     navigate('/analysis');
   };
 
+  const handleDeleteChat = async (asin) => {
+    try {
+      await deleteUserChat(asin);
+      setPreviousChats(previousChats.filter(chat => chat.product_asin_no !== asin));
+    } catch (error) {
+      console.error('Error deleting chat:', error);
+    }
+  };
+
   const handleNavigateToReviewChat = async () => {
     if (url !== "") {
       try {
@@ -61,6 +72,8 @@ export default function HomeNew() {
     const fetchUserChats = async () => {
       try {
         const products = await getUserChats();
+        // Sort chats by date
+        products.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
         setPreviousChats(products);
       } catch (error) {
         console.error('Error fetching user chats:', error);
@@ -212,13 +225,13 @@ export default function HomeNew() {
         <AnimatePresence>
           {isModalOpen && auth.isLoggedIn && (
             <Dialog open={isModalOpen} onOpenChange={() => setIsModalOpen(false)}>
-              <DialogContent className="bg-gray-800 text-gray-100 max-w-3xl">
+              <DialogContent className="bg-gray-800 text-gray-100 max-w-4xl">
                 {/* Increased modal width with max-w-3xl */}
                 <DialogHeader>
                   <DialogTitle className="text-gray-100">Previously Searched Products</DialogTitle>
                 </DialogHeader>
                 <motion.ul
-                  className="space-y-2 max-h-96 overflow-y-auto"
+                  className=" space-y-2 max-h-96 overflow-y-auto scrollbar-thin scrollbar-corner-fuchsia-900 scrollbar-thumb-slate-200 scrollbar-track-gray-800 hover:scrollbar-thumb-gray-900"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
@@ -231,15 +244,22 @@ export default function HomeNew() {
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: index * 0.1 }}
                         className="p-2 bg-gray-700 rounded-md hover:bg-gray-600 transition-colors cursor-pointer"
-                        onClick={() => handleASINClick(product.product_asin_no)}
                       >
                         <div className="flex justify-between items-center">
-                          <span className="break-words whitespace-normal" title={product.title}>
+                          <span className="break-words whitespace-normal" title={product.title} onClick={() => handleASINClick(product.product_asin_no)}>
                             {product.title}
                           </span>
-                          <span className="text-sm text-gray-400">
-                            {new Date(product.created_at).toLocaleDateString()}
-                          </span>
+                          <div className="flex items-center">
+                            <span className="text-sm text-gray-400 mr-2">
+                              {new Date(product.created_at).toLocaleDateString()}
+                            </span>
+                            <button
+                              className="text-red-500 hover:text-red-700"
+                              onClick={() => handleDeleteChat(product.product_asin_no)}
+                            >
+                              <Trash2Icon /> {/* Replace text with delete icon */}
+                            </button>
+                          </div>
                         </div>
                       </motion.li>
                     ))

@@ -136,3 +136,14 @@ export const getProduct = async (asin) => {
     throw error;
   }
 };
+
+export const deleteUserChat = async (asin) => {
+  try {
+    const response = await axios.delete(`/delete_user_chat/${asin}`);
+    toast.success("Chat deleted successfully");
+    return response.data;
+  } catch (error) {
+    toast.error("Failed to delete chat.");
+    throw error;
+  }
+};
