@@ -4,6 +4,57 @@ import { ChevronLeft, ChevronRight, Star, ThumbsUp, ThumbsDown } from 'lucide-re
 import ChatComponent from './ChatComponent';
 import { getProduct } from '../../Helpers/apiComms'; // Import the getProduct function
 
+// Add enhanced parseMarkdown function to handle bold, italics, and bullet points
+const parseMarkdown = (text) => {
+  const lines = text.split('\n');
+  const elements = [];
+  let listItems = [];
+
+  lines.forEach((line, index) => {
+    if (/^[-*]\s+/.test(line)) {
+      listItems.push(line.replace(/^[-*]\s+/, ''));
+    } else {
+      if (listItems.length > 0) {
+        elements.push(
+          <ul key={`ul-${index}`} className="list-disc list-inside">
+            {listItems.map((item, idx) => (
+              <li key={idx}>{parseInlineMarkdown(item)}</li>
+            ))}
+          </ul>
+        );
+        listItems = [];
+      }
+      elements.push(<p key={`p-${index}`} className="mb-2">{parseInlineMarkdown(line)}</p>);
+    }
+  });
+
+  if (listItems.length > 0) {
+    elements.push(
+      <ul key={`ul-end`} className="list-disc list-inside">
+        {listItems.map((item, idx) => (
+          <li key={idx}>{parseInlineMarkdown(item)}</li>
+        ))}
+      </ul>
+    );
+  }
+
+  return elements;
+};
+
+// Helper function to parse inline markdown for bold and italics
+const parseInlineMarkdown = (text) => {
+  const parts = text.split(/(\*\*[^*]+\*\*|_[^_]+_)/g);
+  return parts.map((part, index) => {
+    if (part.startsWith('**') && part.endsWith('**')) {
+      return <strong key={index}>{part.slice(2, -2)}</strong>;
+    }
+    if (part.startsWith('_') && part.endsWith('_')) {
+      return <em key={index}>{part.slice(1, -1)}</em>;
+    }
+    return part;
+  });
+};
+
 export const Analysis = () => {
   const [product, setProduct] = useState(null);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
@@ -158,7 +209,13 @@ export const Analysis = () => {
               className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-lg rounded-lg p-6 shadow-xl"
             >
               <h2 className="text-xl md:text-2xl font-bold text-white mb-4">Review Summary</h2>
-              <p className="text-sm md:text-base text-gray-300">{product.review_summary || 'Unavailable'}</p>
+              <div className="text-sm md:text-base text-gray-300 space-y-4">
+                {product.review_summary ? (
+                  parseMarkdown(product.review_summary)
+                ) : (
+                  'Unavailable'
+                )}
+              </div>
             </motion.div>
           </div>
           <div>

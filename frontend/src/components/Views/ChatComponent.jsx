@@ -4,6 +4,56 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { getChatResponse, get_user_chat } from '../../Helpers/apiComms' // Import the getChatResponse function
 import { useAuth } from '../../Context/AuthContext'
 
+// Add helper functions to parse markdown syntax
+const parseInlineMarkdown = (text) => {
+  const parts = text.split(/(\*\*[^*]+\*\*|_[^_]+_)/g);
+  return parts.map((part, index) => {
+    if (part.startsWith('**') && part.endsWith('**')) {
+      return <strong key={index}>{part.slice(2, -2)}</strong>;
+    }
+    if (part.startsWith('_') && part.endsWith('_')) {
+      return <em key={index}>{part.slice(1, -1)}</em>;
+    }
+    return part;
+  });
+};
+
+const parseMarkdown = (text) => {
+  const lines = text.split('\n');
+  const elements = [];
+  let listItems = [];
+
+  lines.forEach((line, index) => {
+    if (/^[-*]\s+/.test(line)) {
+      listItems.push(line.replace(/^[-*]\s+/, ''));
+    } else {
+      if (listItems.length > 0) {
+        elements.push(
+          <ul key={`ul-${index}`} className="list-disc list-inside">
+            {listItems.map((item, idx) => (
+              <li key={idx}>{parseInlineMarkdown(item)}</li>
+            ))}
+          </ul>
+        );
+        listItems = [];
+      }
+      elements.push(<p key={`p-${index}`} className="mb-2">{parseInlineMarkdown(line)}</p>);
+    }
+  });
+
+  if (listItems.length > 0) {
+    elements.push(
+      <ul key={`ul-end`} className="list-disc list-inside">
+        {listItems.map((item, idx) => (
+          <li key={idx}>{parseInlineMarkdown(item)}</li>
+        ))}
+      </ul>
+    );
+  }
+
+  return elements;
+};
+
 export default function ChatComponent() { // Accept productUrl as prop
   const [chatMessages, setChatMessages] = useState([])
   const [currentMessage, setCurrentMessage] = useState('')
@@ -136,7 +186,7 @@ export default function ChatComponent() { // Accept productUrl as prop
                     transition={{ delay: 0.1, duration: 0.3 }}
                     className="text-lg"
                   >
-                    {message.content}
+                    {message.sender === 'bot' ? parseMarkdown(message.content) : message.content}
                   </motion.p>
                 </motion.div>
                 {message.sender === 'user' && (
