@@ -102,27 +102,31 @@ export default function Profile() {
                   <label htmlFor="current-password" className="text-sm font-medium text-white">
                     Current Password
                   </label>
-                  <Input
-                    id="current-password"
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="bg-white/10 border-white/20 text-white placeholder-white/50"
-                    placeholder="Enter current password"
-                  />
+                  <div className="relative">
+                    <Input
+                      id="current-password"
+                      type="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      className="bg-[#272729] text-white"
+                      placeholder="Enter current password"
+                    />
+                  </div>
                 </div>
                 <div className="space-y-2">
                   <label htmlFor="new-password" className="text-sm font-medium text-white">
                     New Password
                   </label>
-                  <Input
-                    id="new-password"
-                    type="password"
-                    value={newPassword}
-                    onChange={(e) => setNewPassword(e.target.value)}
-                    className="bg-white/10 border-white/20 text-white placeholder-white/50"
-                    placeholder="Enter new password"
-                  />
+                  <div className="relative">
+                    <Input
+                      id="new-password"
+                      type="password"
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      className="bg-[#272729] text-white"
+                      placeholder="Enter new password"
+                    />
+                  </div>
                 </div>
                 <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="py-14">
                   <Button onClick={handlePasswordChange} className="w-full bg-white text-black hover:bg-white/90">
