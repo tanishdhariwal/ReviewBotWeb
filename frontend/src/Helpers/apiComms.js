@@ -5,6 +5,7 @@ export const LoginUser = async (userData) => {
   try {
     const { email, password } = userData;
     const response = await axios.post(`/login`, { email, password });
+    console.log(response.status);
     if (response.status != 200) {
       toast.error("Invalid credintials");
     }
@@ -105,8 +106,11 @@ export const getUserDetails = async () => {
 export const changePassword = async (currentPassword, newPassword) => {
   try {
     const response = await axios.post(`/change_password`, { currentPassword, newPassword });
-    toast.success("Password changed successfully");
-    return response.data;
+    if (response.status == 200) {
+      toast.success("Password changed successfully");
+    }
+    console.log(response.data);
+    
   } catch (error) {
     toast.error("Failed to change password.");
     throw error;
@@ -143,3 +147,17 @@ export const deleteUserChat = async (asin) => {
     throw error;
   }
 };
+
+export const giveFeedback = async (feedback) => {
+  try {
+    const response = await axios.post(`/feedback`, { feedback });
+    console.log(response.data);
+    if (response.status == 201) {
+      toast.success("Feedback submitted successfully");
+    }
+    console.log("Feedback submitted:", feedback);
+  } catch (error) {
+    toast.error("Failed to submit feedback.");
+    throw error;
+  }
+}

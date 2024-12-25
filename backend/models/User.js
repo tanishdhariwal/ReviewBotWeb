@@ -53,6 +53,11 @@ UserSchema.pre('save',async function(next){
 UserSchema.methods.comparePass = async function (Password){ 
     console.log(this.password,Password);
     const matched = await bcrypt.compare(Password,this.password);
+    if(matched){
+        console.log("Password matched");
+    }else{
+        console.log("Password did not");
+    }
     return matched;
 }
 
