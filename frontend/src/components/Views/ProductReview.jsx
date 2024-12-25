@@ -98,7 +98,7 @@ export const Analysis = () => {
         className="bg-transparent "
       >
         <div className="container mx-auto px-4 py-4 max-w-7xl">
-          <h1 className="text-2xl md:text-3xl font-bold text-white">{product.title || 'Unavailable'}</h1>
+          <h1 className="text-2xl md:text-3xl font-bold text-white"><a href={`https://www.amazon.com/dp/${product.product_asin_no}/`} target='_blank'>{product.title || 'Unavailable'}</a></h1>
         </div>
       </motion.header>
 

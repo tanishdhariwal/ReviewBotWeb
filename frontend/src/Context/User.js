@@ -27,8 +27,8 @@ class AuthContextType {
   constructor(
     user = null,
     isLoggedIn = false,
-    login = async () => {},
-    logout = async () => {}
+    login = async () => { },
+    logout = async () => { }
   ) {
     this.user = user;
     this.isLoggedIn = isLoggedIn;

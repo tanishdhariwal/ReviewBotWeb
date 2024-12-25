@@ -4,6 +4,7 @@ const imageUrls = require("../utils/Icons");
 const bcrypt = require("bcryptjs");
 const Chat = require("../models/Chat");
 const Product = require("../models/Product");
+const Feedback = require("../models/Feedback");
 
 const signup = async (req, res) => {
   const { username, email, password } = req.body;
@@ -12,11 +13,9 @@ const signup = async (req, res) => {
       .status(400)
       .json({ error: "Please provide name email and password" });
   }
-  console.log("came ")
+
   try {
-    // username = username.toString().trim();
-    // email = email.toString().trim().toLowerCase();
-    // password = password.toString().trim();
+    
     const randomIcon = imageUrls[Math.floor(Math.random() * imageUrls.length)];
     console.log("Random Icon:", randomIcon);
     const user = new User({
@@ -193,8 +192,7 @@ const changePassword = async (req, res) => {
       return res.status(400).json({ error: "Current password is incorrect" });
     }
 
-    const salt = await bcrypt.genSalt(10);
-    user.password = await bcrypt.hash(newPassword, salt);
+    user.password = newPassword;
     await user.save();
 
     return res.status(200).json({ message: "Password changed successfully" });
@@ -237,6 +235,32 @@ const get_user_chats = async (req, res) => {
   }
 };
 
+const giveFeedback = async (req, res) => {
+  const { feedback } = req.body;
+  const userId = res.locals.jwtData.id;
+
+  const user = await User.findById(userId);
+  if (!user) {
+    return res.status(400).json({ error: 'You should be a user to give feedback' });
+  }
+  if (!feedback) {
+    return res.status(400).json({ error: 'Please provide feedback' });
+  }
+
+  try {
+    // Save feedback to database
+    // const feedback = new Feedback({ feedback });
+    // await feedback.save();
+    const feedbackDocument = new Feedback({ user_id: userId, "feedback":feedback });
+    await feedbackDocument.save();
+    return res.status(201).json({ message: 'Feedback submitted successfully' });
+  } catch (error) {
+    console.error('Error in giveFeedback:', error);
+    return res.status(500).json({ error: 'Internal server error.' });
+  }
+}
+
+
 module.exports = {
   signup,
   login,
@@ -246,4 +270,5 @@ module.exports = {
   get_user,
   changePassword,
   get_user_chats,
+  giveFeedback,
 };
