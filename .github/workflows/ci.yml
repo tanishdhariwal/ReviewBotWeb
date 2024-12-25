@@ -15,7 +15,7 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
-      
+
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
@@ -25,21 +25,43 @@ jobs:
         run: |
           cd frontend
           npm install
-      # - name: Build the code
-      #   run: |
-      #     cd frontend
-      #     npm run build
 
-      # - name: Run Playwright Tests
-      #   run: |
-      #     cd frontend
-      #     npx playwright install
-      #     npx playwright test
+      - name: Build Frontend
+        run: |
+          cd frontend
+          npm run build  # Ensure the frontend is built before testing
 
-      # - name: Run Frontend Tests
-      #   run: |
-      #     cd frontend
-      #     npm test
+      - name: Install missing dependencies for Playwright
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libwoff2dec1 \
+            libvpx6 \
+            libevent-2.1-6 \
+            libopus0 \
+            libgstapp1.0-0 \
+            libgstreamer-plugins-base1.0-0 \
+            libflite1 \
+            libavif13 \
+            libharfbuzz-icu0 \
+            libhyphen0 \
+            libgles2 \
+            libx264-152
+
+      - name: Install Playwright Browsers
+        run: |
+          cd frontend
+          npx playwright install
+
+      - name: Start Frontend Server
+        run: |
+          cd frontend
+          npm run dev &  # Start the Vite dev server in the background
+
+      - name: Run Frontend Tests with Playwright
+        run: |
+          cd frontend
+          npx playwright test  # Run Playwright tests after the frontend server is up
 
   backend:
     name: Build and Test Backend
@@ -48,19 +70,17 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      - name: Set up Node.js
+      - name: Set up Node.js for Backend
         uses: actions/setup-node@v3
         with:
           node-version: 18
 
-      - name: Install Dependencies
+      - name: Install Backend Dependencies
         run: |
           cd backend
           npm install
 
-          
-
-      # - name: Run Backend Tests
-      #   run: |
-      #     cd backend
-      #     npm test
+      - name: Run Backend Tests
+        run: |
+          cd backend
+          npm test
