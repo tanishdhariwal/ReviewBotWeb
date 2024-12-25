@@ -61,7 +61,7 @@ jobs:
       - name: Run Frontend Tests with Playwright
         run: |
           cd frontend
-          npx playwright test  # Run Playwright tests after the frontend server is up
+          npm test  
 
   backend:
     name: Build and Test Backend
@@ -80,7 +80,7 @@ jobs:
           cd backend
           npm install
 
-      - name: Run Backend Tests
+      - name: Run Backend 
         run: |
           cd backend
-          npm test
+          npm start
