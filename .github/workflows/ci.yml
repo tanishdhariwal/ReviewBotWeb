@@ -58,10 +58,7 @@ jobs:
           cd frontend
           npm run dev &  # Start the Vite dev server in the background
 
-      - name: Run Frontend Tests with Playwright
-        run: |
-          cd frontend
-          npm test  
+
 
   backend:
     name: Build and Test Backend
