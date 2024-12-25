@@ -226,7 +226,7 @@ export default function HomeNew() {
             <Button
               variant="outline"
               className="bg-white/10 backdrop-blur-md border-white/20 text-white hover:bg-white/20 hover:text-white/90 transition-all duration-300"
-              onClick={() => navigate("/top-rated")}
+              onClick={() => navigate("/comingsoon")}
             >
               Top Rated Products
             </Button>
@@ -239,7 +239,7 @@ export default function HomeNew() {
             <Button
               variant="outline"
               className="bg-white/10 backdrop-blur-md border-white/20 text-white hover:bg-white/20 hover:text-white/90 transition-all duration-300"
-              onClick={() => navigate("/trending")}
+              onClick={() => navigate("/comingsoon")}
             >
               Trending Products
             </Button>

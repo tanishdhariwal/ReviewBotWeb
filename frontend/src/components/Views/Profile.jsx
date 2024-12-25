@@ -1,5 +1,3 @@
-'use client'
-
 import { motion } from "framer-motion"
 import { DollarSign, LogOut } from 'lucide-react'
 import { useEffect, useState } from "react"
@@ -19,7 +17,6 @@ import { Textarea } from "../ui/textarea"
 
 const shimmer = `relative overflow-hidden before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_1.5s_infinite] before:bg-gradient-to-r before:from-transparent before:via-white/10 before:to-transparent`
 
-
 export default function Profile() {
   const [password, setPassword] = useState("")
   const [newPassword, setNewPassword] = useState("")
@@ -32,7 +29,6 @@ export default function Profile() {
   useEffect(() => {
     const fetchUserDetails = async () => {
       try {
-        // Simulated API call
         const userDetails = await getUserDetails();
         setUsername(userDetails.username)
         setCredits(userDetails.credits)
@@ -43,11 +39,8 @@ export default function Profile() {
     fetchUserDetails();
   }, [])
 
-
-
   const handlePasswordChange = async () => {
     try {
-      // Simulated API call
       await new Promise(resolve => setTimeout(resolve, 1000))
       setPassword("")
       setNewPassword("")
@@ -57,7 +50,7 @@ export default function Profile() {
 
   const handleFeedbackSubmit = () => {
     console.log("Feedback submitted:", feedback)
-    setFeedback("");  
+    setFeedback("");
   };
 
   const handleLogout = () => {
@@ -70,16 +63,12 @@ export default function Profile() {
       <div className="max-w-7xl mx-auto space-y-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <motion.div whileHover={{ y: -5 }} transition={{ type: "spring", stiffness: 300 }}>
-            <Card className= {`lg:col-span-1 bg-white/5 border-white/10 shadow-[0_0_15px_rgba(255,255,255,0.1)] ${shimmer}`}>
+            <Card className={`lg:col-span-1 bg-white/5 border-white/10 shadow-[0_0_15px_rgba(255,255,255,0.1)] ${shimmer}`}>
               <CardContent className="flex flex-col items-center space-y-4 pt-6">
                 <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                  {/* <Avatar className="w-24 h-24 cursor-pointer border-4 border-white/20 hover:border-white/40 transition-colors">
-                    <AvatarImage src={avatar} alt="User Avatar" />
-                    <AvatarFallback>{username[0]}</AvatarFallback>
-                  </Avatar> */}
                   <div className="relative group mb-4">
                     <div className="absolute inset-0 p-4 rounded-full bg-gradient-to-br from-purple-500 via-fuchsia-500 to-blue-500 transition-all opacity-100 blur-lg z-0 group-hover:bg-gradient-to-tr group-hover:from-purple-500 group-hover:via-fuchsia-500 group-hover:to-blue-500"></div>
-                    <img src={avatar} alt="avatar" className="relative rounded-full z-10"/>
+                    <img src={avatar} alt="avatar" className="relative rounded-full z-10" />
                   </div>
                 </motion.div>
                 <CardTitle className="text-2xl font-bold text-white">{username}</CardTitle>
@@ -198,7 +187,6 @@ export default function Profile() {
                     You can change your password as often as you like. We recommend updating your password regularly for security reasons.
                   </AccordionContent>
                 </AccordionItem>
-
               </Accordion>
             </CardContent>
           </Card>

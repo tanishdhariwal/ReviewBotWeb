@@ -9,13 +9,10 @@ import { useAuth } from "./Context/AuthContext";
 import LandingPage from "./LandingPage";
 import Analysis from "./components/Views/ProductReview";
 import Pricing from "./components/Views/Pricing";
+import FeatureComingSoon from "./components/Views/FeatureComingSoon";
 
 function App() {
-  const { isLoggedIn} = useAuth();
-
-  // if (loading) {
-  //   return <LoaderModal />;
-  // }
+  const { isLoggedIn } = useAuth();
 
   return (
     <>
@@ -30,11 +27,11 @@ function App() {
             <Route path="/profile" element={<Profile />} />
             <Route path="*" element={<Navigate to="/" />} />
             <Route path="/pricing" element={<Pricing />} />
+            <Route path="/comingsoon" element={<FeatureComingSoon />} />
           </>
         ) : (
           <>
             <Route path="/login" element={<LoginSignUp />} />
-            {/* <Route path="/analysis" element={<Analysis />} /> */}
             <Route path="*" element={<Navigate to="/login" />} />
           </>
         )}

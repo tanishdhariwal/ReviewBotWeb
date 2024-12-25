@@ -3,17 +3,15 @@ import toast from 'react-hot-toast';
 
 export const LoginUser = async (userData) => {
   try {
-    // const id = toast.loading("Logging in...");
     const { email, password } = userData;
     const response = await axios.post(`/login`, { email, password });
     if (response.status != 200) {
-        toast.error("Invalid credintials");
+      toast.error("Invalid credintials");
     }
     toast.success("Logged in successfully");
     return response.data;
   } catch (error) {
-    toast.error("Server Issue bruh.");
-
+    toast.error("Cannot connect to server");
     throw error;
   }
 };
@@ -30,8 +28,7 @@ export const SignUpUser = async (userData) => {
     return response.data;
   } catch (error) {
     toast.dismiss(toastId);
-    toast.error(error.message || "Sign up failed. Please try again.");
-
+    toast.error("Sign up failed. Please try again.");
     throw error;
   }
 };
@@ -44,7 +41,7 @@ export const checkAuthStatus = async () => {
 export const LogoutUser = async () => {
   try {
     const response = await axios.get(`/logout`);
-    if(response.status!=200){
+    if (response.status != 200) {
       toast.error("unable to logout");
       throw new Error("unable to Logout")
     }
@@ -63,7 +60,7 @@ export const checkURL = async (asinData) => {
     }
     return response.data;
   } catch (error) {
-    toast.error(error.response?.data?.error || "Validation failed.");
+    toast.error("Validation failed.");
     throw error;
   }
 };
@@ -74,12 +71,11 @@ export const getChatResponse = async (payload) => {
     return response.data;
   } catch (error) {
     toast.error("Failed to get response. Please try again.");
-
     throw error;
   }
 };
 
-export const extractASINFromUrl = (url)=>{
+export const extractASINFromUrl = (url) => {
   // Match ASIN using a regex pattern, accounting for query strings
   const asinRegex = /\/([A-Z0-9]{10})(?=\/|$|\?)/;
   const match = url.match(asinRegex);
@@ -112,7 +108,7 @@ export const changePassword = async (currentPassword, newPassword) => {
     toast.success("Password changed successfully");
     return response.data;
   } catch (error) {
-
+    toast.error("Failed to change password.");
     throw error;
   }
 };
