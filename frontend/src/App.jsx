@@ -11,7 +11,7 @@ import Analysis from "./components/Views/ProductReview";
 import Pricing from "./components/Views/Pricing";
 
 function App() {
-  const { isLoggedIn, loading } = useAuth();
+  const { isLoggedIn} = useAuth();
 
   // if (loading) {
   //   return <LoaderModal />;

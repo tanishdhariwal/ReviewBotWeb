@@ -1,18 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
-import { useTheme } from "../../ThemeContext"; // Import useTheme from ThemeContext
 
 export default function NavBar({ isLoggedIn, username }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-  const { theme } = useTheme(); // Use the theme from ThemeContext
-  const [isDarkMode, setIsDarkMode] = useState(theme === "dark");
-
-  useEffect(() => {
-    setIsDarkMode(theme === "dark");
-  }, [theme]);
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
@@ -39,9 +32,7 @@ export default function NavBar({ isLoggedIn, username }) {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 ${
-        theme === "dark" ? "bg-gray-800 text-white" : "bg-white text-black"
-      } bg-opacity-20 backdrop-filter backdrop-blur-lg shadow-lg z-50`}
+      className={`fixed top-0 left-0 right-0 bg-opacity-20 backdrop-filter backdrop-blur-lg shadow-lg z-50`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
@@ -53,13 +44,13 @@ export default function NavBar({ isLoggedIn, username }) {
           <div className="hidden md:flex items-center space-x-4">
             <Link
               to="/pricing"
-              className="hover:text-sky-400 transition-transform px-3 py-2 rounded-md text-sm font-medium"
+              className="hover:text-sky-400  text-sky-200 transition-transform px-3 py-2 rounded-md text-sm font-medium transform hover:scale-110"
             >
               Pricing
             </Link>
             <Link
               to="/about"
-              className="hover:text-sky-400 px-3 py-2 rounded-md text-sm font-medium"
+              className="hover:text-sky-400 text-sky-200 px-3 py-2 rounded-md text-sm font-medium  transform hover:scale-110"
             >
               About
             </Link>
@@ -90,25 +81,19 @@ export default function NavBar({ isLoggedIn, username }) {
             </button>
             {isMenuOpen && (
               <div
-                className={`absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 ring-1 ring-black ring-opacity-5 ${
-                  theme === "dark" ? "bg-gray-800 text-white" : "bg-white text-black"
-                }`}
+                className={`absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 ring-1 ring-black ring-opacity-5 `}
               >
                 <Link
                   to="/pricing"
                   onClick={toggleMenu}
-                  className={`block px-4 py-2 text-sm ${
-                    theme === "dark" ? "hover:bg-gray-700" : "hover:bg-gray-100"
-                  }`}
+                  className={`block px-4 py-2 text-sm `}
                 >
                   Pricing
                 </Link>
                 <Link
                   to="/about"
                   onClick={toggleMenu}
-                  className={`block px-4 py-2 text-sm ${
-                    theme === "dark" ? "hover:bg-gray-700" : "hover:bg-gray-100"
-                  }`}
+                  className={`block px-4 py-2 text-sm `}
                 >
                   About
                 </Link>
@@ -116,9 +101,7 @@ export default function NavBar({ isLoggedIn, username }) {
                   <Link
                     to="/profile"
                     onClick={toggleMenu}
-                    className={`block px-4 py-2 text-sm ${
-                      theme === "dark" ? "hover:bg-gray-700" : "hover:bg-gray-100"
-                    }`}
+                    className={`block px-4 py-2 text-sm `}
                   >
                     Profile
                   </Link>
@@ -128,9 +111,7 @@ export default function NavBar({ isLoggedIn, username }) {
                       handleNavigateToLogin();
                       toggleMenu();
                     }}
-                    className={`block w-full text-left px-4 py-2 text-sm ${
-                      theme === "dark" ? "hover:bg-gray-700" : "hover:bg-gray-100"
-                    }`}
+                    className={`block w-full text-left px-4 py-2 text-sm `}
                   >
                     Login
                   </button>
