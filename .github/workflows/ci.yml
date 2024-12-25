@@ -15,7 +15,7 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
-
+      
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
@@ -25,38 +25,10 @@ jobs:
         run: |
           cd frontend
           npm install
-
-      - name: Build Frontend
+      - name: Build the code
         run: |
           cd frontend
-          npm run build  # Ensure the frontend is built before testing
-
-      - name: Install missing dependencies for Playwright
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-            libwoff2dec1 \
-            libvpx6 \
-            libevent-2.1-6 \
-            libopus0 \
-            libgstapp1.0-0 \
-            libgstreamer-plugins-base1.0-0 \
-            libflite1 \
-            libavif13 \
-            libharfbuzz-icu0 \
-            libhyphen0 \
-            libgles2 \
-            libx264-152
-
-      - name: Install Playwright Browsers
-        run: |
-          cd frontend
-          npx playwright install
-
-      - name: Start Frontend Server
-        run: |
-          cd frontend
-          npm run dev &  # Start the Vite dev server in the background
+          npm run dev
 
 
 
@@ -67,17 +39,16 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      - name: Set up Node.js for Backend
+      - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18
 
-      - name: Install Backend Dependencies
+      - name: Install Dependencies
         run: |
           cd backend
           npm install
 
-      - name: Run Backend 
-        run: |
-          cd backend
-          npm start
+          
+
+
