@@ -24,8 +24,8 @@ This app provides users with insights from product reviews by allowing them to i
 
 ### NLP Integration
 - **FastAPI** for the Python-based NLP server
-- **HuggingFace Transformers** for pre-trained NLP models
-- **Sentence-BERT** for embedding reviews
+- **thenlper/gte-small** for embedding reviews
+- **Ollama llama 3.2 3B** for NLP Summarization and Chatbot
 
 ---
 
@@ -90,7 +90,7 @@ backend/
 │   ├── Product.js
 │   ├── User.js
 ├── routes/
-│   ├── chatRoutes.js
+│   ├── chatRoutes.js  
 │   ├── userRoutes.js
 │   ├── index.js
 ├── utils/
