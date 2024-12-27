@@ -42,7 +42,7 @@ export default function HomeNew() {
     if (e.key === "Enter") {
       e.preventDefault(); // Prevent form submission
       if (url === "") {
-        toast.error("Please enter the URL to proceed", { duration: 4000 });
+        toast.error("Please enter the URL to proceed", { duration: 3000 });
       } else {
         handleNavigateToReviewChat();
       }
@@ -99,10 +99,10 @@ export default function HomeNew() {
       }
     };
 
-    if (auth.isLoggedIn) {
-      fetchUserChats();
-    }
-  }, [auth.isLoggedIn]);
+    // if (auth.isLoggedIn) {
+    fetchUserChats();
+    // }
+  }, [isModalOpen]);
 
   return (
     <div className="relative min-h-screen bg-gray-900 flex flex-col items-center justify-center p-4 overflow-hidden">
