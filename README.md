@@ -50,8 +50,15 @@ This app provides users with insights from product reviews by allowing them to i
 ```bash
 git clone https://github.com/Bharadwajreddy1406/ReviewBot.git
 cd ReviewBot
-
 ```
+
+---
+
+## Architecture Diagram
+
+![Architecture Diagram](./assets/ArchDiag.png)
+
+---
 
 ## Project Structure
 
@@ -71,84 +78,121 @@ This directory structure provides an overview of the organization within each se
 The backend directory contains the core server-side files for managing user-related operations, database interactions, and API routing. It also includes utility files for token management and other supporting functions. This section uses Node.js and Express for handling API requests.
 
 ```plaintext
-backend
-├── DB
-│   └── dbConnection.js          # Database connection configuration
-├── models
-│   ├── Chat.js                  # Chat model for storing conversation data
-│   └── User.js                  # User model for storing user data
-├── routes
-│   └── userRoutes.js            # Route definitions for user-related operations
-├── utils
-│   ├── tokenManaging
-│   │   └── tokenManager.js      # Utility for managing user tokens
-│   └── userControllers.js       # Controllers for handling user operations
-├── .env                         # Environment variables
-├── .dockerignore                # Docker ignore configuration
-├── Dockerfile                   # Dockerfile for building the backend container
-├── index.js                     # Main entry point for the backend server
-├── package.json                 # Node.js dependencies and scripts
-└── package-lock.json            # Lock file for Node.js dependencies
+backend/
+├── Controllers/
+│   ├── chatControllers.js
+│   ├── userControllers.js
+├── DB/
+│   ├── dbconnection.js
+├── models/
+│   ├── Chat.js
+│   ├── Feedback.js
+│   ├── Product.js
+│   ├── User.js
+├── routes/
+│   ├── chatRoutes.js
+│   ├── userRoutes.js
+│   ├── index.js
+├── utils/
+│   ├── Icons.js
+│   ├── tokenManager.js
+├── .dockerignore
+├── Dockerfile
+├── .gitignore
+├── index.js
+├── package-lock.json
+├── package.json
+
 ```
 
-## FastAPI
+### FastAPI
 
 The FastAPI directory manages NLP-related tasks using Python. This section processes product reviews to generate insights and responses for user queries. It includes modules for handling NLP models, scraping APIs, and defining schemas and controllers.
 
 ```plaintext
-fastapi
-├── app
-│   ├── Controllers
-│   │   ├── __init__.py          # Init file for controllers module
-│   │   └── routes.py            # API routes for FastAPI endpoints
-│   ├── DB
-│   │   ├── __init__.py          # Init file for database module
-│   │   └── session.py           # Database session management
-│   ├── Helpers
-│   │   ├── formatter.py         # Formatting helper for output data
-│   │   └── scraperAPI.py        # API for scraping product reviews
-│   ├── Model
-│   │   ├── NLPModel.py          # NLP model for processing text data
-│   │   └── SentimentAnalyzer.py # Sentiment analysis module
-│   ├── Schemas
-│   │   ├── __init__.py          # Init file for schemas module
-│   │   └── models.py            # Data models for request/response validation
-│   ├── main.py                  # Entry point for FastAPI app
-│   └── HuggingFaceModels        # Pre-trained NLP models from Hugging Face
-├── venv                         # Virtual environment for Python dependencies
-├── .env                         # Environment variables for FastAPI
-├── .gitignore                   # Git ignore configuration
-├── Dockerfile                   # Dockerfile for building FastAPI container
-└── requirements.txt             # Python dependencies
+fastapi/
+├── app/
+│   ├── Controllers/
+│   │   ├── __init__.py
+│   │   ├── routes.py
+│   ├── DB/
+│   │   ├── __init__.py
+│   │   ├── session.py
+│   ├── Helpers/
+│   │   ├── __init__.py
+│   │   ├── embeddingAndFormat.py
+│   │   ├── formatter.py
+│   │   ├── playwrightScrapper.py
+│   │   ├── RagHelper.py
+│   │   ├── scrapeAndStore.py
+│   │   ├── scraperAPI.py
+│   ├── Model/
+│   │   ├── __init__.py
+│   │   ├── APIModel.py
+│   │   ├── embeddingModel.py
+│   │   ├── LlamaModel.py
+│   │   ├── NLPModel.py       
+│   │   ├── SentimentAnalyzer.py
+│   ├── Schemas/
+│   │   ├── __init__.py
+│   │   ├── models.py
+│   │   ├── Product.py
+│   ├── __init__.py
+│   ├── main.py
+├── .dockerignore
+├── .gitignore
+├── Dockerfile
+├── requirements.txt
+
+
 ```
 
-## Frontend
+### Frontend
 The frontend directory is a React-based setup built with Vite. It provides a user-friendly interface that enables users to interact with the chatbot, view review insights, and manage their accounts. This section uses Tailwind CSS for styling.
 
 ```plaintext
-frontend
-├── public                       # Public assets
-├── src
-│   ├── components
-│   │   └── Context
-│   │       ├── AuthContext.jsx  # Authentication context for user sessions
-│   │       └── User.js          # User-related functions
-│   ├── Helpers                  # Helper functions for frontend logic
-│   ├── App.css                  # Main styling file
-│   ├── App.jsx                  # Main app component
-│   ├── index.css                # Global CSS file
-│   ├── main.jsx                 # Entry point for the React app
-├── .dockerignore                # Docker ignore configuration
-├── .env                         # Environment variables for frontend
-├── .gitignore                   # Git ignore configuration
-├── Dockerfile                   # Dockerfile for building frontend container
-├── index.html                   # Main HTML file
-├── package.json                 # React dependencies and scripts
-├── package-lock.json            # Lock file for React dependencies
-├── postcss.config.js            # PostCSS configuration
-├── README.md                    # Documentation for the frontend
-├── tailwind.config.js           # Tailwind CSS configuration
-└── vite.config.js               # Vite configuration for building the app
+frontend/
+├── public/
+├── src/
+│   ├── components/
+│   │   ├── Common/
+│   │   │   ├── Header.jsx
+│   │   │   ├── HexagonLoader.jsx
+│   │   ├── Sections/
+│   │   │   ├── About.jsx
+│   │   │   ├── LoginSignUp.jsx
+│   │   ├── Views/
+│   │       ├── ChatComponent.jsx
+│   │       ├── FeatureComingSoon.jsx
+│   │       ├── HomeNew.jsx
+│   │       ├── NavBar.jsx
+│   │       ├── Pricing.jsx
+│   │       ├── ProductReview.jsx
+│   │       ├── Profile.jsx
+│   ├── Context/
+│   │   ├── AuthContext.jsx
+│   │   ├── User.js
+│   ├── Helpers/
+│       ├── apiComms.js
+│   ├── App.css
+│   ├── App.jsx
+│   ├── index.css
+│   ├── LandingPage.jsx
+│   ├── main.jsx
+├── tests/
+├── .dockerignore
+├── .gitignore
+├── Dockerfile
+├── eslint.config.js
+├── index.html
+├── package-lock.json
+├── package.json
+├── playwright.config.ts
+├── postcss.config.js
+├── README.md
+├── tailwind.config.js
+├── vite.config.js
+
 ```
 
 ## Project Modules
