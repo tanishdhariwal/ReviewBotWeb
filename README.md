@@ -69,7 +69,7 @@ The ReviewBot project is organized into three main sections:
 git clone https://github.com/Bharadwajreddy1406/ReviewBot.git
 cd ReviewBot
 ```
-
+---
 
 ## Directory Structure
 
