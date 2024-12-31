@@ -55,22 +55,6 @@ The ReviewBot project is organized into three main sections:
 
 ---
 
-
-## Setup and Installation
-
-### Prerequisites
-
-- **Node.js** v14+ for the backend and frontend.
-- **Python** 3.8+ for FastAPI.
-
-### Clone the Repository
-
-```bash
-git clone https://github.com/Bharadwajreddy1406/ReviewBot.git
-cd ReviewBot
-```
----
-
 ## Directory Structure
 
 This directory structure provides an overview of the organization within each section of the project.
@@ -217,3 +201,20 @@ frontend/
 - **Helpers**: Utility functions for supporting frontend logic.
 - **CSS and Styling**: Custom styling files using Tailwind CSS.
 - **App**: Main components and entry points for the React application.
+
+---
+
+
+## Setup and Installation
+
+### Prerequisites
+
+- **Node.js** v14+ for the backend and frontend.
+- **Python** 3.8+ for FastAPI.
+
+### Clone the Repository
+
+```bash
+git clone https://github.com/Bharadwajreddy1406/ReviewBot.git
+cd ReviewBot
+```
