@@ -38,20 +38,6 @@ This app provides users with insights from product reviews by allowing them to i
 
 ---
 
-## Setup and Installation
-
-### Prerequisites
-
-- **Node.js** v14+ for the backend and frontend.
-- **Python** 3.8+ for FastAPI.
-
-### Clone the Repository
-
-```bash
-git clone https://github.com/Bharadwajreddy1406/ReviewBot.git
-cd ReviewBot
-```
-
 ---
 
 ## Architecture Diagram
@@ -69,6 +55,22 @@ The ReviewBot project is organized into three main sections:
 - **Frontend**: Provides the user interface through a React-based application.
 
 ---
+
+
+## Setup and Installation
+
+### Prerequisites
+
+- **Node.js** v14+ for the backend and frontend.
+- **Python** 3.8+ for FastAPI.
+
+### Clone the Repository
+
+```bash
+git clone https://github.com/Bharadwajreddy1406/ReviewBot.git
+cd ReviewBot
+```
+
 
 ## Directory Structure
 
