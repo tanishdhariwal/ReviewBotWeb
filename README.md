@@ -38,14 +38,6 @@ This app provides users with insights from product reviews by allowing them to i
 
 ---
 
----
-
-## Architecture Diagram
-
-![Architecture Diagram](./assets/ArchDiag.png)
-
----
-
 ## Project Structure
 
 The ReviewBot project is organized into three main sections:
@@ -53,6 +45,13 @@ The ReviewBot project is organized into three main sections:
 - **Backend**: Manages core server-side logic and user operations.
 - **FastAPI**: Handles NLP tasks like sentiment analysis using pre-trained models.
 - **Frontend**: Provides the user interface through a React-based application.
+
+---
+
+## Architecture Diagram
+
+![Architecture Diagram](./assets/ArchDiag.png)
+
 
 ---
 
