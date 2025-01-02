@@ -157,7 +157,7 @@ export default function HomeNew() {
           transition={{ duration: 0.5 }}
         >
           <motion.h1
-            className="text-5xl h-28 font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-300 via-blue-300 to-purple-300"
+            className="text-3xl sm:text-5xl sm:h-28 font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-300 via-blue-300 to-purple-300"
             animate={{
               backgroundPosition: ["0%", "100%", "0%"],
             }}
@@ -175,7 +175,7 @@ export default function HomeNew() {
             Get Insights on <br /> Amazon Product reviews by AI.
           </motion.h1>
           <motion.p
-            className="text-gray-400 text-xl mt-3 mb-4"
+            className="text-base sm:text-xl mt-3 mb-4 text-gray-400"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
@@ -195,12 +195,11 @@ export default function HomeNew() {
         </motion.div>
 
         {/* Review Input */}
-        <motion.div className="w-full max-w-2xl mb-8 z-10 flex items-center justify-center">
-          <form className="flex space-x-4">
-            <Input
+        <motion.div className="w-full max-w-2xl mb-8 z-10 flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4 items-center justify-center">
+          <form className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4">            <Input
               type="url"
               placeholder="Enter product URL"
-              className="flex-auto w-96 bg-gray-800 border-gray-700 text-gray-100 placeholder-gray-400"
+              className="flex-auto w-80 sm:w-96 bg-gray-800 border-gray-700 text-gray-100 placeholder-gray-400"
               value={url}
               onKeyDown={handleKeyPress}
               onChange={(e) => setUrl(e.target.value)}
@@ -217,7 +216,7 @@ export default function HomeNew() {
         </motion.div>
 
         {/* Button Group */}
-        <div className="flex space-x-4 z-10">
+        <div className="flex flex-col items-center sm:flex-row sm:items-center space-x-0 sm:space-x-4 space-y-2 sm:space-y-0 z-10">
           <motion.div
             variants={buttonVariants}
             whileHover="hover"

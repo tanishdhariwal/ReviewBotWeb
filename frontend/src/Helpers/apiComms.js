@@ -4,15 +4,20 @@ import toast from 'react-hot-toast';
 export const LoginUser = async (userData) => {
   try {
     const { email, password } = userData;
+    console.log(email,password);
     const response = await axios.post(`/login`, { email, password });
-    console.log(response.status);
+    console.log(response.data);
     if (response.status != 200) {
       toast.error("Invalid credintials");
     }
     toast.success("Logged in successfully");
     return response.data;
   } catch (error) {
-    toast.error("Cannot connect to server");
+    if(axios.isAxiosError(error)){
+      if(error.response.status == 400){
+        toast.error("Invalid credintials");
+      }
+    }
     throw error;
   }
 };

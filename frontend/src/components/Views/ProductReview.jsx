@@ -108,15 +108,15 @@ export const Analysis = () => {
         transition={{ duration: 0.5 }}
         className="container mx-auto px-4 py-8 max-w-7xl"
       >
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
+          <div className="lg:col-span-2 flex flex-col h-full">
             <motion.div 
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5 }}
-              className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-lg rounded-lg overflow-hidden shadow-xl"
+              className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-lg rounded-lg shadow-xl flex flex-col h-full"
             >
-              <div className="relative aspect-w-1 aspect-h-1">
+              <div className="relative flex-grow w-full h-full">
                 <motion.img
                   key={selectedImageIndex}
                   initial={{ opacity: 0 }}
@@ -124,7 +124,7 @@ export const Analysis = () => {
                   transition={{ duration: 0.5 }}
                   src={product.image_url[selectedImageIndex] || 'Unavailable'}
                   alt={`Product image ${selectedImageIndex + 1}`}
-                  className="w-full h-full object-cover rounded-lg"
+                  className="w-full h-full object-contain rounded-lg"
                 />
                 <button
                   className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black/50 text-white p-1 rounded-full hover:bg-black/70 transition-colors duration-200"
@@ -153,12 +153,12 @@ export const Analysis = () => {
               </div>
             </motion.div>
           </div>
-          <div className="lg:col-span-1">
+          <div className="lg:col-span-1 h-full">
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-lg rounded-lg p-6 shadow-xl"
+              className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-lg rounded-lg p-6 shadow-xl h-full flex flex-col"
             >
               <div className="space-y-4">
                 <div>
