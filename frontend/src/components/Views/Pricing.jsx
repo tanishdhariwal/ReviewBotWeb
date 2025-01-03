@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Check, X } from 'lucide-react'
 import { Label } from "../ui/label"
 import { Switch } from "../ui/switch"
+import { useNavigate } from 'react-router-dom'
 
 const pricingPlans = [
     {
@@ -71,6 +72,11 @@ const testimonials = [
 export default function Pricing() {
     const [hoveredPlan, setHoveredPlan] = useState(null)
     const [isAnnual, setIsAnnual] = useState(false)
+    const navigate = useNavigate();
+
+    const handleButtonClick = () => {
+        navigate('/comingsoon');
+    };
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 text-white">
@@ -169,6 +175,7 @@ export default function Pricing() {
                                                     ? "bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white"
                                                     : "bg-gray-800 hover:bg-gray-700 text-white"
                                                 } transition-all duration-300 ease-in-out text-sm sm:text-base`}
+                                            onClick={handleButtonClick}
                                         >
                                             {plan.cta}
                                         </Button>

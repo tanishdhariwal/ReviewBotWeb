@@ -1,16 +1,20 @@
-'use client'
-
-import { AnimatePresence, motion } from 'framer-motion'
-import { useEffect, useState } from 'react'
-import { useLocation, useNavigate } from "react-router-dom"
-import { useAuth } from "../../Context/AuthContext"
-import { checkURL, deleteUserChat, extractASINFromUrl, getUserChats } from "../../Helpers/apiComms"
-import HexagonOverlay from '../Common/HexagonLoader'
-import { Button } from "../ui/button"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog"
-import { Input } from "../ui/input"
+import { AnimatePresence, motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "../../Context/AuthContext";
+import {
+  checkURL,
+  deleteUserChat,
+  extractASINFromUrl,
+  getUserChats,
+} from "../../Helpers/apiComms";
+import HexagonOverlay from "../Common/HexagonLoader";
+import { Button } from "../ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
+import { Input } from "../ui/input";
 // import { FaTrash } from 'react-icons/fa'; // Import delete icon
-import { Trash2Icon } from "lucide-react"
+import { Trash2Icon } from "lucide-react";
+import toast from "react-hot-toast";
 
 export default function HomeNew() {
   const auth = useAuth();
@@ -24,7 +28,7 @@ export default function HomeNew() {
   const buttonVariants = {
     hover: { scale: 1.05 },
     tap: { scale: 0.95 },
-    };
+  };
 
   const handleRecentlyReviewedClick = () => {
     if (auth.isLoggedIn) {
@@ -34,17 +38,30 @@ export default function HomeNew() {
     }
   };
 
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault(); // Prevent form submission
+      if (url === "") {
+        toast.error("Please enter the URL to proceed", { duration: 3000 });
+      } else {
+        handleNavigateToReviewChat();
+      }
+    }
+  };
+
   const handleASINClick = (asin) => {
-    localStorage.setItem('asin', asin);
-    navigate('/analysis');
+    localStorage.setItem("asin", asin);
+    navigate("/analysis");
   };
 
   const handleDeleteChat = async (asin) => {
     try {
       await deleteUserChat(asin);
-      setPreviousChats(previousChats.filter(chat => chat.product_asin_no !== asin));
+      setPreviousChats(
+        previousChats.filter((chat) => chat.product_asin_no !== asin)
+      );
     } catch (error) {
-      console.error('Error deleting chat:', error);
+      console.error("Error deleting chat:", error);
     }
   };
 
@@ -56,7 +73,7 @@ export default function HomeNew() {
           setIsLoading(true);
           const data = await checkURL({ asin: validationResponse.asin });
           if (data.isValid) {
-            localStorage.setItem('asin', validationResponse.asin);
+            localStorage.setItem("asin", validationResponse.asin);
             navigate(`/analysis`, { state: { asin: validationResponse.asin } });
           }
         }
@@ -73,17 +90,19 @@ export default function HomeNew() {
       try {
         const products = await getUserChats();
         // Sort chats by date
-        products.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+        products.sort(
+          (a, b) => new Date(b.created_at) - new Date(a.created_at)
+        );
         setPreviousChats(products);
       } catch (error) {
-        console.error('Error fetching user chats:', error);
+        console.error("Error fetching user chats:", error);
       }
     };
 
-    if (auth.isLoggedIn) {
-      fetchUserChats();
-    }
-  }, [auth.isLoggedIn]);
+    // if (auth.isLoggedIn) {
+    fetchUserChats();
+    // }
+  }, [isModalOpen]);
 
   return (
     <div className="relative min-h-screen bg-gray-900 flex flex-col items-center justify-center p-4 overflow-hidden">
@@ -118,7 +137,7 @@ export default function HomeNew() {
             transition={{
               duration: Math.random() * 10 + 20,
               repeat: Infinity,
-              repeatType: 'reverse',
+              repeatType: "reverse",
             }}
             style={{
               width: `${Math.random() * 3 + 1}px`,
@@ -132,56 +151,62 @@ export default function HomeNew() {
       <div className="relative z-10 flex flex-col items-center justify-center w-full max-w-4xl mx-auto">
         {/* Enhanced Title Section */}
         <motion.div
-          className="text-center mb-12"
+          className="text-center mb-6"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
           <motion.h1
-            className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-300 via-blue-300 to-purple-300 mb-3"
-            animate={{ 
-              backgroundPosition: ['0%', '100%', '0%'],
+            className="text-3xl sm:text-5xl sm:h-28 font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-300 via-blue-300 to-purple-300"
+            animate={{
+              backgroundPosition: ["0%", "100%", "0%"],
             }}
             transition={{
               duration: 10,
               repeat: Infinity,
-              ease: "linear"
+              ease: "linear",
             }}
             style={{
-              backgroundSize: '200% 100%'
+              backgroundSize: "200% 100%",
+              // fontFamily: 'Helvetica, sans-serif',
+              fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif",
             }}
           >
-            AI-Powered Review Analysis
+            Get Insights on <br /> Amazon Product reviews by AI.
           </motion.h1>
           <motion.p
-            className="text-gray-400 text-xl mt-3 mb-4"
+            className="text-base sm:text-xl mt-3 mb-4 text-gray-400"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
+            style={{
+              fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif",
+            }}
           >
-            Smart insights from thousands of reviews in seconds
+            Tired of reading reviews? Let AI do the work for you. paste the
+            product URL below to get started.
           </motion.p>
           <motion.div
             className="flex flex-col gap-2 text-gray-500"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5 }}
-          >
-          </motion.div>
+          ></motion.div>
         </motion.div>
 
         {/* Review Input */}
-        <motion.div className="w-full max-w-2xl mb-8 z-10 flex items-center justify-center">
-          <form className="flex space-x-4">
-            <Input
+        <motion.div className="w-full max-w-2xl mb-8 z-10 flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4 items-center justify-center">
+          <form className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4">            <Input
               type="url"
               placeholder="Enter product URL"
-              className="flex-auto w-96 bg-gray-800 border-gray-700 text-gray-100 placeholder-gray-400"
+              className="flex-auto w-80 sm:w-96 bg-gray-800 border-gray-700 text-gray-100 placeholder-gray-400"
               value={url}
+              onKeyDown={handleKeyPress}
               onChange={(e) => setUrl(e.target.value)}
             />
-            <Button 
-              type="button" 
+            <Button
+              type="button"
+              onKeyDown={handleKeyPress}
               onClick={handleNavigateToReviewChat}
               className="bg-gradient-to-br hover:from-purple-600 hover:via-indigo-600 hover:to-purple-600 from-purple-500 via-blue-500 to-purple-500 text-white shadow-lg hover:shadow-purple-500/20 transition-all duration-700 ease-in-out"
             >
@@ -191,26 +216,38 @@ export default function HomeNew() {
         </motion.div>
 
         {/* Button Group */}
-        <div className="flex space-x-4 z-10">
-          <motion.div variants={buttonVariants} whileHover="hover" whileTap="tap">
-            <Button 
-              variant="outline" 
+        <div className="flex flex-col items-center sm:flex-row sm:items-center space-x-0 sm:space-x-4 space-y-2 sm:space-y-0 z-10">
+          <motion.div
+            variants={buttonVariants}
+            whileHover="hover"
+            whileTap="tap"
+          >
+            <Button
+              variant="outline"
               className="bg-white/10 backdrop-blur-md border-white/20 text-white hover:bg-white/20 hover:text-white/90 transition-all duration-300"
-              onClick={() => navigate('/top-rated')}
+              onClick={() => navigate("/comingsoon")}
             >
               Top Rated Products
             </Button>
           </motion.div>
-          <motion.div variants={buttonVariants} whileHover="hover" whileTap="tap">
-            <Button 
-              variant="outline" 
+          <motion.div
+            variants={buttonVariants}
+            whileHover="hover"
+            whileTap="tap"
+          >
+            <Button
+              variant="outline"
               className="bg-white/10 backdrop-blur-md border-white/20 text-white hover:bg-white/20 hover:text-white/90 transition-all duration-300"
-              onClick={() => navigate('/trending')}
+              onClick={() => navigate("/comingsoon")}
             >
               Trending Products
             </Button>
           </motion.div>
-          <motion.div variants={buttonVariants} whileHover="hover" whileTap="tap">
+          <motion.div
+            variants={buttonVariants}
+            whileHover="hover"
+            whileTap="tap"
+          >
             <Button
               variant="outline"
               className="bg-white/10 backdrop-blur-md border-white/20 text-white hover:bg-white/20 hover:text-white/90 transition-all duration-300"
@@ -224,11 +261,16 @@ export default function HomeNew() {
         {/* Recently Reviewed Modal */}
         <AnimatePresence>
           {isModalOpen && auth.isLoggedIn && (
-            <Dialog open={isModalOpen} onOpenChange={() => setIsModalOpen(false)}>
+            <Dialog
+              open={isModalOpen}
+              onOpenChange={() => setIsModalOpen(false)}
+            >
               <DialogContent className="bg-gray-800 text-gray-100 max-w-4xl">
                 {/* Increased modal width with max-w-3xl */}
                 <DialogHeader>
-                  <DialogTitle className="text-gray-100">Previously Searched Products</DialogTitle>
+                  <DialogTitle className="text-gray-100">
+                    Previously Searched Products
+                  </DialogTitle>
                 </DialogHeader>
                 <motion.ul
                   className=" space-y-2 max-h-96 overflow-y-auto scrollbar-thin scrollbar-corner-fuchsia-900 scrollbar-thumb-slate-200 scrollbar-track-gray-800 hover:scrollbar-thumb-gray-900"
@@ -246,18 +288,29 @@ export default function HomeNew() {
                         className="p-2 bg-gray-700 rounded-md hover:bg-gray-600 transition-colors cursor-pointer"
                       >
                         <div className="flex justify-between items-center">
-                          <span className="break-words whitespace-normal" title={product.title} onClick={() => handleASINClick(product.product_asin_no)}>
+                          <span
+                            className="break-words whitespace-normal"
+                            title={product.title}
+                            onClick={() =>
+                              handleASINClick(product.product_asin_no)
+                            }
+                          >
                             {product.title}
                           </span>
                           <div className="flex items-center">
                             <span className="text-sm text-gray-400 mr-2">
-                              {new Date(product.created_at).toLocaleDateString()}
+                              {new Date(
+                                product.created_at
+                              ).toLocaleDateString()}
                             </span>
                             <button
                               className="text-red-500 hover:text-red-700"
-                              onClick={() => handleDeleteChat(product.product_asin_no)}
+                              onClick={() =>
+                                handleDeleteChat(product.product_asin_no)
+                              }
                             >
-                              <Trash2Icon /> {/* Replace text with delete icon */}
+                              <Trash2Icon />{" "}
+                              {/* Replace text with delete icon */}
                             </button>
                           </div>
                         </div>
@@ -273,5 +326,5 @@ export default function HomeNew() {
         </AnimatePresence>
       </div>
     </div>
-  )
+  );
 }

@@ -8,7 +8,8 @@ const {
   verifyuser,
   get_user,
   changePassword,
-  get_user_chats
+  get_user_chats,
+  giveFeedback
 } = require("../Controllers/userControllers");
 const { verifyToken } = require("../utils/tokenManager");
 
@@ -19,6 +20,7 @@ userRouter.get("/logout", verifyToken, logout);
 userRouter.get("/authstatus", verifyToken, verifyuser);
 userRouter.get("/get_user", verifyToken, get_user); 
 userRouter.get("/get_user_chats", verifyToken, get_user_chats);
+userRouter.post("/feedback",verifyToken,giveFeedback);
 userRouter.get("/", (req, res) => {
   res.status(200).send("Hello from the server");
 });

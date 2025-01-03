@@ -4,6 +4,57 @@ import { ChevronLeft, ChevronRight, Star, ThumbsUp, ThumbsDown } from 'lucide-re
 import ChatComponent from './ChatComponent';
 import { getProduct } from '../../Helpers/apiComms'; // Import the getProduct function
 
+// Add enhanced parseMarkdown function to handle bold, italics, and bullet points
+const parseMarkdown = (text) => {
+  const lines = text.split('\n');
+  const elements = [];
+  let listItems = [];
+
+  lines.forEach((line, index) => {
+    if (/^[-*]\s+/.test(line)) {
+      listItems.push(line.replace(/^[-*]\s+/, ''));
+    } else {
+      if (listItems.length > 0) {
+        elements.push(
+          <ul key={`ul-${index}`} className="list-disc list-inside">
+            {listItems.map((item, idx) => (
+              <li key={idx}>{parseInlineMarkdown(item)}</li>
+            ))}
+          </ul>
+        );
+        listItems = [];
+      }
+      elements.push(<p key={`p-${index}`} className="mb-2">{parseInlineMarkdown(line)}</p>);
+    }
+  });
+
+  if (listItems.length > 0) {
+    elements.push(
+      <ul key={`ul-end`} className="list-disc list-inside">
+        {listItems.map((item, idx) => (
+          <li key={idx}>{parseInlineMarkdown(item)}</li>
+        ))}
+      </ul>
+    );
+  }
+
+  return elements;
+};
+
+// Helper function to parse inline markdown for bold and italics
+const parseInlineMarkdown = (text) => {
+  const parts = text.split(/(\*\*[^*]+\*\*|_[^_]+_)/g);
+  return parts.map((part, index) => {
+    if (part.startsWith('**') && part.endsWith('**')) {
+      return <strong key={index}>{part.slice(2, -2)}</strong>;
+    }
+    if (part.startsWith('_') && part.endsWith('_')) {
+      return <em key={index}>{part.slice(1, -1)}</em>;
+    }
+    return part;
+  });
+};
+
 export const Analysis = () => {
   const [product, setProduct] = useState(null);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
@@ -47,7 +98,7 @@ export const Analysis = () => {
         className="bg-transparent "
       >
         <div className="container mx-auto px-4 py-4 max-w-7xl">
-          <h1 className="text-2xl md:text-3xl font-bold text-white">{product.title || 'Unavailable'}</h1>
+          <h1 className="text-2xl md:text-3xl font-bold text-white"><a href={`https://www.amazon.com/dp/${product.product_asin_no}/`} target='_blank'>{product.title || 'Unavailable'}</a></h1>
         </div>
       </motion.header>
 
@@ -57,15 +108,15 @@ export const Analysis = () => {
         transition={{ duration: 0.5 }}
         className="container mx-auto px-4 py-8 max-w-7xl"
       >
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
+          <div className="lg:col-span-2 flex flex-col h-full">
             <motion.div 
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5 }}
-              className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-lg rounded-lg overflow-hidden shadow-xl"
+              className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-lg rounded-lg shadow-xl flex flex-col h-full"
             >
-              <div className="relative aspect-w-1 aspect-h-1">
+              <div className="relative flex-grow w-full h-full">
                 <motion.img
                   key={selectedImageIndex}
                   initial={{ opacity: 0 }}
@@ -73,7 +124,7 @@ export const Analysis = () => {
                   transition={{ duration: 0.5 }}
                   src={product.image_url[selectedImageIndex] || 'Unavailable'}
                   alt={`Product image ${selectedImageIndex + 1}`}
-                  className="w-full h-full object-cover rounded-lg"
+                  className="w-full h-full object-contain rounded-lg"
                 />
                 <button
                   className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black/50 text-white p-1 rounded-full hover:bg-black/70 transition-colors duration-200"
@@ -102,12 +153,12 @@ export const Analysis = () => {
               </div>
             </motion.div>
           </div>
-          <div className="lg:col-span-1">
+          <div className="lg:col-span-1 h-full">
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-lg rounded-lg p-6 shadow-xl"
+              className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-lg rounded-lg p-6 shadow-xl h-full flex flex-col"
             >
               <div className="space-y-4">
                 <div>
@@ -158,7 +209,13 @@ export const Analysis = () => {
               className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-lg rounded-lg p-6 shadow-xl"
             >
               <h2 className="text-xl md:text-2xl font-bold text-white mb-4">Review Summary</h2>
-              <p className="text-sm md:text-base text-gray-300">{product.review_summary || 'Unavailable'}</p>
+              <div className="text-sm md:text-base text-gray-300 space-y-4">
+                {product.review_summary ? (
+                  parseMarkdown(product.review_summary)
+                ) : (
+                  'Unavailable'
+                )}
+              </div>
             </motion.div>
           </div>
           <div>

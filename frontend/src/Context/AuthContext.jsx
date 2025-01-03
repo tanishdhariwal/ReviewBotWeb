@@ -1,7 +1,6 @@
-import { createContext, useState, useContext, useEffect } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LoginUser, LogoutUser, checkAuthStatus } from "../Helpers/apiComms";
-import LoaderModal from "../components/Common/Loader";
 import { AuthContextType, User } from "./User";
 
 const AuthContext = createContext(null | new AuthContextType());
@@ -81,8 +80,7 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider value={value}>
-      {loading && <LoaderModal />}
-      {!loading && children}
+      {children}
     </AuthContext.Provider>
   );
 };

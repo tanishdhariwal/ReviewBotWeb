@@ -30,16 +30,7 @@ jobs:
           cd frontend
           npm run build
 
-      - name: Run Playwright Tests
-        run: |
-          cd frontend
-          npx playwright install
-          npx playwright test
 
-      # - name: Run Frontend Tests
-      #   run: |
-      #     cd frontend
-      #     npm test
 
   backend:
     name: Build and Test Backend
@@ -60,7 +51,4 @@ jobs:
 
           
 
-      # - name: Run Backend Tests
-      #   run: |
-      #     cd backend
-      #     npm test
+

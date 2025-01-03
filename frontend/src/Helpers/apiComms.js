@@ -3,17 +3,21 @@ import toast from 'react-hot-toast';
 
 export const LoginUser = async (userData) => {
   try {
-    // const id = toast.loading("Logging in...");
     const { email, password } = userData;
+    console.log(email,password);
     const response = await axios.post(`/login`, { email, password });
+    console.log(response.data);
     if (response.status != 200) {
-        toast.error("Invalid credintials");
+      toast.error("Invalid credintials");
     }
     toast.success("Logged in successfully");
     return response.data;
   } catch (error) {
-    toast.error("Server Issue bruh.");
-
+    if(axios.isAxiosError(error)){
+      if(error.response.status == 400){
+        toast.error("Invalid credintials");
+      }
+    }
     throw error;
   }
 };
@@ -30,8 +34,7 @@ export const SignUpUser = async (userData) => {
     return response.data;
   } catch (error) {
     toast.dismiss(toastId);
-    toast.error(error.message || "Sign up failed. Please try again.");
-
+    toast.error("Sign up failed. Please try again.");
     throw error;
   }
 };
@@ -44,7 +47,7 @@ export const checkAuthStatus = async () => {
 export const LogoutUser = async () => {
   try {
     const response = await axios.get(`/logout`);
-    if(response.status!=200){
+    if (response.status != 200) {
       toast.error("unable to logout");
       throw new Error("unable to Logout")
     }
@@ -63,7 +66,7 @@ export const checkURL = async (asinData) => {
     }
     return response.data;
   } catch (error) {
-    toast.error(error.response?.data?.error || "Validation failed.");
+    toast.error("Validation failed.");
     throw error;
   }
 };
@@ -74,12 +77,11 @@ export const getChatResponse = async (payload) => {
     return response.data;
   } catch (error) {
     toast.error("Failed to get response. Please try again.");
-
     throw error;
   }
 };
 
-export const extractASINFromUrl = (url)=>{
+export const extractASINFromUrl = (url) => {
   // Match ASIN using a regex pattern, accounting for query strings
   const asinRegex = /\/([A-Z0-9]{10})(?=\/|$|\?)/;
   const match = url.match(asinRegex);
@@ -109,10 +111,13 @@ export const getUserDetails = async () => {
 export const changePassword = async (currentPassword, newPassword) => {
   try {
     const response = await axios.post(`/change_password`, { currentPassword, newPassword });
-    toast.success("Password changed successfully");
-    return response.data;
+    if (response.status == 200) {
+      toast.success("Password changed successfully");
+    }
+    console.log(response.data);
+    
   } catch (error) {
-
+    toast.error("Failed to change password.");
     throw error;
   }
 };
@@ -147,3 +152,17 @@ export const deleteUserChat = async (asin) => {
     throw error;
   }
 };
+
+export const giveFeedback = async (feedback) => {
+  try {
+    const response = await axios.post(`/feedback`, { feedback });
+    console.log(response.data);
+    if (response.status == 201) {
+      toast.success("Feedback submitted successfully");
+    }
+    console.log("Feedback submitted:", feedback);
+  } catch (error) {
+    toast.error("Failed to submit feedback.");
+    throw error;
+  }
+}

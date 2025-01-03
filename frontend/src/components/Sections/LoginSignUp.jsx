@@ -16,7 +16,7 @@ export default function LoginSignUp() {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const auth = useAuth();
-  const [isSignin, setisSignin] = useState(true);
+  const [isSignin, setisSignin] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -32,12 +32,10 @@ export default function LoginSignUp() {
         const response = await SignUpUser(payload);
         if (response.success) {
           setisSignin(false);
-
         }
       }
     } catch (error) {
       console.error(error);
-
     }
   };
 
@@ -50,76 +48,93 @@ export default function LoginSignUp() {
 
   return (
     <div className="bg-black">
-      <HeroHighlight className="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
+      <HeroHighlight className="min-h-screen flex items-center justify-end px-4 sm:px-6 lg:px-8">
         {/* <motion.div className="w-full max-w-full sm:max-w-lg md:max-w-xl"> */}
-          <div className="lg:w-[474px] md:w-[370px] md:rounded-[20px] mx-auto p-4 sm:p-6 md:p-8 shadow-[0px_0px_16px_0px_#ffffff4d] hover:shadow-[0px_0px_24px_0px_#ffffff4d] transition-all ease-in bg-white dark:bg-black">
-            <h2 className="font-bold text-xl sm:text-2xl md:text-3xl text-neutral-800 dark:text-neutral-200">
-
-              {isSignin ? "Join Us" : "Welcome Back"}
-            </h2>
-            <p className="text-neutral-600 text-sm sm:text-base md:text-lg max-w-sm mt-2 dark:text-neutral-300">
+        <div className="lg:w-[460px] md:w-[370px] md:rounded-[20px] mx-auto p-4 sm:p-6 md:p-8 shadow-[0px_0px_16px_0px_#ffffff4d] hover:shadow-[0px_0px_24px_0px_#ffffff4d] transition-all ease-in bg-black">
+          <h2 className="font-bold text-xl sm:text-2xl md:text-3xl text-neutral-200">
+            {isSignin ? (
+              <>
+                {" "}
+                Join{" "}
+                <span className="font-bold text-transparent bg-clip-text bg-gradient-to-br from-purple-500 via-blue-400 to-purple-500 animate-bounce">
+                  EasyPick
+                </span> today for free
+              </>
+            ) : (
+              <>
+                Welcome Back to{" "}
+                <span className="font-bold text-transparent bg-clip-text bg-gradient-to-br from-purple-500 via-blue-400 to-purple-500 animate-bounce">
+                  EasyPick
+                </span>
+              </>
+            )}
+          </h2>
+          {/* <p className="text-sm sm:text-base md:text-lg max-w-sm mt-2 text-slate-300">
               Welcome to EasyPick
-            </p>
-            <form onSubmit={handleSubmit} className="my-8">
-              {isSignin && (
-                <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-4">
-                  <LabelInputContainer>
-                    <Label htmlFor="firstname">Username</Label>
-                    <Input
-                      id="firstname"
-                      placeholder="Username"
-                      type="text"
-                      value={username}
-                      onChange={(e) => setuserName(e.target.value)}
-                    />
-                  </LabelInputContainer>
-                </div>
-              )}
-              <LabelInputContainer className="mb-4">
-                <Label htmlFor="email">Email Address</Label>
-                <Input
-                  id="email"
-                  placeholder="Email address"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-              </LabelInputContainer>
-              <LabelInputContainer className="mb-4">
-                <Label htmlFor="password">Password</Label>
-                <div className="relative">
+            </p> */}
+          <form onSubmit={handleSubmit} className="my-8">
+            {isSignin && (
+              <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-4">
+                <LabelInputContainer>
+                  <Label htmlFor="firstname">Username</Label>
                   <Input
-                    id="password"
-                    placeholder="password"
-                    type={showPassword ? "text" : "password"}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    id="firstname"
+                    placeholder="Username"
+                    type="text"
+                    className="text-white bg-[#272729]"
+                    value={username}
+                    onChange={(e) => setuserName(e.target.value)}
                   />
-                  <button
-                    type="button"
-                    onClick={togglePasswordVisibility}
-                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500"
-                  >
-                    {showPassword ? <FaEyeSlash /> : <FaEye />}
-                  </button>
-                </div>
-              </LabelInputContainer>
-              {/* <div className="flex items-center mb-4">
+                </LabelInputContainer>
+              </div>
+            )}
+            <LabelInputContainer className="mb-4 ">
+              <Label htmlFor="email">Email Address</Label>
+              <Input
+                id="email"
+                placeholder="Email address"
+                type="email"
+                value={email}
+                className="text-white bg-[#272729]"
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </LabelInputContainer>
+            <LabelInputContainer className="mb-4">
+              <Label htmlFor="password">Password</Label>
+              <div className="relative">
+                <Input
+                  id="password"
+                  placeholder="password"
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  className=" bg-[#272729] text-white"
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                <button
+                  type="button"
+                  onClick={togglePasswordVisibility}
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500"
+                >
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                </button>
+              </div>
+            </LabelInputContainer>
+            {/* <div className="flex items-center mb-4">
                 <Checkbox id="remember" />
                 <Label htmlFor="remember" className="ml-2 text-neutral-700 dark:text-neutral-300">
                   Remember Me
                 </Label>
               </div> */}
-              <button
-                className="bg-gradient-to-br relative group/btn from-black dark:from-zinc-900 to-neutral-600 w-full text-white rounded-md h-10 font-medium"
-                type="submit"
-                onClick={handleSubmit}
-              >
-                {isSignin ? "Sign Up" : "Sign In"} &rarr;
-                <BottomGradient />
-              </button>
-              <div className="bg-gradient-to-r from-transparent via-neutral-300 dark:via-neutral-700 to-transparent my-8 h-[1px] w-full" />
-              {/* <div className="flex flex-col space-y-4">
+            <button
+              className="bg-gradient-to-br relative group/btn from-zinc-800 to-black w-full mt-4 text-white rounded-md h-10 font-medium"
+              type="submit"
+              onClick={handleSubmit}
+            >
+              {isSignin ? "Sign Up" : "Log in"} &rarr;
+              <BottomGradient />
+            </button>
+            <div className="bg-gradient-to-r from-transparent  via-neutral-700 to-transparent my-8 h-[1px] w-full" />
+            {/* <div className="flex flex-col space-y-4">
                 <button
                   type="button"
                   onClick={() => handleSocialLogin("GitHub")}
@@ -147,34 +162,38 @@ export default function LoginSignUp() {
                   onClick={() => handleSocialLogin("OnlyFans")}
                   className="relative group/btn flex space-x-2 items-center justify-start px-4 w-full text-black dark:text-white rounded-md h-10 font-medium"
                 >
-                  <IconBrandOnlyfans className="h-4 w-4 text-neutral-800 dark:text-neutral-300" />
-                  <span className="text-neutral-700 dark:text-neutral-300 text-sm">
-                    OnlyFans
-                  </span>
+                 
                   <BottomGradient />
                 </button>
               </div> */}
-              <div className="mt-4 text-center">
-                <small className="text-neutral-700 dark:text-neutral-300">
-                  {isSignin ? (
-                    <>
-                      Already have an account?{" "}
-                      <span className="text-blue-500 cursor-pointer" onClick={toggleForm}>
-                        Sign In
-                      </span>
-                    </>
-                  ) : (
-                    <>
-                      Don't have an account?{" "}
-                      <span className="text-blue-500 cursor-pointer" onClick={toggleForm}>
-                        Sign Up
-                      </span>
-                    </>
-                  )}
-                </small>
-              </div>
-            </form>
-          </div>
+            <div className="mt-4 text-center">
+              <small className="text-neutral-300">
+                {isSignin ? (
+                  <>
+                    Already have an account?{" "}
+                    <span
+                      className="text-blue-500 cursor-pointer"
+                      onClick={toggleForm}
+                    >
+                      Log in
+                    </span>
+                    <span>{" " + "here"}</span>
+                  </>
+                ) : (
+                  <>
+                    Don't have an account?{" "}
+                    <span
+                      className="text-blue-500 cursor-pointer"
+                      onClick={toggleForm}
+                    >
+                      Sign Up
+                    </span>
+                  </>
+                )}
+              </small>
+            </div>
+          </form>
+        </div>
         {/* </motion.div> */}
       </HeroHighlight>
     </div>
